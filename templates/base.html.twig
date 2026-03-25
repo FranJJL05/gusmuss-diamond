@@ -21,17 +21,31 @@
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="menuPrincipal">
-              <ul class="navbar-nav gap-3">
-                <li class="nav-item">
-                  <a class="nav-link text-dark" href="/">Inicio</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-dark" href="#">Colección</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-dark" href="#">Mi Cuenta</a>
-                </li>
-              </ul>
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('app_home') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Colección</a>
+                    </li>
+                    
+                    {# Magia de Symfony: Comprobamos si el usuario ha iniciado sesión #}
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Mi Cuenta ({{ app.user.nombre }})</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="{{ path('app_logout') }}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_register') }}">Registrarse</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
           </div>
         </nav>

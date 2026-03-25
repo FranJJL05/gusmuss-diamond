@@ -1,23 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Registro | Gusmuss Diamond{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4 text-uppercase" style="font-family: 'Didot', serif; letter-spacing: 2px;">Crear Cuenta</h1>
+                    <p class="text-center text-muted mb-4" style="font-style: italic;">Únete a la exclusividad de Gusmuss Diamond.</p>
 
-    <h1>Register</h1>
+                    {# Aquí mostramos los errores si el usuario se equivoca #}
+                    {% if form_errors(registrationForm) %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(registrationForm) }}
+                        </div>
+                    {% endif %}
 
-    {{ form_errors(registrationForm) }}
+                    {# Inicia el formulario #}
+                    {{ form_start(registrationForm) }}
+                    <div class="mb-3">
+                            {{ form_label(registrationForm.nombre, 'Nombre', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(registrationForm.nombre, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Tu nombre'}}) }}
+                        </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.apellidos, 'Apellidos', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(registrationForm.apellidos, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Tus apellidos'}}) }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.email, 'Correo Electrónico', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'ejemplo@gusmuss.com'}}) }}
+                        </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.plainPassword, 'Contraseña', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '••••••••'}}) }}
+                        </div>
+
+                        <div class="mb-4 form-check mt-3">
+                            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.agreeTerms, 'Acepto los términos de exclusividad y privacidad.', {'label_attr': {'class': 'form-check-label text-muted'}}) }}
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">
+                            Registrarse
+                        </button>
+                        
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

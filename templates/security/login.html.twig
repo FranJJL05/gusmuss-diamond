@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Iniciar Sesión | Gusmuss Diamond{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4 text-uppercase" style="font-family: 'Didot', serif; letter-spacing: 2px;">Iniciar Sesión</h1>
+                    <p class="text-center text-muted mb-4" style="font-style: italic;">Bienvenido de nuevo a la exclusividad.</p>
+
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        {% if app.user %}
+                            <div class="mb-3 text-center">
+                                Has iniciado sesión como {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label fw-bold">Correo Electrónico</label>
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control form-control-lg" placeholder="ejemplo@gusmuss.com" autocomplete="email" required autofocus>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label fw-bold">Contraseña</label>
+                            <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" placeholder="••••••••" autocomplete="current-password" required>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="mb-4 form-check mt-3">
+                            <input type="checkbox" name="_remember_me" id="_remember_me" class="form-check-input">
+                            <label class="form-check-label text-muted" for="_remember_me">Recordar mi sesión</label>
+                        </div>
+
+                        <button class="btn btn-dark w-100 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;" type="submit">
+                            Entrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
