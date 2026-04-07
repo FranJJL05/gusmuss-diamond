@@ -49,6 +49,11 @@ class Product
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->nombre ?? '';
+    }
+
     public function getDescripcion(): ?string
     {
         return $this->descripcion;

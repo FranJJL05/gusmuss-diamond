@@ -46,6 +46,11 @@ class Category
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->nombre ?? '';
+    }
+
     /**
      * @return Collection<int, Product>
      */
