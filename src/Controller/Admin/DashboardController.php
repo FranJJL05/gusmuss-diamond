@@ -2,30 +2,38 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Category;
-use App\Entity\Order;
-use App\Entity\Product;
-use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(private AdminUrlGeneratorInterface $adminUrlGenerator)
+    {
+    }
+
+    /**
+     * Al entrar en /admin, redirigimos al listado de Productos.
+     * parent::index() solo muestra una página de bienvenida sin menú,
+     * por eso en EasyAdmin 5 lo sustituimos por un redirect al primer CRUD.
+     */
     public function index(): Response
     {
-        return parent::index();
+        return $this->redirect(
+            $this->adminUrlGenerator
+                ->setController(ProductCrudController::class)
+                ->generateUrl()
+        );
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('<img src="/images/logo.png" alt="Gusmuss Diamond"> Gusmuss Diamond')
-            ->setFaviconPath('favicon.ico')
-            ->setTranslationDomain('admin');
+            ->setTitle('Gusmuss Diamond ✦ Admin');
     }
 
     public function configureMenuItems(): iterable
@@ -33,14 +41,14 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
         yield MenuItem::section('Catálogo');
-        yield MenuItem::linkToCrud('Productos', 'fas fa-gem', Product::class);
-        yield MenuItem::linkToCrud('Categorías', 'fas fa-tags', Category::class);
+        yield MenuItem::linkTo(ProductCrudController::class, 'Productos', 'fas fa-gem');
+        yield MenuItem::linkTo(CategoryCrudController::class, 'Categorías', 'fas fa-tags');
 
         yield MenuItem::section('Pedidos');
-        yield MenuItem::linkToCrud('Pedidos', 'fas fa-shopping-bag', Order::class);
+        yield MenuItem::linkTo(OrderCrudController::class, 'Pedidos', 'fas fa-shopping-bag');
 
         yield MenuItem::section('Usuarios');
-        yield MenuItem::linkToCrud('Usuarios', 'fas fa-users', User::class);
+        yield MenuItem::linkTo(UserCrudController::class, 'Usuarios', 'fas fa-users');
 
         yield MenuItem::section('');
         yield MenuItem::linkToUrl('Ver Tienda', 'fas fa-store', '/');
