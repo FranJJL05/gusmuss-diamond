@@ -27,7 +27,7 @@ class Product
     private ?int $stock = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imagen_url = null;
+    private ?string $imagenFilename = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
@@ -90,14 +90,14 @@ class Product
         return $this;
     }
 
-    public function getImagenUrl(): ?string
+    public function getImagenFilename(): ?string
     {
-        return $this->imagen_url;
+        return $this->imagenFilename;
     }
 
-    public function setImagenUrl(?string $imagen_url): static
+    public function setImagenFilename(?string $imagenFilename): static
     {
-        $this->imagen_url = $imagen_url;
+        $this->imagenFilename = $imagenFilename;
 
         return $this;
     }

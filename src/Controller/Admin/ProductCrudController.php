@@ -23,11 +23,27 @@ class ProductCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
+
             TextField::new('nombre', 'Nombre del Producto'),
-            TextareaField::new('descripcion', 'Descripción'),
-            MoneyField::new('precio', 'Precio')->setCurrency('EUR'),
+
+            TextareaField::new('descripcion', 'Descripción')
+                ->hideOnIndex(),
+
+            MoneyField::new('precio', 'Precio')
+                ->setCurrency('EUR'),
+
             NumberField::new('stock', 'Stock'),
-            TextField::new('imagen_url', 'URL de Imagen')->hideOnIndex(),
+
+            // ImageField gestiona automáticamente la subida del fichero al servidor
+            // setBasePath: la ruta pública desde la que se sirve la imagen (URL)
+            // setUploadDir: la ruta física donde se guarda en el servidor
+            // setUploadedFileNamePattern: nombre único para evitar colisiones
+            ImageField::new('imagenFilename', 'Imagen')
+                ->setBasePath('/uploads/products')
+                ->setUploadDir('public/uploads/products')
+                ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
+                ->setRequired(false),
+
             AssociationField::new('category', 'Categoría'),
         ];
     }
