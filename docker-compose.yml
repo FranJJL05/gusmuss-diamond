@@ -1,24 +1,20 @@
 version: '3.8'
 
 services:
-  # El servidor Web y PHP
   web:
-    image: php:8.2-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: gusmuss_web
     ports:
       - "8000:80"
     volumes:
       - .:/var/www/html
-    environment:
-      APACHE_DOCUMENT_ROOT: /var/www/html/public
-    command: >
-      bash -c "a2enmod rewrite &&
-      sed -ri -e 's!/var/www/html!$${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf &&
-      sed -ri -e 's!/var/www/!$${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf &&
-      docker-php-ext-install pdo pdo_mysql &&
-      apache2-foreground"
+      # var/ en un volumen Docker nativo (Linux) para que la caché sea rápida en Windows
+      - symfony_var:/var/www/html/var
+    depends_on:
+      - db
 
-  # La Base de Datos
   db:
     image: mysql:8.0
     container_name: gusmuss_db
@@ -35,3 +31,4 @@ services:
 
 volumes:
   db_data:
+  symfony_var:

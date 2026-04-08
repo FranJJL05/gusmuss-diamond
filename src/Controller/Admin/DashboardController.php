@@ -17,8 +17,7 @@ class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-        // Redirigimos al listado de productos como página principal del panel
-        return $this->redirectToRoute('admin', ['crudAction' => 'index', 'crudControllerFqcn' => ProductCrudController::class]);
+        return parent::index();
     }
 
     public function configureDashboard(): Dashboard
