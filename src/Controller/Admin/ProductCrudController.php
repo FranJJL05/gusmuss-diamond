@@ -22,29 +22,18 @@ class ProductCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->hideOnForm(),
-
-            TextField::new('nombre', 'Nombre del Producto'),
-
-            TextareaField::new('descripcion', 'Descripción')
-                ->hideOnIndex(),
-
-            MoneyField::new('precio', 'Precio')
-                ->setCurrency('EUR'),
-
-            NumberField::new('stock', 'Stock'),
-
-            // ImageField gestiona automáticamente la subida del fichero al servidor
-            // setBasePath: la ruta pública desde la que se sirve la imagen (URL)
-            // setUploadDir: la ruta física donde se guarda en el servidor
-            // setUploadedFileNamePattern: nombre único para evitar colisiones
-            ImageField::new('imagenFilename', 'Imagen')
-                ->setBasePath('/uploads/products')
-                ->setUploadDir('public/uploads/products')
-                ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
-                ->setRequired(false),
-
-            AssociationField::new('category', 'Categoría'),
+            // El primer texto es la propiedad de tu entidad, el segundo es cómo se ve en la columna
+            TextField::new('nombre', 'Nombre de la Prenda'), 
+            AssociationField::new('category', 'Categoría'), // Este lo dejamos así porque vimos que funcionaba
+            NumberField::new('precio', 'Precio'), 
+            NumberField::new('stock', 'Unidades en Stock'),
+            TextareaField::new('descripcion', 'Descripción'),
+            
+            ImageField::new('imagenFilename', 'Foto del Producto')
+                ->setBasePath('uploads/images/products') 
+                ->setUploadDir('public/uploads/images/products') 
+                ->setUploadedFileNamePattern('[randomhash].[extension]') 
+                ->setRequired(false), 
         ];
     }
 }
