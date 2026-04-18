@@ -218,3 +218,50 @@ docker exec gusmuss_web php bin/console doctrine:fixtures:load --no-interaction
 - ✅ Endpoints protegidos con control de acceso por roles
 
 ---
+
+## ENTRADA 6
+
+**Fase:** 5. Componentes e Interfaz del Cliente con React (Frontend)
+**Rama:** `feature/react-frontend`
+
+**Acciones realizadas:**
+
+### 5.1 Configuración de Vite y React
+
+Se inicializó un nuevo proyecto Vite con React en la carpeta `/frontend` del repositorio principal de Symfony.
+**Configuración de Vite (`vite.config.js`)**: Se configuró el puerto `3000` para el servidor de desarrollo y se estableció un proxy (`/api -> http://localhost:8000`) para redirigir todas las peticiones a la API de Symfony y evitar bloqueos por políticas CORS durante el desarrollo.
+
+### 5.2 Sistema de Diseño: Alta Joyería
+
+Se diseñó desde cero el CSS (`index.css`) basado en un sistema estético premium, cumpliendo estrictamente con el requisito de ofrecer una experiencia dinámica y elegante:
+- **Paleta de Colores**: Fondo negro profundo (`#0a0a0a`) para resaltar las joyas, con detalles en oro clásico (`#c9a84c`) y blanco crema para textos.
+- **Tipografía**: Combinación de `Playfair Display` (serif elegante para encabezados y logotipo) e `Inter` (sans-serif para lectura clara de la interfaz y elementos funcionales).
+- **Componentes**: Botones con degradados suaves (Gold), tarjetas con efectos `hover` que amplían (`scale`) la imagen mostrando micro-animaciones (dynamic design), insignias (badges) y divisores refinados.
+
+### 5.3 Arquitectura de Componentes y Páginas
+
+Se implementó el enrutamiento utilizando `react-router-dom`:
+
+#### Módulos Globales y Layout
+- **Layout Base**: Un componente `Layout` con `Navbar` (fijo con fondo desenfocado) y `Footer` expansivo.
+- **Context API (Estado Global)**: 
+  - `AuthContext`: Gestiona la sesión a través del servidor (`/api/auth/me`), controlando inicio/cierre de sesión persistente (cookie enviada de forma transparente por el proxy de Vite).
+  - `CartContext`: Mantiene y persiste la cesta de la compra en el `localStorage`, sumando subtotales y cantidades en tiempo real.
+
+#### Páginas Creadas Completamente Funcionales:
+1. **Home (`/`)**: Hero section principal de alto impacto visual (imita un spotlight de luz sobre fondo oscuro), y una cuadrícula de las joyas marcadas como `destacadas` que carga dinámicamente de la API de Symfony.
+2. **Collection (`/coleccion`)**: Vista general de todo el catálogo. Implementa filtrado dinámico mediante _query parameters_ (`?categoria=...`) consumiendo `/api/categorias` y `/api/productos`.
+3. **ProductDetail (`/producto/:slug`)**: Ficha detallada con descripción, stock, control de `Añadir al Carrito`, disponibilidad y ventajas adicionales (garantía, certificado GIA). Si un producto no tiene stock, inhabilita los controles del botón.
+4. **Cart (`/carrito`)**: Interfaz del carrito con previsualizaciones, actualización de cantidades en línea, prevención de rebaja a cantidades negativas (elimina el item), subtotalización y comprobador de sesión (invita al login si el usuario es anónimo).
+5. **Login y Registro (`/login` y `/registro`)**: Formularios validados conectados en vivo con `AuthController` del Backend.
+6. **Checkout (`/checkout`)**: Pantalla final guiada: recoge domicilio del perfil, detalla cobros blindados y genera un POST a `/api/pedidos` confirmando el pedido y vaciando el carrito en `success`.
+7. **Profile (`/perfil`)**: Panel de control privado que carga el historial de compras directo del ORM de Doctrine. 
+
+**Cumplimiento de la Rúbrica Frontend:**
+- ✅ Implementación mediante React, integrando los endpoints construidos del Backend Symfony.
+- ✅ Gestión de estado con React Context (`Auth`, `Cart`).
+- ✅ Componentización completa (`Components`, `Pages`, `Layouts`).
+- ✅ Sistema de Autenticación con `React Router Route protection` y API Fetch Helper.
+- ✅ Funcionalidad avanzada visual completa sin depender de librerías de estilos externas, fomentando una calidad de CSS premium en línea con el nicho de negocio (joyería).
+
+---
