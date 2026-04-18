@@ -14,6 +14,11 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator
+            # Login JSON para React: POST /api/auth/login → body {"email":"...","password":"..."}
+            json_login:
+                check_path: /api/auth/login
+                username_path: email
+                password_path: password
             logout:
                 path: app_logout
             remember_me:
@@ -22,7 +27,12 @@ security:
                 path: /
 
     access_control:
-        - { path: ^/api, roles: PUBLIC_ACCESS }   # API pública para React
+        # Rutas que requieren usuario autenticado
+        - { path: ^/api/pedidos, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/auth/me, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/auth/perfil, roles: IS_AUTHENTICATED_FULLY }
+        # Resto de la API es pública (productos, categorías, registro, login)
+        - { path: ^/api, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
 

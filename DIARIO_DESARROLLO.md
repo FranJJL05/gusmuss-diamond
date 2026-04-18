@@ -147,3 +147,74 @@ echo 'OK' . PHP_EOL;
 - ✅ Gestión completa de Productos, Categorías, Pedidos y Usuarios desde el admin
 
 ---
+
+## ENTRADA 5
+
+**Fase:** 4.7. Mejora del Modelo de Datos y API REST completa del Backend.
+**Rama:** `feature/db-mejoras`
+
+**Acciones realizadas:**
+
+### 5.1 Mejora del Esquema de la Base de Datos
+
+Se identificaron carencias en el modelo de datos inicial y se ampliaron tres entidades:
+
+**`Product`** — Nuevos campos: `slug` (URL SEO), `material` (Oro 18k, Platino…), `destacado` (boolean para portada), `createdAt`. El tipo de `precio` pasó de `DOUBLE` a `INT` (céntimos): 185000 = 1.850,00 €.
+
+**`Category`** — Nuevos campos: `slug` (para rutas `/coleccion/anillos`), `descripcion` (texto de la página de categoría).
+
+**`User`** — Nuevos campos: `telefono` y `direccion` (dirección de envío predeterminada para el checkout).
+
+**Gestión de migración en dev:** `doctrine:schema:drop --force` + `doctrine:schema:create` + `doctrine:migrations:version --add --all`, al ser entorno de desarrollo donde los datos se recargan con fixtures.
+
+### 5.2 Reescritura de los DataFixtures con joyas reales
+
+Los fixtures originales tenían productos de ropa (incoherente con "Gusmuss Diamond"). Se reescribieron completamente con **12 joyas de alta joyería** en 5 categorías (Anillos, Collares, Pulseras, Pendientes, Alta Joyería), con precios entre 950 € y 12.500 €, materiales reales (Oro 18k, Platino 950) y 7 productos marcados como destacados.
+
+### 5.3 API REST de Productos y Categorías
+
+**`GET /api/productos`** — listado con JOIN eager a Category (evita N+1). Filtra por `?categoria=anillos`.
+**`GET /api/productos/destacados`** — para la portada de React.
+**`GET /api/productos/buscar?q=...`** — búsqueda por nombre, descripción o material.
+**`GET /api/productos/{slug}`** — ficha completa con descripción.
+**`GET /api/categorias`** — todas las categorías con recuento de productos.
+**`GET /api/categorias/{slug}`** — categoría + sus productos.
+
+Todos los endpoints llevan cabeceras CORS (`Access-Control-Allow-Origin: *`) para que React pueda consumirlos desde cualquier puerto.
+
+### 5.4 API REST de Autenticación
+
+**`POST /api/auth/registro`** — crea cuenta con validaciones (email único, formato, contraseña ≥ 6 caracteres).
+**`POST /api/auth/login`** — gestionado por `json_login` nativo de Symfony. Acepta `{"email":"...","password":"..."}`, crea sesión PHP, retorna 200 o 401.
+**`GET /api/auth/me`** — datos del usuario autenticado (requiere sesión).
+**`PUT /api/auth/perfil`** — actualiza nombre, apellidos, teléfono, dirección.
+
+### 5.5 API REST de Pedidos (Checkout)
+
+**Decisión arquitectónica:** el carrito vive en el **cliente React** (localStorage + Context API), no en el servidor. Al hacer checkout, React envía los items en el body del POST.
+
+**`POST /api/pedidos`** — recibe `{"items":[{"productId":1,"cantidad":2},...], "direccionEnvio":"..."}`. Valida stock de cada producto, crea `Order` + `OrderItem`, descuenta stock y devuelve el resumen. Requiere autenticación.
+**`GET /api/pedidos`** — historial de pedidos del usuario autenticado.
+**`GET /api/pedidos/{id}`** — detalle con líneas del pedido.
+
+### 5.6 Control de acceso de la API
+
+- Protegidos con `IS_AUTHENTICATED_FULLY`: `/api/pedidos`, `/api/auth/me`, `/api/auth/perfil`.
+- Públicos (`PUBLIC_ACCESS`): productos, categorías, carrito, registro, login.
+
+**Tecnologías/Comandos clave usados:**
+```bash
+docker exec gusmuss_web php bin/console doctrine:schema:drop --force
+docker exec gusmuss_web php bin/console doctrine:schema:create
+docker exec gusmuss_web php bin/console doctrine:migrations:version --add --all --no-interaction
+docker exec gusmuss_web php bin/console doctrine:fixtures:load --no-interaction
+```
+
+**Cumplimiento de la Rúbrica:**
+- ✅ API REST con múltiples recursos (productos, categorías, pedidos, usuarios)
+- ✅ Validación de datos en el servidor (stock, email único, campos requeridos)
+- ✅ Proceso de compra completo: carrito (React) → pedido (Symfony) → descuento de stock
+- ✅ Autenticación JSON para SPA (json_login nativo de Symfony)
+- ✅ Endpoints protegidos con control de acceso por roles
+
+---
