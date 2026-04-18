@@ -1,72 +1,65 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchApi } from '../api';
 import './Home.css';
 
 export default function Home() {
-  const [destacados, setDestacados] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchApi('/productos/destacados')
-      .then(data => {
-        setDestacados(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
-
   return (
-    <div>
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1 className="hero-title">El Arte de la <span className="gold">Eternidad</span></h1>
-          <p className="hero-subtitle">Alta joyería diseñada para trascender el tiempo y celebrar los momentos más preciados de su vida.</p>
-          <div className="hero-actions">
-            <Link to="/coleccion" className="btn btn-gold">Descubrir Colección</Link>
+    <div className="home-container">
+      
+      {/* Las rayas grises al fondo (como en el mockup, en los bordes) */}
+      <div className="bg-guidelines hide-mobile"></div>
+
+      <section className="hero-light">
+        <h2 className="hero-sub font-serif">ESTO ES MÁS QUE UNA SIMPLE MARCA DE ROPA</h2>
+        <h1 className="hero-main logo-text" style={{ color: 'var(--color-black)' }}>
+          Gusmuss
+        </h1>
+
+        <div className="hero-asymmetric-grid">
+          
+          {/* Columna Izquierda: Círculo y barras negras */}
+          <div className="hero-left-art">
+            <div className="black-bar bar-1"></div>
+            <div className="black-bar bar-2"></div>
+            <div className="black-bar bar-3"></div>
+            
+            <div className="circle-image-wrap">
+              <img src="/placeholder-hero-1.jpg" alt="Boutique" className="circle-base" />
+            </div>
+            
+            {/* Hojas falsas encima del círculo */}
+            <div className="plant-leaf-decoration left-plant"></div>
           </div>
+
+          {/* Centro: Modulos caqui y Botón */}
+          <div className="hero-center-modules">
+            <div className="khaki-box box-familia">Familia</div>
+            <div className="khaki-box box-lujo">Lujo</div>
+            <div className="khaki-box box-actitud">Actitud</div>
+            <div className="khaki-box box-servicio">Servicio<br/>Personalizado</div>
+            
+            <Link to="/contacto" className="btn btn-black action-contact-oval">
+              Contactacta con nosotros
+            </Link>
+          </div>
+
+          {/* Columna Derecha: Fotos con verde y planta derecha */}
+          <div className="hero-right-art">
+            <div className="img-frame img-top-right">
+              <img src="/placeholder-hero-2.jpg" alt="Model" />
+              <div className="green-accent top-right-corner"></div>
+            </div>
+
+            <div className="img-frame img-bottom-right">
+              <img src="/placeholder-hero-2.jpg" alt="Model" />
+              <div className="green-accent bottom-left-corner"></div>
+            </div>
+
+            <div className="plant-leaf-decoration right-plant"></div>
+          </div>
+
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="section container">
-        <div className="section-title">
-          <h2>Piezas Destacadas</h2>
-          <div className="gold-divider"></div>
-          <p>Selección curada de nuestras creaciones más exquisitas</p>
-        </div>
-
-        {loading ? (
-          <div className="spinner-wrap"><div className="spinner"></div></div>
-        ) : (
-          <div className="grid-products">
-            {destacados.map(p => (
-              <Link to={`/producto/${p.slug}`} key={p.id} className="card product-card">
-                <div className="product-img-wrap">
-                  {p.imagen ? (
-                    <img src={p.imagen} alt={p.nombre} className="product-img" loading="lazy" />
-                  ) : (
-                    <div className="product-img-placeholder">Gusmuss</div>
-                  )}
-                  {p.destacado && <span className="badge badge-gold absolute-top-right">Exclusivo</span>}
-                </div>
-                <div className="product-info">
-                  <span className="product-cat">{p.categoria?.nombre || 'Alta Joyería'}</span>
-                  <h3 className="product-name">{p.nombre}</h3>
-                  <div className="product-meta">
-                    <span className="product-material">{p.material}</span>
-                    <span className="product-price">{p.precioFormateado}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </section>
     </div>
   );
 }

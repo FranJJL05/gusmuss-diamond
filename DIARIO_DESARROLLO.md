@@ -231,12 +231,13 @@ docker exec gusmuss_web php bin/console doctrine:fixtures:load --no-interaction
 Se inicializó un nuevo proyecto Vite con React en la carpeta `/frontend` del repositorio principal de Symfony.
 **Configuración de Vite (`vite.config.js`)**: Se configuró el puerto `3000` para el servidor de desarrollo y se estableció un proxy (`/api -> http://localhost:8000`) para redirigir todas las peticiones a la API de Symfony y evitar bloqueos por políticas CORS durante el desarrollo.
 
-### 5.2 Sistema de Diseño: Alta Joyería
+### 5.2 Sistema de Diseño: Rediseño Prototipo "Gusmuss"
 
-Se diseñó desde cero el CSS (`index.css`) basado en un sistema estético premium, cumpliendo estrictamente con el requisito de ofrecer una experiencia dinámica y elegante:
-- **Paleta de Colores**: Fondo negro profundo (`#0a0a0a`) para resaltar las joyas, con detalles en oro clásico (`#c9a84c`) y blanco crema para textos.
-- **Tipografía**: Combinación de `Playfair Display` (serif elegante para encabezados y logotipo) e `Inter` (sans-serif para lectura clara de la interfaz y elementos funcionales).
-- **Componentes**: Botones con degradados suaves (Gold), tarjetas con efectos `hover` que amplían (`scale`) la imagen mostrando micro-animaciones (dynamic design), insignias (badges) y divisores refinados.
+Tras recibir validación visual mediante prototipos (tipo Figma), se rediseñó desde cero el CSS (`index.css`) hacia un tema claro y asimétrico:
+- **Paleta de Colores**: Fondo blanco puro (`#ffffff`), cabeceras compartimentadas en negro profundo y caqui (`#bda57b`), con acentos verdes (`#9abd4c`) para destacar elementos "Frame".
+- **Cabecera Dual**: Barra negra principal con el logotipo y barra inferior caqui interactiva.
+- **Tipografía**: Incorporación de la fuente cursiva `Great Vibes` (extraída de Google Fonts para el logotipo original "Gusmuss") junto con la lectura clara de `Playfair Display` serif.
+- **Asimetría Constante (Dynamic Design)**: Cuadrículas de imagen cortadas, superposición de elementos florales, botón central de desborde y un pie de página en franjas anchas tipo "teclas de piano". Cajas imitando "marcos de cuadro 3D" con sombras CSS y efecto bisel para los productos («Unique Pieces»).
 
 ### 5.3 Arquitectura de Componentes y Páginas
 

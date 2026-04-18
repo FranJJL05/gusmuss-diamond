@@ -15,40 +15,34 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <div className="container nav-container">
-        <div className="nav-brand">
-          <Link to="/">
-            <span className="serif gold">GUSMUSS</span> DIAMOND
-          </Link>
-        </div>
+      {/* Botones de acción flotantes a la derecha (fuera del prototipo visual, pero necesarios para funcionalidad) */}
+      <div className="nav-actions-container">
+        {user ? (
+          <>
+            <span>Hola, {user.nombre}</span>
+            <Link to="/perfil">Perfil</Link>
+            <button onClick={handleLogout}>Salir</button>
+          </>
+        ) : (
+          <Link to="/login">Entrar / Registrarse</Link>
+        )}
+        <Link to="/carrito" style={{ position: 'relative' }}>
+          Carrito
+          {totalItems > 0 && <span style={{ position: 'absolute', top: '-10px', right: '-15px', background: 'red', color: 'white', borderRadius: '50%', padding: '0 5px', fontSize: '0.7rem' }}>{totalItems}</span>}
+        </Link>
+      </div>
 
-        <nav className="nav-links hide-mobile">
-          <Link to="/">Inicio</Link>
-          <Link to="/coleccion">Colección</Link>
+      <div className="nav-top">
+        <Link to="/" className="logo-text">Gusmuss</Link>
+      </div>
+      
+      <div className="nav-bottom">
+        <nav className="nav-links">
+          <Link to="/">INICIO</Link>
+          <Link to="/coleccion">ROPA</Link>   {/* Usamos "Ropa" para coincidir con tu diseño, aunque lleve a colección */}
+          <Link to="/coleccion">ACCESORIOS</Link>
+          <Link to="/contacto">CONTACTO</Link>
         </nav>
-
-        <div className="nav-actions">
-          {user ? (
-            <div className="nav-user">
-              <span className="hide-mobile">Hola, {user.nombre}</span>
-              <Link to="/perfil" className="badge badge-gold">Perfil</Link>
-              <button onClick={handleLogout} className="btn-text">Salir</button>
-            </div>
-          ) : (
-            <div className="nav-guest">
-              <Link to="/login" className="btn-text">Entrar</Link>
-            </div>
-          )}
-          
-          <Link to="/carrito" className="cart-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
-            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
-          </Link>
-        </div>
       </div>
     </header>
   );
