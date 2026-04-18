@@ -22,6 +22,7 @@ security:
                 path: /
 
     access_control:
+        - { path: ^/api, roles: PUBLIC_ACCESS }   # API pública para React
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
 
