@@ -45,6 +45,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerified = false;
 
     /**
+     * Teléfono de contacto (opcional)
+     */
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $telefono = null;
+
+    /**
+     * Dirección de envío completa
+     */
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $direccion = null;
+
+    /**
      * @var Collection<int, Order>
      */
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
@@ -192,6 +204,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
 
+        return $this;
+    }
+
+    public function getTelefono(): ?string { return $this->telefono; }
+
+    public function setTelefono(?string $telefono): static
+    {
+        $this->telefono = $telefono;
+        return $this;
+    }
+
+    public function getDireccion(): ?string { return $this->direccion; }
+
+    public function setDireccion(?string $direccion): static
+    {
+        $this->direccion = $direccion;
         return $this;
     }
 }
