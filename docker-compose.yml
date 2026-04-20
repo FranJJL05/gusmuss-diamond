@@ -45,6 +45,13 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
 
+  mailer:
+    image: mailhog/mailhog
+    container_name: gusmuss_mailer
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Interfaz Web
+
 volumes:
   db_data:
   symfony_var:

@@ -190,6 +190,52 @@ class OrderController extends AbstractController
         return $this->json($this->serializeOrder($pedido, true), 200, $this->cors());
     }
 
+    /**
+     * GET /api/pedidos/{id}/pdf
+     * Descargar factura del pedido en PDF
+     */
+    #[Route('/{id}/pdf', name: 'pdf', methods: ['GET'])]
+    public function pdf(int $id, #[CurrentUser] ?User $user, \Twig\Environment $twig): \Symfony\Component\HttpFoundation\Response
+    {
+        if (!$user) {
+            return $this->json(['error' => 'No autenticado'], 401, $this->cors());
+        }
+
+        $pedido = $this->orderRepository->find($id);
+
+        if (!$pedido || $pedido->getUser() !== $user) {
+            return $this->json(['error' => 'Pedido no encontrado'], 404, $this->cors());
+        }
+
+        // Configurar Dompdf
+        $pdfOptions = new \Dompdf\Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        $pdfOptions->set('isRemoteEnabled', true); // Permitir imgs
+        
+        $dompdf = new \Dompdf\Dompdf($pdfOptions);
+        
+        // Renderizar el HTML
+        $html = $twig->render('pdf/factura_pedido.html.twig', [
+            'pedido' => $pedido,
+            'title'  => "Factura Pedido #" . $pedido->getId(),
+        ]);
+        
+        // Cargar HTML a dompdf
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return new \Symfony\Component\HttpFoundation\Response(
+            $dompdf->output(),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="factura_gusmuss_#' . $pedido->getId() . '.pdf"',
+                'Access-Control-Allow-Origin' => '*',
+            ]
+        );
+    }
+
     // ---------------------------------------------------------------
 
     private function serializeOrder(Order $o, bool $withItems = false): array

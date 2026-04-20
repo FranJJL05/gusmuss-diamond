@@ -23,3 +23,7 @@
 /public/uploads/products/*
 !/public/uploads/products/.gitkeep
 ###< uploads ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

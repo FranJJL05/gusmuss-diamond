@@ -26,6 +26,30 @@ export default function Profile() {
   );
   if (!user) return <Navigate to="/login" />;
 
+  const handleDownloadInvoice = async (pedidoId) => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+      const response = await fetch(`/api/pedidos/${pedidoId}/pdf`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error('Error al generar PDF');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `factura_gusmuss_${pedidoId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
     <div className="px-4 py-6">
       {/* Cabecera perfil */}
@@ -67,10 +91,18 @@ export default function Profile() {
                 <span className="text-gus-gold font-semibold text-sm">Pedido #{pedido.id}</span>
                 <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">{pedido.estado}</span>
               </div>
-              <div className="flex justify-between text-sm text-gray-500">
+              <div className="flex justify-between text-sm text-gray-500 mb-3">
                 <span>{pedido.fechaPedido}</span>
                 <span className="font-serif font-bold text-gus-black">{pedido.totalFormateado}</span>
               </div>
+              <button 
+                onClick={() => handleDownloadInvoice(pedido.id)}
+                className="w-full text-center border-t border-gray-100 pt-3 text-sm text-gus-black hover:text-gus-gold flex justify-center items-center gap-2 transition-colors"
+                title="Imprimir o Descargar copia PDF"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                Descargar Factura PDF
+              </button>
             </div>
           ))}
         </div>

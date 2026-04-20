@@ -6,6 +6,11 @@ export async function fetchApi(endpoint, options = {}) {
     ...options.headers,
   };
 
+  const token = localStorage.getItem('jwt_token');
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const config = {
     ...options,
     headers,

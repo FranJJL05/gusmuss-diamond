@@ -26,6 +26,8 @@ class AuthController extends AbstractController
     public function __construct(
         private EntityManagerInterface      $em,
         private UserPasswordHasherInterface $hasher,
+        private \SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface $verifyEmailHelper,
+        private \Symfony\Component\Mailer\MailerInterface $mailer,
     ) {
     }
 
@@ -74,10 +76,70 @@ class AuthController extends AbstractController
         $this->em->persist($user);
         $this->em->flush();
 
+        // Enviar correo de Verificación
+        try {
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                'api_auth_verify_email',
+                $user->getId(),
+                $user->getEmail(),
+                ['id' => $user->getId()]
+            );
+
+            // Symfony TemplatedEmail
+            $email = (new \Symfony\Bridge\Twig\Mime\TemplatedEmail())
+                ->from('no-reply@gusmuss.com')
+                ->to($user->getEmail())
+                ->subject('Por favor, confirma tu cuenta en Gusmuss')
+                ->htmlTemplate('email/verificacion.html.twig')
+                ->context([
+                    'verificacion_url' => $signatureComponents->getSignedUrl()
+                ]);
+
+            $this->mailer->send($email);
+        } catch (\Exception $e) {
+            // Ignorar para no romper el registro si el mailer no estuviera levantado
+        }
+
         return $this->json([
-            'mensaje' => 'Cuenta creada correctamente',
+            'mensaje' => 'Cuenta creada correctamente. Por favor, revisa tu correo electrónico.',
             'usuario' => $this->serializeUser($user),
         ], 201, $this->cors());
+    }
+
+    /**
+     * GET /api/auth/verify/email
+     */
+    #[Route('/verify/email', name: 'verify_email', methods: ['GET'])]
+    public function verifyUserEmail(Request $request): JsonResponse
+    {
+        $id = $request->query->get('id');
+        
+        if (null === $id) {
+            return $this->json(['error' => 'Falta identificador'], 400, $this->cors());
+        }
+
+        $user = $this->em->getRepository(User::class)->find($id);
+
+        if (null === $user) {
+            return $this->json(['error' => 'Usuario no encontrado'], 404, $this->cors());
+        }
+
+        try {
+            $this->verifyEmailHelper->validateEmailConfirmation(
+                $request->getUri(),
+                $user->getId(),
+                $user->getEmail()
+            );
+        } catch (\SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface $e) {
+            return $this->json(['error' => $e->getReason()], 400, $this->cors());
+        }
+
+        // Marcar como verificado
+        $user->setIsVerified(true);
+        $this->em->flush();
+
+        // Redirigir al frontend de React (por defecto Vite en puerto 5173 o 3000)
+        return $this->redirect('http://localhost:3000/login?verified=true');
     }
 
     /**

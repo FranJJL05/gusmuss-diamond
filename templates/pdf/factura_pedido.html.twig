@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; color: #333; }
+        .header { text-align: center; border-bottom: 2px solid #bda57b; padding-bottom: 20px; margin-bottom: 30px; }
+        .logo { font-size: 32px; font-weight: bold; color: #bda57b; font-style: italic; }
+        .details { margin-bottom: 30px; width: 100%; }
+        .details td { vertical-align: top; width: 50%; }
+        table.items { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        table.items th { background: #f4f4f4; border-bottom: 1px solid #ddd; padding: 10px; text-align: left; font-size: 12px; text-transform: uppercase; }
+        table.items td { border-bottom: 1px solid #ddd; padding: 10px; }
+        .total-row td { font-weight: bold; border-top: 2px solid #333; font-size: 16px; }
+        .footer { text-align: center; font-size: 12px; color: #777; margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">Gusmuss Diamond</div>
+    <p>Puerto Banús, Marbella<br>Moda de lujo multimarca</p>
+</div>
+
+<h2>Factura / Resumen de Pedido</h2>
+
+<table class="details">
+    <tr>
+        <td>
+            <strong>Datos del Cliente:</strong><br>
+            Nombre: {{ pedido.user.nombre }} {{ pedido.user.apellidos }}<br>
+            Email: {{ pedido.user.email }}<br>
+            Teléfono: {{ pedido.user.telefono|default('No especificado') }}
+        </td>
+        <td>
+            <strong>Detalles del Pedido:</strong><br>
+            Nº de Pedido: #{{ pedido.id }}<br>
+            Fecha: {{ pedido.fechaPedido|date('d/m/Y H:i') }}<br>
+            Estado: {{ pedido.estado | capitalize }}<br><br>
+        </td>
+    </tr>
+</table>
+
+<table class="items">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio Ud</th>
+            <th>Cant</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in pedido.orderItems %}
+        <tr>
+            <td>{{ item.product.nombre }}</td>
+            <td>{{ (item.precioUnitario)|number_format(2, ',', '.') }} €</td>
+            <td>{{ item.cantidad }}</td>
+            <td>{{ (item.precioUnitario * item.cantidad)|number_format(2, ',', '.') }} €</td>
+        </tr>
+        {% endfor %}
+        <tr class="total-row">
+            <td colspan="3" style="text-align: right">TOTAL</td>
+            <td>{{ pedido.total|number_format(2, ',', '.') }} €</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="footer">
+    Factura generada automáticamente el {{ "now"|date('d/m/Y H:i') }}<br>
+    Gracias por confiar en Gusmuss.
+</div>
+
+</body>
+</html>

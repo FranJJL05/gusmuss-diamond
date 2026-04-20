@@ -1,0 +1,45 @@
+services:
+  # Backend Symfony (PHP)
+  - type: web
+    name: gusmuss-backend
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    healthCheckPath: /api/productos
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gusmuss-db
+          property: connectionString
+      - key: JWT_PASSPHRASE
+        generateValue: true
+      - key: MAILER_DSN
+        value: null://null  # Sustituir por brevo, mailgun, sendgrid en el hosting
+
+  # Frontend React (Vite)
+  - type: static
+    name: gusmuss-frontend
+    env: node
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "./frontend/dist"
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: gusmuss-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+databases:
+  # Base de datos MySQL / MariaDB (via Docker o nativa)
+  # Render usa PostgreSQL de forma nativa, pero la declaramos para la demo
+  - name: gusmuss-db
+    databaseName: gusmuss_production
+    user: gusmuss_user
+    plan: free

@@ -23,9 +23,6 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    // Simulamos la respuesta de la API ya que login por defecto puede no devolver JSON dependiendo de config
-    // Para json_login en Symfony, sí devuelve JSON si lo configuramos, 
-    // pero si Symfony 401s it drops here.
     try {
       const resp = await fetch('/api/auth/login', {
         method: 'POST',
@@ -34,7 +31,12 @@ export function AuthProvider({ children }) {
       });
       if (!resp.ok) throw new Error('Credenciales inválidas');
       
-      // Una vez logueado, recuperamos \`me\` para tener sus datos
+      const data = await resp.json();
+      if (data.token) {
+        localStorage.setItem('jwt_token', data.token);
+      }
+      
+      // Una vez guardado el token, llamamos al me para traer los datos reales
       const userData = await fetchApi('/auth/me');
       setUser(userData);
       return true;
@@ -44,9 +46,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } catch(e) {} // ignore
+    localStorage.removeItem('jwt_token');
     setUser(null);
   };
 
