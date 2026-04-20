@@ -5,6 +5,9 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+
+# Documentos Privados del alumno (no subir)
+GUIA_PRIVADA_DEFENSA.md
 /var/
 /vendor/
 ###< symfony/framework-bundle ###

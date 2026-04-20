@@ -298,3 +298,29 @@ Para automatizar la integración continua (Asignatura de Despliegue):
 - ✅ Funcionalidad avanzada visual completa sin depender de librerías de estilos externas, fomentando una calidad de CSS premium en línea con el nicho de negocio (joyería).
 
 ---
+
+## ENTRADA 8 - Finalización Backend (Entorno de Producción y Asignatura Servidor)
+
+**Fase:** 7. Consolidación de Servidor Web y APIs.  
+**Objetivos:** Autenticación por Tokens (JWT), Emisión de Documentación (PDF), Verificación por Correo y Despliegue.
+
+Para concluir los requisitos estrictos de la evaluación y preparar el repositorio para su entrega a los docentes, se han acometido los siguientes desarrollos transversales:
+
+### 7.1 Subsistema de Tokens: Lexik JWT Authentication
+El acceso de los clientes de la tienda ya no se valida con las obsoletas cookies locales (`SESSION_ID`), sino mediante un estándar robusto y sin estado requerido en clase:
+- Se generaron claves asimétricas RSA de 4096-bits para la firma del Payload (`config/jwt`).
+- Cada vez que el cliente hace login en `/api/auth/login`, Symfony emite un Token y React lo intercepta, guardándolo en `localStorage`.
+- Las llamadas a rutas como Mis Pedidos o Perfil llevan adjunto: `Authorization: Bearer <token>`.
+
+### 7.2 Emisión de Facturas y Contratos (DOMPDF)
+Se incluyó la librería PHP `dompdf`.
+Cualquier cliente logueado puede recuperar en su panel de Perfil el resguardo de sus pedidos. Al pulsar el botón "Descargar Factura PDF" en React, se solicita al controlador `InvoiceController / OrderController`. Symfony baja hasta el motor de plantillas de `Twig`, inyecta los datos del `Order` real y renderiza al vuelo en formato PDF con forzadura de descarga en encabezados (`Content-Disposition: attachment`).
+
+### 7.3 Interceptor de Entregas por Email (Protocolo SMTP Asíncrono)
+Para la asignatura de Desarrollo de Entorno Servidor:
+- Al registrar cuenta, el backend orquesta `Symfony\Component\Mailer` junto a `SymfonyCasts\VerifyEmailBundle` generando una URL criptográfica de verificación.
+- Las pruebas han sido validadas en local mediante inyección del contenedor Docker **MailHog** (`1025`/`8025`). Esto evita inundar buzones reales pero valida el transporte SMTP.
+- La confirmación en el correo marca al cliente como verificado en la Base de Datos (`isVerified`) y lo reconduce a la tienda en React.
+
+### 7.4 Preparación Infraestructura como Código (IaC)
+En vista de no aplicar costes de hosting al alumno en esta etapa, pero cubrir el ítem de despliegue, el código no solo tiene pruebas `Github Actions (ci.yml)`. Se ha programado un mapa de infraestructura `render.yaml`. Es un Blueprint autoejecutable que en entornos PaaS de la nube (como Render) lee el archivo y levanta la Base de Datos, el servidor PHP, compila Vite/React y vincula variables de entorno entre los servicios de manera desatendida.
