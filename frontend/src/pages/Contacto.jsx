@@ -6,8 +6,6 @@ export default function Contacto() {
 
   return (
     <div className="bg-white min-h-screen pb-20">
-      <Navbar title={t.contact.title} />
-
       <div className="pt-14 md:pt-20 md:flex md:w-full md:max-w-6xl md:mx-auto md:min-h-[70vh] md:pb-32">
 
         {/* Lado Izquierdo (Móvil e Imagen Desktop) */}

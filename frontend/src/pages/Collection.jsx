@@ -19,8 +19,8 @@ function StripesBg() {
 // Barra de búsqueda dorada
 function SearchBar({ value, onChange, placeholder }) {
   return (
-    <div className="relative mx-4 mb-4">
-      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gus-gold/60" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+    <div className="relative mx-4 mb-4 z-50">
+      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gus-gold/60 pointer-events-none" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
       </svg>
       <input
@@ -29,7 +29,7 @@ function SearchBar({ value, onChange, placeholder }) {
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         className="w-full bg-gus-gold/20 border border-gus-gold/40 text-gus-black placeholder-gus-gold/60
-          pl-9 pr-4 py-2 rounded-full text-sm focus:outline-none focus:border-gus-gold transition-colors"
+          pl-9 pr-4 py-2 rounded-full text-sm focus:outline-none focus:border-gus-gold transition-colors relative z-50"
       />
     </div>
   );
@@ -56,13 +56,25 @@ export default function Collection({ category = null, pageTitle }) {
         p.material?.toLowerCase().includes(search.toLowerCase()))
     : productos;
 
+  // Si no hay sombreros en la BD, inyectamos placeholders para que la UI no quede rota.
+  const displayProducts = filtered.length > 0 ? filtered : [
+    { id: 'f1', nombre: 'Sombrero Panamá', precio: 12000, precioFormateado: '120.00 €', imagen: null },
+    { id: 'f2', nombre: 'Sombrero Fedora', precio: 15600, precioFormateado: '156.00 €', imagen: null },
+    { id: 'f3', nombre: 'Pamela Negro', precio: 22000, precioFormateado: '220.00 €', imagen: null },
+    { id: 'f4', nombre: 'Boina Francesa', precio: 8000, precioFormateado: '80.00 €', imagen: null },
+    { id: 'f5', nombre: 'Bolso Clutch', precio: 18000, precioFormateado: '180.00 €', imagen: null },
+    { id: 'f6', nombre: 'Bolso Shopper', precio: 29000, precioFormateado: '290.00 €', imagen: null },
+    { id: 'f7', nombre: 'Bolso Bandolera', precio: 14000, precioFormateado: '140.00 €', imagen: null },
+    { id: 'f8', nombre: 'Cartera Piel', precio: 9500, precioFormateado: '95.00 €', imagen: null },
+  ];
+
   // Render para Accesorios (Escritorio Mockup 3)
   if (category === 'accesorios') {
     return (
       <div className="relative min-h-screen bg-white">
-        {/* Barra de Búsqueda Móvil */}
-        <div className="md:hidden pt-4">
-          <SearchBar value={search} onChange={setSearch} placeholder={t.collection.search} />
+        {/* Barra de Búsqueda */}
+        <div className="pt-8 max-w-sm mx-auto z-20 relative">
+          <SearchBar value={search} onChange={setSearch} placeholder={t.collection.search || 'Buscar accesorios'} />
         </div>
 
         {loading ? (
@@ -71,11 +83,11 @@ export default function Collection({ category = null, pageTitle }) {
           <div className="flex flex-col items-center w-full pb-20">
             {/* LILA 1: Sombreros */}
             <div className="w-full flex-col flex items-center mb-12">
-               <div className="grid grid-cols-1 md:grid-cols-4 w-full h-[300px] mb-8">
-                 {/* Sombreros estáticos basados en el mockup si no hay datos reales, o mapeados. Haremos simulación del layout. */}
-                 {filtered.slice(0,4).map((p, i) => (
-                    <div key={p.id} className={`flex flex-col justify-center items-center relative ${i % 2 === 1 ? 'bg-black text-white' : 'bg-white text-black'}`}>
-                      <img src={p.imagen || `https://placehold.co/400x300/transparent/transparent?text=${p.nombre}`} className="w-48 object-contain z-10 hover:scale-110 transition-transform" />
+               <div className="grid grid-cols-1 md:grid-cols-4 w-full md:h-[300px] mb-8">
+                 {/* Sombreros */}
+                 {displayProducts.slice(0,4).map((p, i) => (
+                    <div key={p.id} className={`flex flex-col justify-center items-center relative py-12 md:py-0 ${i % 2 === 1 ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                      <img src={p.imagen || `https://placehold.co/400x300/transparent/transparent?text=${p.nombre}`} className="w-48 object-contain z-10 hover:scale-110 transition-transform" alt={p.nombre} />
                       <div className="text-gus-gold mt-4 font-serif text-lg">{p.precioFormateado || p.precio + ' €'}</div>
                       <button className="bg-[#222] text-white px-6 py-1 rounded-full mt-2 font-serif italic hover:bg-gus-gold transition-colors text-sm shadow-md z-10">Comprar</button>
                     </div>
@@ -85,30 +97,30 @@ export default function Collection({ category = null, pageTitle }) {
             </div>
             
             {/* LILA 2: Balsos y barra de meta */}
-            <div className="w-full relative py-20 flex px-8 items-center justify-between">
-              <div className="flex gap-4 items-end relative z-10 w-1/3">
-                 {filtered.slice(4,6).map((p, i) => (
+            <div className="w-full relative py-20 flex flex-col md:flex-row px-8 items-center justify-between gap-12 md:gap-0">
+              <div className="flex flex-col md:flex-row gap-8 items-end relative z-10 md:w-1/3">
+                 {displayProducts.slice(4,6).map((p, i) => (
                     <div key={p.id} className="flex flex-col items-center relative">
                       {/* Fondo a rayas (piano) parcial detrás de estos */}
                       <div className="absolute inset-0 bg-piano-stripes opacity-20 -z-10 translate-y-12"></div>
-                      <img src={p.imagen || `https://placehold.co/300x200/transparent/transparent?text=${p.nombre}`} className="w-40 object-contain hover:scale-110 transition-transform z-10" />
-                      <div className="text-gus-gold mt-4 font-serif font-bold text-sm bg-white px-2 rounded z-10">{p.precioFormateado || p.precio + ' €'} <span className="bg-[#222] text-white px-3 py-1 rounded-full font-serif italic text-xs ml-2 cursor-pointer hover:bg-gus-gold transition-colors">Comprar</span></div>
+                      <img src={p.imagen || `https://placehold.co/300x200/transparent/transparent?text=${p.nombre}`} className="w-40 object-contain hover:scale-110 transition-transform z-10" alt={p.nombre} />
+                      <div className="text-gus-gold mt-4 font-serif font-bold text-sm bg-white px-2 rounded z-10 shadow-sm">{p.precioFormateado || p.precio + ' €'} <span className="bg-[#222] text-white px-3 py-1 rounded-full font-serif italic text-xs ml-2 cursor-pointer hover:bg-gus-gold transition-colors">Comprar</span></div>
                     </div>
                  ))}
               </div>
               
-              <div className="w-1/3 text-center px-8 z-10">
-                 <h3 className="font-logo text-4xl leading-tight">Lleva contigo algo más que estilo: lleva confianza.</h3>
+              <div className="md:w-1/3 text-center px-4 md:px-8 z-10">
+                 <h3 className="font-logo text-4xl leading-tight bg-white md:bg-transparent py-4">Lleva contigo algo más que estilo: lleva confianza.</h3>
               </div>
 
               {/* Barra de metal con bolsos */}
-              <div className="w-1/3 relative flex justify-center items-center z-10 pr-8">
-                 <div className="absolute top-1/2 -translate-y-1/2 left-0 w-[120%] h-4 bg-gradient-to-b from-gray-300 via-gray-100 to-gray-400 shadow-sm border-b border-gray-500 rounded-sm -z-10 -translate-x-8"></div>
-                 {filtered.slice(6,8).map(p => (
+              <div className="md:w-1/3 relative flex flex-col md:flex-row justify-center items-center gap-8 md:gap-4 z-10 pr-0 md:pr-8">
+                 <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[120%] h-4 bg-gradient-to-b from-gray-300 via-gray-100 to-gray-400 shadow-sm border-b border-gray-500 rounded-sm -z-10 -translate-x-8"></div>
+                 {displayProducts.slice(6,8).map(p => (
                    <div key={p.id} className="flex flex-col items-center">
-                     <div className="w-1 h-8 bg-gray-600 rounded"></div>
-                     <img src={p.imagen || `https://placehold.co/200x250/transparent/transparent?text=${p.nombre}`} className="w-32 object-contain shadow-lg bg-white rounded" />
-                     <div className="text-gus-gold mt-4 font-serif font-bold text-sm bg-white px-2 rounded z-10">{p.precioFormateado || p.precio + ' €'} <span className="bg-[#222] text-white px-3 py-1 rounded-full font-serif italic text-xs ml-2 cursor-pointer hover:bg-gus-gold transition-colors">Comprar</span></div>
+                     <div className="hidden md:block w-1 h-8 bg-gray-600 rounded"></div>
+                     <img src={p.imagen || `https://placehold.co/200x250/transparent/transparent?text=${p.nombre}`} className="w-32 object-contain shadow-lg bg-white rounded" alt={p.nombre} />
+                     <div className="text-gus-gold mt-4 font-serif font-bold text-sm bg-white px-2 rounded z-10 shadow-sm">{p.precioFormateado || p.precio + ' €'} <span className="bg-[#222] text-white px-3 py-1 rounded-full font-serif italic text-xs ml-2 cursor-pointer hover:bg-gus-gold transition-colors">Comprar</span></div>
                    </div>
                  ))}
               </div>
