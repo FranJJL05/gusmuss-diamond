@@ -32,6 +32,17 @@ class AuthController extends AbstractController
     }
 
     /**
+     * POST /api/auth/login
+     * Atrapado automáticamente por el firewall json_login (lexik_jwt_authentication).
+     */
+    #[Route('/login', name: 'login', methods: ['POST'])]
+    public function login(): JsonResponse
+    {
+        // Si llega aquí es que el firewall no lo interceptó.
+        return $this->json(['error' => 'Login interceptor no configurado'], 401);
+    }
+
+    /**
      * POST /api/auth/registro
      * Body JSON: { "email": "...", "password": "...", "nombre": "...", "apellidos": "..." }
      */

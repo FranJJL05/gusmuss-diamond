@@ -29,10 +29,14 @@ export function AuthProvider({ children }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      if (!resp.ok) throw new Error('Credenciales inválidas');
       
-      const data = await resp.json();
-      if (data.token) {
+      const data = await resp.json().catch(() => null);
+
+      if (!resp.ok) {
+        throw new Error(data?.message || data?.error || 'Credenciales inválidas u error interno (posibles claves JWT faltantes)');
+      }
+      
+      if (data && data.token) {
         localStorage.setItem('jwt_token', data.token);
       }
       
