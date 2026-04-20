@@ -9,7 +9,7 @@ html { scroll-behavior: smooth; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Clase BEM para las "teclas de piano" del footer — metodología BEM */
+/* Clase BEM para las "teclas de piano" horizontales del footer */
 .piano-stripes {
   background: repeating-linear-gradient(
     90deg,
@@ -18,12 +18,42 @@ html { scroll-behavior: smooth; }
   );
 }
 
-/* Marco verde de cuadro (BEM: .product-frame) */
+/* Teclas de piano VERTICALES (gruesas) para el fondo de Colección Desktop */
+.piano-stripes-vertical {
+  background: repeating-linear-gradient(
+    90deg,
+    #fff 0%, #fff 5%,
+    #000 5%, #000 10%
+  );
+  background-size: 20vw 100%;
+}
+
+/* Regla para simular las 4 guías horizontales (red guides en mockup, pero hechas negras/grises) en grid */
+.bg-guide-lines {
+  background-image: linear-gradient(90deg, 
+      transparent 10%, rgba(0,0,0,0.15) 10%, rgba(0,0,0,0.15) 10.1%, 
+      transparent 10.1%, transparent 33%, rgba(0,0,0,0.15) 33%, rgba(0,0,0,0.15) 33.1%, 
+      transparent 33.1%, transparent 66%, rgba(0,0,0,0.15) 66%, rgba(0,0,0,0.15) 66.1%, 
+      transparent 66.1%, transparent 90%, rgba(0,0,0,0.15) 90%, rgba(0,0,0,0.15) 90.1%, 
+      transparent 90.1%
+  );
+}
+.dark-guide-lines {
+  background-image: linear-gradient(90deg, 
+      transparent 10%, rgba(255,255,255,0.1) 10%, rgba(255,255,255,0.1) 10.1%, 
+      transparent 10.1%, transparent 33%, rgba(255,255,255,0.1) 33%, rgba(255,255,255,0.1) 33.1%, 
+      transparent 33.1%, transparent 66%, rgba(255,255,255,0.1) 66%, rgba(255,255,255,0.1) 66.1%, 
+      transparent 66.1%, transparent 90%, rgba(255,255,255,0.1) 90%, rgba(255,255,255,0.1) 90.1%, 
+      transparent 90.1%
+  );
+}
+
+/* Marco verde de cuadro */
 .product-frame__border {
   border: 12px solid #9abd4c;
   border-top-color: #aed057;
   border-left-color: #9abd4c;
   border-right-color: #7a9c38;
   border-bottom-color: #6a8530;
-  box-shadow: inset 0 0 8px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
