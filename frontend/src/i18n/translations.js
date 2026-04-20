@@ -13,6 +13,14 @@ const translations = {
       helpText: '¿Necesitas ayuda?',
       helpLink: 'Contáctanos',
       featuredTitle: 'Piezas Destacadas',
+      editorial: {
+        essence: 'La Esencia de Puerto Banús',
+        moreThan: 'MÁS QUE UNA MARCA DE ROPA',
+        family: 'Familia',
+        luxury: 'Lujo',
+        attitude: 'Actitud',
+        personalService: 'Servicio Personal'
+      }
     },
     collection: {
       title: 'Nuestra Colección',
@@ -65,6 +73,14 @@ const translations = {
       helpText: 'Need help?',
       helpLink: 'Contact us',
       featuredTitle: 'Featured Pieces',
+      editorial: {
+        essence: 'The Essence of Puerto Banús',
+        moreThan: 'MORE THAN A CLOTHING BRAND',
+        family: 'Family',
+        luxury: 'Luxury',
+        attitude: 'Attitude',
+        personalService: 'Personal Service'
+      }
     },
     collection: {
       title: 'Our Collection',

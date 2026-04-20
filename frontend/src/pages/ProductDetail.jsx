@@ -47,63 +47,67 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="bg-white min-h-screen pb-24">
-      {/* Galería de imágenes */}
-      <div className="w-full h-80 bg-gray-100">
-        <ImageGallery images={images} autoPlay={false} />
-      </div>
-
-      {/* Info */}
-      <div className="px-5 py-6">
-        {/* Categoría */}
-        <p className="text-gus-gold text-xs uppercase tracking-widest mb-1">
-          {product.categoria?.nombre}
-        </p>
-
-        {/* Nombre */}
-        <h1 className="font-serif text-2xl text-gus-black mb-2">{product.nombre}</h1>
-
-        {/* Precio */}
-        <p className="text-gus-green font-bold text-2xl mb-4">{product.precioFormateado}</p>
-
-        {/* Separador */}
-        <div className="w-full h-px bg-gray-200 mb-4"></div>
-
-        {/* Detalles */}
-        <div className="space-y-2 mb-6 text-sm text-gray-600">
-          <p><span className="font-semibold text-gus-black">{t.product.material}:</span> {product.material}</p>
-          <p>
-            <span className="font-semibold text-gus-black">{t.product.stock}:</span>{' '}
-            {product.stock > 0
-              ? <span className="text-green-600">En stock ({product.stock} uds)</span>
-              : <span className="text-red-500">{t.product.outOfStock}</span>
-            }
-          </p>
+    <div className="bg-white md:bg-[#faf9f7] min-h-screen pb-24 md:pb-0">
+      <div className="md:max-w-[1200px] md:mx-auto md:py-20 md:flex md:gap-16 md:items-start">
+        {/* Galería de imágenes */}
+        <div className="w-full h-96 md:h-[700px] md:w-1/2 bg-gray-100 relative shadow-sm">
+          <ImageGallery images={images} autoPlay={false} />
         </div>
 
-        {/* Descripción */}
-        {product.descripcion && (
-          <div className="mb-6">
-            <h3 className="font-serif font-semibold text-gus-black mb-2">{t.product.description}</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">{product.descripcion}</p>
+        {/* Info */}
+        <div className="px-5 py-8 md:w-1/2 md:p-16 md:bg-white md:shadow-2xl md:relative md:top-8 flex flex-col">
+          {/* Categoría */}
+          <p className="text-gus-gold text-xs font-serif uppercase tracking-[0.3em] mb-3">
+            {product.categoria?.nombre || t.collection.all}
+          </p>
+
+          {/* Nombre */}
+          <h1 className="font-logo text-4xl md:text-5xl text-gus-black mb-4 leading-tight">{product.nombre}</h1>
+
+          {/* Precio */}
+          <p className="font-serif text-gus-green font-bold text-3xl mb-8">{product.precioFormateado}</p>
+
+          {/* Separador */}
+          <div className="w-full h-px bg-gray-200 mb-8"></div>
+
+          {/* Detalles */}
+          <div className="space-y-4 mb-8 text-sm text-gray-600 font-serif">
+            <p className="flex justify-between border-b border-gray-100 pb-2"><span className="font-semibold tracking-widest uppercase text-gus-black text-xs">{t.product.material}</span> <span>{product.material}</span></p>
+            <p className="flex justify-between border-b border-gray-100 pb-2">
+              <span className="font-semibold tracking-widest uppercase text-gus-black text-xs">{t.product.stock}</span>
+              {product.stock > 0
+                ? <span className="text-green-600 italic">En stock ({product.stock})</span>
+                : <span className="text-red-500 italic">{t.product.outOfStock}</span>
+              }
+            </p>
           </div>
-        )}
 
-        {/* Botón Añadir al Carrito */}
-        <button
-          onClick={handleAdd}
-          disabled={product.stock < 1 || adding}
-          className="w-full bg-gus-black text-white font-serif italic text-lg py-4 rounded-full
-            hover:bg-gus-gold hover:text-gus-black transition-all duration-300
-            disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {adding ? '...' : product.stock > 0 ? t.product.addToCart : t.product.outOfStock}
-        </button>
+          {/* Descripción */}
+          {product.descripcion && (
+            <div className="mb-10">
+              <h3 className="font-serif font-semibold text-gus-black tracking-widest text-xs uppercase mb-3">{t.product.description}</h3>
+              <p className="text-gray-500 text-sm leading-relaxed text-justify">{product.descripcion}</p>
+            </div>
+          )}
 
-        {/* Garantías */}
-        <div className="mt-6 space-y-2 text-xs text-gray-500 text-center">
-          <p>✦ Envío asegurado gratuito</p>
-          <p>✦ Garantía de por vida</p>
+          <div className="mt-auto pt-8">
+            {/* Botón Añadir al Carrito */}
+            <button
+              onClick={handleAdd}
+              disabled={product.stock < 1 || adding}
+              className="w-full bg-gus-black text-white font-serif italic text-xl py-5 rounded-none shadow-lg
+                hover:bg-gus-gold hover:text-black transition-all duration-300 transform hover:-translate-y-1
+                disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {adding ? '...' : product.stock > 0 ? t.product.addToCart : t.product.outOfStock}
+            </button>
+
+            {/* Garantías */}
+            <div className="mt-8 flex justify-between text-xs font-serif text-gray-500 border-t border-gray-100 pt-6">
+              <p className="flex items-center gap-2"><span className="text-gus-gold text-lg">✦</span> Envío asegurado gratuito</p>
+              <p className="flex items-center gap-2"><span className="text-gus-gold text-lg">✦</span> Garantía de por vida</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

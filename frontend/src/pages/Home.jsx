@@ -68,9 +68,9 @@ export default function Home() {
         {/* Cabecera Tipo Revista Editorial */}
         <div className="text-center w-full z-10 pt-20 pb-12 px-8 flex flex-col items-center">
           <div className="w-px h-16 bg-gus-gold mb-8 opacity-40"></div>
-          <p className="font-serif text-[0.65rem] sm:text-xs tracking-[0.4em] text-gray-500 uppercase mb-4">La Esencia de Puerto Banús</p>
-          <p className="font-serif text-3xl font-light tracking-widest text-gus-black max-w-2xl mx-auto leading-relaxed">
-            MÁS QUE UNA MARCA DE ROPA
+          <p className="font-serif text-[0.65rem] sm:text-xs tracking-[0.4em] text-gray-500 uppercase mb-4">{t.home.editorial.essence}</p>
+          <p className="font-serif text-3xl font-light tracking-widest text-gus-black max-w-2xl mx-auto leading-relaxed uppercase">
+            {t.home.editorial.moreThan}
           </p>
           <div className="w-12 h-px bg-gus-gold mt-8 opacity-40"></div>
         </div>
@@ -93,17 +93,17 @@ export default function Home() {
           {/* Bloque Central: Valores Flotantes (Refinados) */}
           <div className="col-span-3 flex flex-col gap-12 font-serif text-center mt-32 pl-12">
             <div className="w-full flex justify-start">
-               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">Familia</span>
+               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">{t.home.editorial.family}</span>
             </div>
             <div className="w-full flex justify-end pr-8">
-               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">Lujo</span>
+               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">{t.home.editorial.luxury}</span>
             </div>
             <div className="w-full flex justify-start pl-8 relative">
-               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">Actitud</span>
+               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">{t.home.editorial.attitude}</span>
             </div>
             <div className="w-full flex justify-center mt-8">
               <Link to="/contacto" className="group relative inline-flex items-center gap-4 bg-gus-black text-white px-8 py-4 uppercase text-xs tracking-widest hover:bg-[#bda57b] transition-all duration-500 overflow-hidden">
-                <span className="relative z-10">Servicio Personal</span>
+                <span className="relative z-10">{t.home.editorial.personalService}</span>
                 <svg className="w-4 h-4 relative z-10 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </Link>
             </div>
