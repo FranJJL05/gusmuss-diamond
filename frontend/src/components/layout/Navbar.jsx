@@ -103,10 +103,10 @@ export default function Navbar({ title }) {
         {/* Barra caqui inferior con navegación centrada */}
         <div className="bg-[#bda57b] py-3">
           <nav className="flex justify-center gap-20 max-w-7xl mx-auto items-center text-sm font-serif tracking-widest text-[#3d3322]">
-            <Link to="/" className="hover:text-black transition-colors">INICIO</Link>
-            <Link to="/coleccion" className="hover:text-black transition-colors">ROPA</Link>
-            <Link to="/accesorios" className="hover:text-black transition-colors">ACCESORIOS</Link>
-            <Link to="/contacto" className="hover:text-black transition-colors">CONTACTO</Link>
+            <Link to="/" className="hover:text-black transition-colors uppercase">{t.nav.home}</Link>
+            <Link to="/coleccion" className="hover:text-black transition-colors uppercase">{t.nav.ropa}</Link>
+            <Link to="/accesorios" className="hover:text-black transition-colors uppercase">{t.nav.accessories}</Link>
+            <Link to="/contacto" className="hover:text-black transition-colors uppercase">{t.nav.contact}</Link>
           </nav>
         </div>
       </div>

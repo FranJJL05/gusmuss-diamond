@@ -12,7 +12,11 @@ import Checkout from './pages/Checkout';
 import Profile from './pages/Profile';
 import Contacto from './pages/Contacto';
 
+import { useLang } from './context/LanguageContext';
+
 export default function App() {
+  const { t } = useLang();
+
   return (
     <BrowserRouter>
       <Routes>
@@ -29,11 +33,11 @@ export default function App() {
         </Route>
 
         {/* Colección y Accesorios tienen su propio Navbar con title */}
-        <Route path="/coleccion" element={<Layout title="ROPA" />}>
+        <Route path="/coleccion" element={<Layout title={t.nav.ropa} />}>
           <Route index element={<Collection category={null} />} />
         </Route>
-        <Route path="/accesorios" element={<Layout title="ACCESORIOS" />}>
-          <Route index element={<Collection category="accesorios" pageTitle="ACCESORIOS" />} />
+        <Route path="/accesorios" element={<Layout title={t.nav.accessories} />}>
+          <Route index element={<Collection category="accesorios" pageTitle={t.nav.accessories} />} />
         </Route>
       </Routes>
     </BrowserRouter>

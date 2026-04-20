@@ -109,24 +109,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bloque Derecho: Galería Mampostería (Masonry) */}
-          <div className="col-span-4 relative h-[700px]">
-            {/* Foto Principal (La más grande) */}
-            <div className="absolute top-0 right-0 w-64 h-[420px] bg-white p-2 shadow-xl z-20 group">
-               <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Colección Gris" />
-               <div className="absolute -bottom-6 -left-6 bg-gus-black text-white p-4 font-logo text-2xl shadow-lg">01</div>
-            </div>
+          {/* Bloque Derecho: Galería Interactiva con Marco de Revista */}
+          <div className="col-span-4 relative h-[600px] shadow-2xl mt-16 bg-white flex items-center justify-center group overflow-hidden">
+             {/* Marco súper grueso interior tipo cuadro */}
+             <div className="absolute inset-0 border-[16px] border-white pointer-events-none z-20 transition-all duration-500 group-hover:border-[24px]"></div>
+             
+             {/* Contenedor de Galería */}
+             <div className="w-full h-full relative z-10">
+                <ImageGallery images={galleryImages} interval={3500} autoPlay={true} />
+             </div>
 
-            {/* Foto Solapada Secundaria */}
-            <div className="absolute bottom-20 left-4 w-48 h-64 bg-white p-2 shadow-xl z-30 group">
-               <img src="https://images.unsplash.com/photo-1509631179647-0c1158a4c0cb?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Colección Noir" />
-               <div className="absolute -top-4 -right-4 bg-gus-gold text-white p-3 font-logo text-xl shadow-lg">02</div>
-            </div>
-
-            {/* Foto Solapada Terciaria (Fondo dorado) */}
-            <div className="absolute bottom-0 right-12 w-40 h-56 bg-gus-gold/10 p-2 border border-gus-gold/30 z-10 group backdrop-blur-sm -rotate-3">
-               <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" alt="Editorial Gold" />
-            </div>
+             {/* Etiquetas doradas */}
+             <div className="absolute -top-4 -right-4 bg-gus-gold text-white p-4 font-logo text-2xl shadow-lg z-30 transform rotate-3">{t.home.featuredTitle || 'Destacados'}</div>
+             <div className="absolute bottom-8 left-8 bg-gus-black/80 text-white px-4 py-2 font-serif text-xs tracking-widest uppercase shadow-md z-30 border border-white/20 backdrop-blur">
+                New Collection
+             </div>
           </div>
         </div>
       </div>
