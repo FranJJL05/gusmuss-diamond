@@ -29,6 +29,23 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: gusmuss_n8n
+    restart: always
+    ports:
+      - "5688:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Europe/Madrid
+    volumes:
+      - n8n_data:/home/node/.n8n
+
 volumes:
   db_data:
   symfony_var:
+  n8n_data:

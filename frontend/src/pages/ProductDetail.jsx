@@ -1,99 +1,109 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { fetchApi } from '../api';
 import { useCart } from '../context/CartContext';
-import './ProductDetail.css';
+import { useLang } from '../context/LanguageContext';
+import ImageGallery from '../components/ui/ImageGallery';
 
 export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  
+  const { t } = useLang();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [adding, setAdding] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     fetchApi(`/productos/${slug}`)
-      .then(data => {
-        setProduct(data);
-        setError(null);
-      })
-      .catch(err => setError(err.message))
+      .then(setProduct)
+      .catch(() => navigate('/coleccion'))
       .finally(() => setLoading(false));
   }, [slug]);
 
-  const handleAddToCart = () => {
+  if (loading) return (
+    <div className="flex justify-center items-center h-screen bg-white">
+      <div className="w-10 h-10 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+  if (!product) return null;
+
+  const placeholder = `https://placehold.co/800x1000/1a1a1a/bda57b?text=${encodeURIComponent(product.nombre)}`;
+  // Galería: imagen principal + 2 variaciones de color simuladas
+  const images = [
+    product.imagen || placeholder,
+    `https://placehold.co/800x1000/2a2a2a/bda57b?text=Vista+2`,
+    `https://placehold.co/800x1000/111111/bda57b?text=Vista+3`,
+  ];
+
+  const handleAdd = () => {
     setAdding(true);
     addToCart(product, 1);
-    
-    // Feedback visual rápido
     setTimeout(() => {
       setAdding(false);
       navigate('/carrito');
-    }, 600);
+    }, 700);
   };
 
-  if (loading) return <div className="spinner-wrap"><div className="spinner"></div></div>;
-  if (error) return <div className="container section"><div className="alert alert-error">{error}</div><Link to="/coleccion" className="btn btn-outline">Volver</Link></div>;
-  if (!product) return null;
-
   return (
-    <div className="container section product-detail">
-      <div className="pd-grid">
-        {/* Imagen */}
-        <div className="pd-image-col">
-          {product.imagen ? (
-            <img src={product.imagen} alt={product.nombre} className="pd-image" />
-          ) : (
-            <div className="pd-image-placeholder">Gusmuss Diamond</div>
-          )}
+    <div className="bg-white min-h-screen pb-24">
+      {/* Galería de imágenes */}
+      <div className="w-full h-80 bg-gray-100">
+        <ImageGallery images={images} autoPlay={false} />
+      </div>
+
+      {/* Info */}
+      <div className="px-5 py-6">
+        {/* Categoría */}
+        <p className="text-gus-gold text-xs uppercase tracking-widest mb-1">
+          {product.categoria?.nombre}
+        </p>
+
+        {/* Nombre */}
+        <h1 className="font-serif text-2xl text-gus-black mb-2">{product.nombre}</h1>
+
+        {/* Precio */}
+        <p className="text-gus-green font-bold text-2xl mb-4">{product.precioFormateado}</p>
+
+        {/* Separador */}
+        <div className="w-full h-px bg-gray-200 mb-4"></div>
+
+        {/* Detalles */}
+        <div className="space-y-2 mb-6 text-sm text-gray-600">
+          <p><span className="font-semibold text-gus-black">{t.product.material}:</span> {product.material}</p>
+          <p>
+            <span className="font-semibold text-gus-black">{t.product.stock}:</span>{' '}
+            {product.stock > 0
+              ? <span className="text-green-600">En stock ({product.stock} uds)</span>
+              : <span className="text-red-500">{t.product.outOfStock}</span>
+            }
+          </p>
         </div>
 
-        {/* Info */}
-        <div className="pd-info-col">
-          <nav className="pd-breadcrumbs">
-            <Link to="/">Inicio</Link> / 
-            <Link to={`/coleccion?categoria=${product.categoria?.slug}`}>{product.categoria?.nombre || 'Colección'}</Link> / 
-            <span className="text-gray">{product.nombre}</span>
-          </nav>
-
-          <h1 className="pd-title">{product.nombre}</h1>
-          <div className="pd-price">{product.precioFormateado}</div>
-          
-          <div className="pd-meta">
-            <p><strong>Material:</strong> {product.material}</p>
-            <p><strong>Disponibilidad:</strong> {product.stock > 0 ? <span className="text-success">En stock ({product.stock})</span> : <span className="text-error">Agotado</span>}</p>
+        {/* Descripción */}
+        {product.descripcion && (
+          <div className="mb-6">
+            <h3 className="font-serif font-semibold text-gus-black mb-2">{t.product.description}</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">{product.descripcion}</p>
           </div>
+        )}
 
-          <div className="pd-desc">
-            <h3 className="serif mb-4">Descripción de la Pieza</h3>
-            <p>{product.descripcion || 'Una obra maestra de artesanía y elegancia.'}</p>
-          </div>
+        {/* Botón Añadir al Carrito */}
+        <button
+          onClick={handleAdd}
+          disabled={product.stock < 1 || adding}
+          className="w-full bg-gus-black text-white font-serif italic text-lg py-4 rounded-full
+            hover:bg-gus-gold hover:text-gus-black transition-all duration-300
+            disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {adding ? '...' : product.stock > 0 ? t.product.addToCart : t.product.outOfStock}
+        </button>
 
-          <div className="pd-actions">
-            <button 
-              className="btn btn-gold pd-btn-add" 
-              onClick={handleAddToCart}
-              disabled={product.stock < 1 || adding}
-            >
-              {adding ? 'Añadiendo...' : 'Añadir al Carrito'}
-            </button>
-          </div>
-
-          <div className="pd-perks">
-            <div className="perk">
-              <span className="gold">✦</span> Envío asegurado gratuito
-            </div>
-            <div className="perk">
-              <span className="gold">✦</span> Certificado de autenticidad GIA
-            </div>
-            <div className="perk">
-              <span className="gold">✦</span> Garantía de por vida
-            </div>
-          </div>
+        {/* Garantías */}
+        <div className="mt-6 space-y-2 text-xs text-gray-500 text-center">
+          <p>✦ Envío asegurado gratuito</p>
+          <p>✦ Garantía de por vida</p>
         </div>
       </div>
     </div>

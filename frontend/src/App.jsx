@@ -16,18 +16,24 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Home usa Layout sin title para mostrar solo el logo grande */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="coleccion" element={<Collection />} />
           <Route path="producto/:slug" element={<ProductDetail />} />
-          <Route path="contacto" element={<Contacto />} />
-          
           <Route path="carrito" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
-          
           <Route path="login" element={<Login />} />
           <Route path="registro" element={<Register />} />
           <Route path="perfil" element={<Profile />} />
+          <Route path="contacto" element={<Contacto />} />
+        </Route>
+
+        {/* Colección y Accesorios tienen su propio Navbar con title */}
+        <Route path="/coleccion" element={<Layout title="ROPA" />}>
+          <Route index element={<Collection category={null} />} />
+        </Route>
+        <Route path="/accesorios" element={<Layout title="ACCESORIOS" />}>
+          <Route index element={<Collection category="accesorios" pageTitle="ACCESORIOS" />} />
         </Route>
       </Routes>
     </BrowserRouter>

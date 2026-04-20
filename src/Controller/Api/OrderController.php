@@ -32,6 +32,7 @@ class OrderController extends AbstractController
         private EntityManagerInterface $em,
         private ProductRepository      $productRepository,
         private OrderRepository        $orderRepository,
+        private \Symfony\Contracts\HttpClient\HttpClientInterface $httpClient,
     ) {
     }
 
@@ -116,6 +117,23 @@ class OrderController extends AbstractController
 
         $this->em->persist($order);
         $this->em->flush();
+
+        // LLAMADA AL WEBHOOK DE n8n (Asignatura IA / Automatización)
+        try {
+            $this->httpClient->request('POST', 'http://gusmuss_n8n:5678/webhook/nuevo-pedido', [
+                'json' => [
+                    'pedido_id' => $order->getId(),
+                    'cliente_email' => $user->getEmail(),
+                    'cliente_nombre' => $user->getNombre(),
+                    'total' => $order->getTotal(),
+                    'direccion' => $direccionEnvio,
+                    'items' => $resumenItems,
+                ],
+                'timeout' => 2 // No bloquear la respuesta al usuario si n8n falla o está apagado
+            ]);
+        } catch (\Exception $e) {
+            // Ignoramos errores de n8n para que el usuario pueda seguir comprando
+        }
 
         return $this->json([
             'mensaje' => '¡Pedido confirmado!',

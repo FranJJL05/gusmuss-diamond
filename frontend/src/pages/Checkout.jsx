@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useLang } from '../context/LanguageContext';
 import { fetchApi } from '../api';
 
 export default function Checkout() {
   const { cartItems, totalItems, subtotalFormatted, clearCart } = useCart();
   const { user, loading: authLoading } = useAuth();
+  const { t } = useLang();
   const navigate = useNavigate();
 
   const [direccionEnvio, setDireccionEnvio] = useState('');
@@ -15,137 +17,99 @@ export default function Checkout() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/login?redirect=/checkout');
-    }
-    if (user?.direccion) {
-      setDireccionEnvio(user.direccion);
-    }
-  }, [user, authLoading, navigate]);
+    if (!authLoading && !user) navigate('/login?redirect=/checkout');
+    if (user?.direccion) setDireccionEnvio(user.direccion);
+  }, [user, authLoading]);
 
-  if (authLoading || !user) return <div className="spinner-wrap"><div className="spinner"></div></div>;
+  if (authLoading || !user) return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-8 h-8 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
 
-  if (success) {
-    return (
-      <div className="container section text-center" style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <h1 className="serif gold mb-4">¡Pedido Confirmado!</h1>
-        <p className="mb-4">Gracias por su confianza. Hemos recibido su pedido y comenzaremos a prepararlo inmediatamente. Recibirá un email con los detalles del envío.</p>
-        <Link to="/perfil" className="btn btn-gold">Ver Mis Pedidos</Link>
-      </div>
-    );
-  }
+  if (success) return (
+    <div className="flex flex-col items-center justify-center min-h-[70vh] px-8 text-center gap-6">
+      <div className="text-6xl">✅</div>
+      <h1 className="font-serif text-2xl">¡Pedido Confirmado!</h1>
+      <p className="text-gray-600 text-sm">Hemos recibido tu pedido. Recibirás un email de confirmación en breve.</p>
+      <Link to="/perfil" className="bg-gus-black text-white px-8 py-3 rounded-full font-serif italic hover:bg-gus-gold transition-colors">
+        Ver mis pedidos
+      </Link>
+    </div>
+  );
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="container section text-center">
-        <h2 className="serif mb-4">No hay artículos para comprar</h2>
-        <Link to="/coleccion" className="btn btn-gold">Ir a la tienda</Link>
-      </div>
-    );
-  }
+  if (!cartItems.length) return (
+    <div className="flex flex-col items-center justify-center h-[70vh] gap-4">
+      <p className="text-gray-500">{t.cart.empty}</p>
+      <Link to="/coleccion" className="bg-gus-black text-white px-8 py-3 rounded-full font-serif italic">Ver colección</Link>
+    </div>
+  );
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-    if (!direccionEnvio) {
-      setError('Por favor, indica una dirección de envío');
-      return;
-    }
-    
+    if (!direccionEnvio) { setError('Indica una dirección de envío'); return; }
     setLoading(true);
     setError(null);
-
     try {
-      const resp = await fetchApi('/pedidos', {
+      await fetchApi('/pedidos', {
         method: 'POST',
         body: JSON.stringify({
           items: cartItems.map(i => ({ productId: i.productId, cantidad: i.cantidad })),
           direccionEnvio
         })
       });
-      // Checkout exitoso
       clearCart();
       setSuccess(true);
     } catch (err) {
-      setError(err.message || 'Error al procesar el pedido. Inténtelo de nuevo.');
+      setError(err.message || 'Error al procesar el pedido');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container section cart-page">
-      <h1 className="serif gold mb-4">Finalizar Compra</h1>
-      
-      <div className="cart-grid">
-        {/* Formulario */}
-        <div className="checkout-form">
-          <h3 className="serif mb-4">Datos de Envío Asegurado</h3>
-          
-          {error && <div className="alert alert-error">{error}</div>}
+    <div className="px-4 py-6">
+      <h1 className="font-serif text-2xl text-gus-black mb-6">Finalizar Compra</h1>
 
-          <form onSubmit={handleCheckout}>
-            <div className="form-group">
-              <label className="form-label">Nombre del Destinatario</label>
-              <input type="text" className="form-input" disabled value={`${user.nombre} ${user.apellidos}`} />
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label">Email de Confirmación</label>
-              <input type="text" className="form-input" disabled value={user.email} />
-            </div>
+      {error && <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded mb-4">{error}</div>}
 
-            <div className="form-group">
-              <label className="form-label">Dirección Completa de Envío</label>
-              <textarea 
-                className="form-input" 
-                rows="3" 
-                required
-                value={direccionEnvio}
-                onChange={(e) => setDireccionEnvio(e.target.value)}
-                placeholder="Calle, Número, Piso, Ciudad, Código Postal..."
-              ></textarea>
-            </div>
-
-            <div className="mt-4 p-4" style={{background: 'rgba(201,168,76,0.05)', border: '1px solid rgba(201,168,76,0.2)'}}>
-              <h4 className="serif gold mb-2">Pago a Contrareembolso</h4>
-              <p className="text-gray" style={{fontSize: '0.85rem'}}>Para su seguridad y máxima confidencialidad, el pago se realizará de forma segura en el momento de la entrega de su pieza, mediante transferencia instantánea o tarjeta al transportista blindado.</p>
-            </div>
-
-            <button type="submit" className="btn btn-gold w-100 mt-4" disabled={loading}>
-              {loading ? 'Procesando Pedido...' : 'Confirmar Pedido'}
-            </button>
-          </form>
-        </div>
-
-        {/* Resumen del Pedido */}
-        <div className="cart-summary">
-          <h3 className="serif mb-4">Su Pedido</h3>
-          <div style={{maxHeight: '300px', overflowY: 'auto', marginBottom: '1.5rem'}}>
-            {cartItems.map(item => (
-              <div key={item.productId} style={{display: 'flex', gap: '1rem', marginBottom: '1rem', paddingBottom: '1rem', borderBottom: '1px solid var(--color-border)'}}>
-                <img src={item.imagen} alt="" style={{width: '60px', height: '60px', objectFit: 'cover'}} />
-                <div>
-                  <div className="serif">{item.nombre}</div>
-                  <div className="text-gray" style={{fontSize: '0.8rem'}}>x{item.cantidad} — {item.precioFormateado}</div>
-                </div>
-              </div>
-            ))}
+      {/* Resumen */}
+      <div className="bg-gray-50 p-4 rounded mb-6">
+        {cartItems.map(item => (
+          <div key={item.productId} className="flex justify-between text-sm py-1.5 border-b border-gray-200">
+            <span className="font-serif truncate flex-1 mr-2">{item.nombre} x{item.cantidad}</span>
+            <span>{new Intl.NumberFormat('es-ES', { style:'currency', currency:'EUR' }).format((item.precioUnitario * item.cantidad)/100)}</span>
           </div>
-
-          <div className="summary-row">
-            <span>Subtotal ({totalItems} piezas)</span>
-            <span>{subtotalFormatted}</span>
-          </div>
-          <div className="summary-row">
-            <span>Envío Blindado</span>
-            <span className="text-success">Gratuito</span>
-          </div>
-          <div className="summary-total mt-4">
-            <span>Total a Pagar</span>
-            <span className="gold">{subtotalFormatted}</span>
-          </div>
+        ))}
+        <div className="flex justify-between font-bold text-base mt-2 pt-2">
+          <span>{t.cart.total}</span>
+          <span className="text-gus-gold">{subtotalFormatted}</span>
         </div>
       </div>
+
+      <form onSubmit={handleCheckout} className="space-y-4">
+        <div>
+          <label className="block text-xs uppercase tracking-widest text-gray-500 mb-1">Dirección de Envío</label>
+          <textarea
+            rows={3} required value={direccionEnvio}
+            onChange={e => setDireccionEnvio(e.target.value)}
+            placeholder="Calle, número, ciudad, código postal..."
+            className="w-full border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:border-gus-gold transition-colors"
+          />
+        </div>
+
+        <div className="bg-gus-gold/10 border border-gus-gold/30 p-4 rounded text-sm text-gray-600">
+          <p className="font-semibold text-gus-black mb-1">Pago a contraentrega</p>
+          <p>El pago se realizará en el momento de la entrega de forma segura.</p>
+        </div>
+
+        <button
+          type="submit" disabled={loading}
+          className="w-full bg-gus-black text-white py-4 rounded-full font-serif italic text-lg hover:bg-gus-gold transition-colors disabled:opacity-50"
+        >
+          {loading ? 'Procesando...' : 'Confirmar Pedido'}
+        </button>
+      </form>
     </div>
   );
 }

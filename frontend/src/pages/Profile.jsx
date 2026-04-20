@@ -1,80 +1,88 @@
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLang } from '../context/LanguageContext';
 import { fetchApi } from '../api';
 
 export default function Profile() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
+  const { t } = useLang();
   const [pedidos, setPedidos] = useState([]);
   const [loadingPedidos, setLoadingPedidos] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (user) {
       fetchApi('/pedidos')
-        .then(data => setPedidos(data))
-        .catch(err => setError('No se pudieron cargar los pedidos'))
+        .then(setPedidos)
+        .catch(console.error)
         .finally(() => setLoadingPedidos(false));
     }
   }, [user]);
 
-  if (authLoading) return <div className="spinner-wrap"><div className="spinner"></div></div>;
+  if (authLoading) return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-8 h-8 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
   if (!user) return <Navigate to="/login" />;
 
   return (
-    <div className="container section">
-      <h1 className="serif gold mb-4">Mi Perfil</h1>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '3rem' }}>
-        {/* Datos del usuario */}
-        <div className="card" style={{ padding: '2rem', height: 'fit-content' }}>
-          <h3 className="serif mb-4">Mis Datos</h3>
-          <p className="mb-2"><strong>Nombre:</strong> {user.nombre} {user.apellidos}</p>
-          <p className="mb-2"><strong>Email:</strong> {user.email}</p>
-          <p className="mb-2"><strong>Teléfono:</strong> {user.telefono || 'No especificado'}</p>
-          <p className="mb-2"><strong>Dirección:</strong> {user.direccion || 'No especificada'}</p>
-          <button className="btn btn-outline w-100 mt-4">Editar Datos</button>
+    <div className="px-4 py-6">
+      {/* Cabecera perfil */}
+      <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+        <div className="w-14 h-14 bg-gus-black rounded-full flex items-center justify-center text-gus-gold text-xl font-serif">
+          {user.nombre?.[0]?.toUpperCase()}
         </div>
-
-        {/* Historial de Pedidos */}
         <div>
-          <h3 className="serif mb-4">Historial de Pedidos</h3>
-          
-          {error && <div className="alert alert-error">{error}</div>}
-          
-          {loadingPedidos ? (
-            <div className="spinner-wrap"><div className="spinner"></div></div>
-          ) : pedidos.length === 0 ? (
-            <p className="text-gray border p-4 text-center">Aún no ha realizado ningún pedido.</p>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {pedidos.map(pedido => (
-                <div key={pedido.id} className="card" style={{ padding: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--color-border)', paddingBottom: '1rem', marginBottom: '1rem' }}>
-                    <div>
-                      <span className="gold font-weight-bold">Pedido #{pedido.id}</span>
-                      <span className="text-gray" style={{ marginLeft: '1rem', fontSize: '0.85rem' }}>{pedido.fechaPedido}</span>
-                    </div>
-                    <span className="badge" style={{ border: '1px solid var(--color-border)' }}>
-                      {pedido.estado.toUpperCase()}
-                    </span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                    <div>
-                      <p className="text-gray" style={{ fontSize: '0.9rem' }}>{pedido.totalLineas} pieza(s)</p>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <p className="text-gray" style={{ fontSize: '0.8rem', textTransform: 'uppercase' }}>Total</p>
-                      <p className="serif" style={{ fontSize: '1.5rem' }}>{pedido.totalFormateado}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <p className="font-serif font-semibold text-gus-black">{user.nombre} {user.apellidos}</p>
+          <p className="text-sm text-gray-500">{user.email}</p>
         </div>
       </div>
+
+      {/* Datos personales */}
+      <div className="mb-6 space-y-2 text-sm border border-gray-200 rounded p-4">
+        <p><span className="font-semibold">Teléfono:</span> {user.telefono || 'No especificado'}</p>
+        <p><span className="font-semibold">Dirección:</span> {user.direccion || 'No especificada'}</p>
+      </div>
+
+      {/* Historial pedidos */}
+      <h2 className="font-serif text-lg text-gus-black mb-4">Mis Pedidos</h2>
+
+      {loadingPedidos ? (
+        <div className="flex justify-center py-8">
+          <div className="w-6 h-6 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : pedidos.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          <p className="text-sm">Aún no has realizado ningún pedido.</p>
+          <Link to="/coleccion" className="mt-4 inline-block bg-gus-black text-white px-6 py-2 rounded-full text-sm font-serif italic hover:bg-gus-gold transition-colors">
+            Explorar Colección
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {pedidos.map(pedido => (
+            <div key={pedido.id} className="border border-gray-200 rounded p-4">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gus-gold font-semibold text-sm">Pedido #{pedido.id}</span>
+                <span className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">{pedido.estado}</span>
+              </div>
+              <div className="flex justify-between text-sm text-gray-500">
+                <span>{pedido.fechaPedido}</span>
+                <span className="font-serif font-bold text-gus-black">{pedido.totalFormateado}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Cerrar sesión */}
+      <button
+        onClick={logout}
+        className="w-full mt-8 border border-gray-300 text-gray-600 py-3 rounded-full text-sm hover:border-red-400 hover:text-red-500 transition-colors"
+      >
+        {t.nav.logout}
+      </button>
     </div>
   );
 }

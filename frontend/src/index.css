@@ -1,102 +1,29 @@
-/* =====================================================
-   GUSMUSS — Prototipo Claro
-   Paleta: blanco, negro, caqui, verde pistacho
-   ===================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --color-black:      #000000;
-  --color-white:      #ffffff;
-  
-  --color-khaki:      #bda57b; /* La barra de menú y botones de inicio */
-  --color-khaki-dark: #a08960;
-  
-  --color-green:      #9abd4c; /* El verde de los marcos de las fotos */
-  --color-green-dark: #81a33b;
-
-  --color-gray:       #888888;
-  --color-border:     #e0e0e0;
-
-  --font-logo:   'Great Vibes', cursive;
-  --font-serif:  'Playfair Display', serif;
-  --font-sans:   'Inter', sans-serif;
-
-  --transition: 0.25s ease;
-}
-
-/* ---- Reset ---- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+/* Scroll suave global */
 html { scroll-behavior: smooth; }
 
-body {
-  font-family: var(--font-serif); /* El prototipo tiene mucha fuente serif general */
-  background-color: var(--color-white);
-  color: var(--color-black);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+/* Utilidad para ocultar scrollbar pero mantener scroll */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Clase BEM para las "teclas de piano" del footer — metodología BEM */
+.piano-stripes {
+  background: repeating-linear-gradient(
+    90deg,
+    #000 0px, #000 40px,
+    #fff 40px, #fff 80px
+  );
 }
 
-a { color: inherit; text-decoration: none; }
-img { max-width: 100%; display: block; }
-button { cursor: pointer; font-family: var(--font-sans); }
-ul { list-style: none; }
-
-/* ---- Typography ---- */
-h1, h2, h3, h4 {
-  font-family: var(--font-serif);
-  line-height: 1.2;
+/* Marco verde de cuadro (BEM: .product-frame) */
+.product-frame__border {
+  border: 12px solid #9abd4c;
+  border-top-color: #aed057;
+  border-left-color: #9abd4c;
+  border-right-color: #7a9c38;
+  border-bottom-color: #6a8530;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.15);
 }
-
-.logo-text {
-  font-family: var(--font-logo);
-  font-size: 3.5rem;
-  color: var(--color-khaki);
-  font-weight: 400;
-}
-
-/* ---- Layout ---- */
-.container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.section { padding: 80px 0; }
-
-/* ---- Buttons ---- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1.5rem;
-  border-radius: 50px; /* Ovalados como en el diseño */
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: var(--transition);
-  border: none;
-  font-family: var(--font-sans);
-}
-
-.btn-black {
-  background: var(--color-black);
-  color: var(--color-white);
-}
-.btn-black:hover { opacity: 0.8; }
-
-.btn-khaki {
-  background: var(--color-khaki);
-  color: var(--color-black);
-}
-.btn-khaki:hover { background: var(--color-khaki-dark); }
-
-/* ---- Form ---- */
-.form-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-border);
-  font-family: var(--font-sans);
-}
-
-.text-center { text-align: center; }
-.mb-4 { margin-bottom: 1rem; }

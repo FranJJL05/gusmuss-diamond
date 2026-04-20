@@ -246,8 +246,40 @@ Se implementó el enrutamiento utilizando `react-router-dom`:
 #### Módulos Globales y Layout
 - **Layout Base**: Un componente `Layout` con `Navbar` (fijo con fondo desenfocado) y `Footer` expansivo.
 - **Context API (Estado Global)**: 
-  - `AuthContext`: Gestiona la sesión a través del servidor (`/api/auth/me`), controlando inicio/cierre de sesión persistente (cookie enviada de forma transparente por el proxy de Vite).
-  - `CartContext`: Mantiene y persiste la cesta de la compra en el `localStorage`, sumando subtotales y cantidades en tiempo real.
+  - `AuthContext`: Gestiona la sesión a través del servidor (`/api/auth/me`), controlando inicio/cierre de sesión persistente.
+  - `CartContext`: Mantiene y persiste la cesta de la compra en el `localStorage`.
+  - `LanguageContext`: (Implementado para la Asignatura de Inglés) Permite alternar textos complejos de la app entre Español e Inglés de forma asíncrona usando `translations.js`.
+
+---
+
+## ENTRADA 7 - Primera Entrega (Mobile-First, Tailwind, IA y CI/CD)
+
+**Fase:** 6. Adaptación Móvil e Integración Continua  
+**Objetivos (Rúbrica DAW):** Desarrollo DiW (Responsive, Tailwind), IA (n8n Webhooks), Despliegue (Github Actions).
+
+### 6.1 Rediseño con Tailwind CSS (Mobile-First)
+
+Se ha refactorizado completamente la interfaz de la aplicación hacia un enfoque centrado en móvil.
+- Se ha instalado y configurado **Tailwind CSS v3** en el ecosistema de Vite, prescindiendo de archivos `.css` manuales complejos en favor de clases utilitarias.
+- **Layout y Bottom Navigation:** Implementación de una barra inferior de navegación fija con iconos (Inicio, Ropa, Accesorios, Perfil), que facilita el uso a una mano.
+- **Componentes Reactivos:**
+  - `ImageGallery`: Galería automática con transiciones CSS de fade-in y controles táctiles, usando `setInterval` y estilos condicionales (`opacity-100` vs `opacity-0`).
+  - `ProductCard`: Se mantuvieron los marcos verdes biselados solicitados en el prototipo, pero adaptados con las clases dinámicas de grid móvil (2 columnas).
+  
+### 6.2 Integración IA / Automatización con n8n
+
+Para satisfacer los requisitos de IA y flujos automáticos:
+- Se ha incluido **n8n** dentro de la orquestación de Docker (`docker-compose.yml`) compartimentado en su propio contenedor (puerto 5688 debido a ocupación del 5678).
+- **El flujo:** El `OrderController.php` del backend en Symfony inyecta ahora `HttpClientInterface`. En cuanto un cliente confirma un carrito y se ejecuta el `$em->flush()`, Symfony dispara de forma asíncrona un `POST` HTTP al webhook local de n8n, transfiriéndole el JSON íntegro del pedido recién creado.
+
+### 6.3 Despliegue: CI/CD Pipeline
+
+Para automatizar la integración continua (Asignatura de Despliegue):
+- Configuración de Github Actions en `.github/workflows/ci.yml`.
+- Se realizan dos _jobs_ principales paralelos que se lanzan a cada push/pull-request en `main` o `feature`:
+  1. `test-backend`: Instala PHP 8.2, descarga dependencias de Composer, y lanza `doctrine:schema:validate` para prevenir un schema roto de BD.
+  2. `test-frontend`: Instala Node.js v20, hace un clean install de NPM, y compila Vite (`npm run build`) cerciorándose de que no hay imports circulares ni CSS faltante en Tailwind.
+
 
 #### Páginas Creadas Completamente Funcionales:
 1. **Home (`/`)**: Hero section principal de alto impacto visual (imita un spotlight de luz sobre fondo oscuro), y una cuadrícula de las joyas marcadas como `destacadas` que carga dinámicamente de la API de Symfony.

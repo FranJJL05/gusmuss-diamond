@@ -1,67 +1,93 @@
 import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
 import { fetchApi } from '../api';
-import './Collection.css'; 
+import { useLang } from '../context/LanguageContext';
+import ProductCard from '../components/ui/ProductCard';
+import Navbar from '../components/layout/Navbar';
 
-export default function Collection() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const categoriaQuery = searchParams.get('categoria');
+// Las franjas negras verticales de fondo (BEM: .stripes-bg)
+function StripesBg() {
+  return (
+    <div
+      className="stripes-bg fixed inset-0 pointer-events-none z-0"
+      style={{
+        background: 'repeating-linear-gradient(90deg, #000 0px, #000 35px, transparent 35px, transparent 120px)'
+      }}
+    />
+  );
+}
 
+// Barra de búsqueda dorada
+function SearchBar({ value, onChange, placeholder }) {
+  return (
+    <div className="relative mx-4 mb-4">
+      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gus-gold/60" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
+      </svg>
+      <input
+        type="text"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full bg-gus-gold/20 border border-gus-gold/40 text-gus-black placeholder-gus-gold/60
+          pl-9 pr-4 py-2 rounded-full text-sm focus:outline-none focus:border-gus-gold transition-colors"
+      />
+    </div>
+  );
+}
+
+export default function Collection({ category = null, pageTitle }) {
+  const { t } = useLang();
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
-  // Hardcode categories or fetch them. Fetching them is better.
   useEffect(() => {
     setLoading(true);
-    const endpoint = categoriaQuery ? `/productos?categoria=${categoriaQuery}` : '/productos';
-    
+    const endpoint = category ? `/productos?categoria=${category}` : '/productos';
     fetchApi(endpoint)
       .then(data => setProductos(data))
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [categoriaQuery]);
+  }, [category]);
+
+  const filtered = search
+    ? productos.filter(p =>
+        p.nombre?.toLowerCase().includes(search.toLowerCase()) ||
+        p.material?.toLowerCase().includes(search.toLowerCase()))
+    : productos;
 
   return (
-    <div className="container section text-center">
-      
-      {/* Elementos decorativos de fondo (franjas negras verticales estilo Fetiche) */}
-      <div className="vertical-stripes-bg hide-mobile"></div>
+    <div className="relative min-h-screen bg-white">
+      <StripesBg />
 
-      <div style={{position: 'relative', zIndex: 10, background: 'var(--color-white)', paddingBottom: '4rem'}}>
-        {loading ? (
-          <p>Cargando colección...</p>
-        ) : productos.length === 0 ? (
-          <div style={{padding: '5rem'}}>No hay artículos en esta colección.</div>
-        ) : (
-          <div className="products-grid-custom">
-            
-            {/* Título intermedio (falso elemento de la cuadrícula) */}
-            <div className="grid-center-title logo-text hide-mobile">
-              Unique<br/>Pieces
-            </div>
+      {/* Contenido por encima de las rayas */}
+      <div className="relative z-10">
+        <Navbar title={pageTitle || t.collection.title} />
 
-            {productos.map((p, index) => (
-              <div key={p.id} className="product-frame">
-                <Link to={`/producto/${p.slug}`} className="frame-image-link">
-                  <div className="green-frame-border">
-                    {p.imagen ? (
-                      <img src={p.imagen} alt={p.nombre} className="frame-img" loading="lazy" />
-                    ) : (
-                      <div className="frame-placeholder">Gusmuss</div>
-                    )}
-                  </div>
-                </Link>
-                
-                <div className="frame-footer">
-                  <span className="frame-price gold">{p.precioFormateado}</span>
-                  <Link to={`/producto/${p.slug}`} className="btn btn-black btn-comprar-oval">Comprar</Link>
-                </div>
-              </div>
-            ))}
+        <div className="pt-14">
+          {/* Barra de búsqueda */}
+          <div className="pt-4">
+            <SearchBar
+              value={search}
+              onChange={setSearch}
+              placeholder={t.collection.search}
+            />
           </div>
-        )}
-      </div>
 
+          {/* Grid de productos */}
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="w-8 h-8 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-gray-500 py-16 bg-white mx-4 rounded">{t.collection.noResults}</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-4 px-4 pb-4 bg-white">
+              {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
