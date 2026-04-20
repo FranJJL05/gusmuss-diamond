@@ -121,59 +121,82 @@ export default function Collection({ category = null, pageTitle }) {
 
   // Render para Ropa (Escritorio Mockup 2 y Móvil por defecto)
   return (
-    <div className="relative min-h-screen bg-white">
-      {/* Fondo móvil y escritorio */}
-      <div className="absolute inset-0 pointer-events-none z-0 md:hidden bg-piano-stripes" />
-      <div className="absolute inset-0 pointer-events-none z-0 hidden md:block piano-stripes-vertical" />
+    <div className="relative min-h-screen bg-[#faf9f7]">
+      {/* Fondo móvil sutil */}
+      <div className="absolute inset-0 pointer-events-none z-0 md:hidden bg-[#faf9f7]" />
 
       {/* Controles y vista */}
-      <div className="relative z-10">
-        {/* En móvil buscar, en escritorio hay espacio */}
-        <div className="pt-4 md:col-span-4 max-w-sm">
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            placeholder={t.collection.search}
-          />
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="w-8 h-8 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+      <div className="relative z-10 pt-8 pb-32">
+        {/* Contenedor centralizado premium */}
+        <div className="max-w-[1400px] mx-auto px-6">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div className="md:w-1/3">
+              <h1 className="font-logo text-6xl text-gus-black mb-2 animate-fade-in">{pageTitle || t.collection.title}</h1>
+              <div className="w-24 h-px bg-gus-gold opacity-60"></div>
+            </div>
+            
+            {/* Buscador Integrado Superior */}
+            <div className="mt-8 md:mt-0 md:w-1/3 text-right">
+              <SearchBar
+                value={search}
+                onChange={setSearch}
+                placeholder={t.collection.search}
+              />
+            </div>
           </div>
-        ) : filtered.length === 0 ? (
-          <p className="text-center text-gray-500 py-16 bg-white mx-4 rounded">{t.collection.noResults}</p>
-        ) : (
-          <div className="flex md:gap-8 px-4 pb-12 w-full max-w-[1400px] mx-auto">
-             {/* Grid asimétrico para escritorio (Mockup 2), reja normal móvil */}
-             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-x-12 md:gap-y-8 w-full md:w-4/5 pt-8 md:pt-0">
-               {filtered.map(p => (
-                 <div key={p.id} className="bg-white md:bg-transparent">
-                   <ProductCard product={p} />
+
+          {loading ? (
+            <div className="flex justify-center items-center py-32">
+              <div className="w-10 h-10 border-2 border-gus-gold border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-gray-500 py-32 font-serif tracking-widest">{t.collection.noResults}</p>
+          ) : (
+            <div className="flex flex-col md:flex-row gap-8 lg:gap-16">
+               
+               {/* Grid de Ropa */}
+               <div className="w-full md:w-3/4">
+                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 lg:gap-x-10 gap-y-12">
+                   {filtered.map(p => (
+                     <div key={p.id} className="group relative">
+                       {/* Elemento decorativo tras cuadro (sombra oro desplazada opcional) */}
+                       <div className="absolute inset-0 bg-[#f4ebd9] opacity-0 md:group-hover:opacity-100 transition-opacity translate-x-3 translate-y-3 -z-10"></div>
+                       <ProductCard product={p} />
+                     </div>
+                   ))}
                  </div>
-               ))}
-               {/* Fetiche central deco mockup 2 */}
-               <div className="hidden md:flex flex-col items-center justify-center p-8 bg-white border border-gray-200 shadow-md h-full min-h-[300px]">
-                 <div className="w-16 h-16 border-2 border-gus-gold rounded-full flex items-center justify-center mb-4"><span className="font-serif text-gus-gold text-2xl">F</span></div>
-                 <span className="tracking-widest font-serif text-xl border-b border-gray-400 pb-2 mb-1">FETICHE</span>
-                 <span className="tracking-[0.3em] font-sans text-xs text-gray-500">SUANCES</span>
                </div>
-             </div>
 
-             {/* Lateral derecho decorativo Escritorio */}
-             <div className="hidden md:flex w-1/5 flex-col pl-8 items-center bg-white shadow-[0_0_20px_rgba(0,0,0,0.1)] py-8 mt-12 bg-opacity-95">
-                <h1 className="font-logo text-5xl mb-12 transform hover:scale-105 transition-transform text-center pt-8">Unique<br/>Pieces</h1>
-                <div className="w-full flex justify-center mb-8">
-                   <div className="w-48 product-frame__border p-2 bg-white">
-                      <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=300" className="w-full object-cover"/>
-                   </div>
-                </div>
-                <div className="font-serif text-3xl tracking-widest text-black flex gap-4 mt-8">
-                   <span>XS</span><span>S</span><span>M</span>
-                </div>
-             </div>
-          </div>
-        )}
+               {/* Lateral derecho decorativo Escritorio (Elevado y Minimalista) */}
+               <div className="hidden md:flex w-1/4 flex-col items-center">
+                  <div className="sticky top-32 flex flex-col items-center border border-gus-gold/20 p-8 shadow-sm bg-white">
+                    <h2 className="font-logo text-5xl mb-10 transform text-center text-gus-black leading-tight">Unique<br/>Pieces</h2>
+                    
+                    <div className="w-full product-frame__border p-2 bg-white mb-10 shadow-lg transform -rotate-2">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=400" className="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-700"/>
+                    </div>
+                    
+                    <div className="w-8 h-px bg-gus-gold mb-6"></div>
+                    
+                    <p className="font-serif text-sm tracking-[0.3em] text-gray-500 uppercase mb-4">Availability</p>
+                    <div className="font-serif text-2xl tracking-widest text-gus-black flex gap-6">
+                       <span className="hover:text-gus-gold cursor-default transition-colors">XS</span>
+                       <span className="hover:text-gus-gold cursor-default transition-colors">S</span>
+                       <span className="hover:text-gus-gold cursor-default transition-colors">M</span>
+                    </div>
+
+                    <div className="mt-16 flex flex-col items-center justify-center p-6 bg-[#faf9f7] w-full">
+                      <div className="w-12 h-12 border border-gus-gold rounded-full flex items-center justify-center mb-3 text-gus-gold"><span className="font-serif text-xl">F</span></div>
+                      <span className="tracking-widest font-serif text-sm border-b border-gray-300 pb-1 mb-1">FETICHE</span>
+                      <span className="tracking-[0.2em] font-sans text-[0.65rem] text-gray-500">SUANCES</span>
+                    </div>
+                  </div>
+               </div>
+
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

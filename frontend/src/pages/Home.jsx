@@ -61,69 +61,74 @@ export default function Home() {
       </div>
 
       {/* ==================================================== */}
-      {/* VERSIÓN DESKTOP (Nueva adaptada al Pantallazo 1) */}
+      {/* VERSIÓN DESKTOP PREMIUM (Estilo Luxury Editorial) */}
       {/* ==================================================== */}
-      <div className="hidden md:flex flex-col flex-1 relative w-full h-full min-h-[800px] overflow-hidden py-12">
-        {/* Hero Title */}
-        <div className="text-center w-full z-10 mb-8 mt-12">
-          <p className="font-serif font-black text-xl tracking-[0.2em] text-black">ESTO ES MÁS QUE UNA SIMPLE MARCA DE ROPA</p>
-          <h1 className="font-logo text-black font-light text-8xl mt-4">Gusmuss</h1>
+      <div className="hidden md:flex flex-col flex-1 relative w-full h-full min-h-[900px] overflow-hidden bg-[#faf9f7] pb-20">
+        
+        {/* Cabecera Tipo Revista Editorial */}
+        <div className="text-center w-full z-10 pt-20 pb-12 px-8 flex flex-col items-center">
+          <div className="w-px h-16 bg-gus-gold mb-8 opacity-40"></div>
+          <p className="font-serif text-[0.65rem] sm:text-xs tracking-[0.4em] text-gray-500 uppercase mb-4">La Esencia de Puerto Banús</p>
+          <p className="font-serif text-3xl font-light tracking-widest text-gus-black max-w-2xl mx-auto leading-relaxed">
+            MÁS QUE UNA MARCA DE ROPA
+          </p>
+          <div className="w-12 h-px bg-gus-gold mt-8 opacity-40"></div>
         </div>
 
-        {/* El contendor maestro (relative para asimetría) */}
-        <div className="relative w-full h-[600px] max-w-6xl mx-auto flex z-10">
+        {/* Contenedor central (Grid Asimétrico Editorial) */}
+        <div className="relative w-full max-w-[1400px] mx-auto px-8 lg:px-20 grid grid-cols-12 gap-8 z-10 items-center">
           
-          {/* Lado izquierdo con la esfera de la tienda */}
-          <div className="absolute left-0 top-0 w-1/3">
-            <div className="relative w-80 h-80 rounded-full overflow-hidden shadow-2xl z-20 border-8 border-white bg-white translate-x-12 translate-y-12">
-              {/* Imagen central tienda mockup */}
-              <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&q=80&w=600" alt="Gusmuss Shop" className="w-full h-full object-cover scale-110" />
+          {/* Bloque Izquierdo: Esfera y Slogan */}
+          <div className="col-span-5 relative flex flex-col items-center">
+            {/* Foto circular con marco */}
+            <div className="relative w-96 h-96 rounded-full overflow-hidden shadow-2xl z-20 border-[12px] border-white group">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10"></div>
+              <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&q=80&w=600" alt="Gusmuss Shop" className="w-full h-full object-cover scale-110 group-hover:scale-105 transition-transform duration-1000" />
             </div>
-            
-            {/* Decos de barras negras detrás del circulito (como en el mockup) */}
-            <div className="absolute top-2 left-6 w-8 h-48 bg-black -z-10"></div>
-            <div className="absolute top-1/2 left-32 w-12 h-64 bg-black -z-10"></div>
-            <div className="absolute top-52 right-4 w-6 h-56 bg-black -z-10"></div>
+
+            {/* Typography Decorativa */}
+            <h1 className="font-logo text-black text-9xl absolute -bottom-16 -right-12 z-30 opacity-90 drop-shadow-lg">Gusmuss</h1>
           </div>
 
-          {/* Cajas doradas flotantes */}
-          <div className="absolute left-[35%] top-1/4 flex flex-col gap-6 font-serif">
-            <div className="flex gap-16">
-               <div className="bg-[#bda57b] px-8 py-3 text-black shadow-md">Familia</div>
-               <div className="bg-[#bda57b] px-10 py-3 text-black shadow-md -translate-y-8">Lujo</div>
+          {/* Bloque Central: Valores Flotantes (Refinados) */}
+          <div className="col-span-3 flex flex-col gap-12 font-serif text-center mt-32 pl-12">
+            <div className="w-full flex justify-start">
+               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">Familia</span>
             </div>
-            <div className="flex justify-center ml-12">
-               <div className="bg-[#bda57b] px-12 py-3 text-black shadow-md">Actitud</div>
+            <div className="w-full flex justify-end pr-8">
+               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">Lujo</span>
             </div>
-            <div className="bg-[#bda57b] px-6 py-4 text-black shadow-md w-max mt-4 text-center">Servicio<br/>Personalizado</div>
-            
-            <Link to="/contacto" className="mt-8 relative -left-8 bg-[#222120] text-[#bda57b] border border-[#bda57b] italic font-serif px-8 py-3 rounded-[2rem] w-max shadow-xl hover:bg-black transition-colors">
-              Contacta con nosotros
-            </Link>
+            <div className="w-full flex justify-start pl-8 relative">
+               <span className="text-sm tracking-[0.3em] uppercase text-gus-black pb-2 border-b border-gus-gold/30 hover:border-gus-gold transition-colors inline-block cursor-default">Actitud</span>
+            </div>
+            <div className="w-full flex justify-center mt-8">
+              <Link to="/contacto" className="group relative inline-flex items-center gap-4 bg-gus-black text-white px-8 py-4 uppercase text-xs tracking-widest hover:bg-[#bda57b] transition-all duration-500 overflow-hidden">
+                <span className="relative z-10">Servicio Personal</span>
+                <svg className="w-4 h-4 relative z-10 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </Link>
+            </div>
           </div>
 
-          {/* Modelos de la derecha (dispersas) */}
-          <div className="absolute right-0 top-0 w-1/3 h-full flex flex-col items-end gap-4 p-4 pr-12">
-            {/* Arriba (Chica traje gris) */}
-            <div className="w-48 h-64 bg-white p-2 shadow-lg -translate-x-12 relative overflow-hidden">
-               <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#8eb243] rotate-45 z-10"></div>
-               <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" alt="Modelo 1" />
+          {/* Bloque Derecho: Galería Mampostería (Masonry) */}
+          <div className="col-span-4 relative h-[700px]">
+            {/* Foto Principal (La más grande) */}
+            <div className="absolute top-0 right-0 w-64 h-[420px] bg-white p-2 shadow-xl z-20 group">
+               <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Colección Gris" />
+               <div className="absolute -bottom-6 -left-6 bg-gus-black text-white p-4 font-logo text-2xl shadow-lg">01</div>
             </div>
-            {/* Centro Abajo (Mono negro difuminado) */}
-            <div className="w-44 h-56 bg-white p-2 shadow-lg absolute bottom-20 right-48 overflow-hidden z-20">
-               <div className="absolute -bottom-10 -left-10 w-20 h-20 bg-[#8eb243] rotate-45 z-10"></div>
-               <img src="https://images.unsplash.com/photo-1509631179647-0c1158a4c0cb?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" alt="Modelo 2" />
+
+            {/* Foto Solapada Secundaria */}
+            <div className="absolute bottom-20 left-4 w-48 h-64 bg-white p-2 shadow-xl z-30 group">
+               <img src="https://images.unsplash.com/photo-1509631179647-0c1158a4c0cb?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Colección Noir" />
+               <div className="absolute -top-4 -right-4 bg-gus-gold text-white p-3 font-logo text-xl shadow-lg">02</div>
             </div>
-            {/* Derecha Abajo (Chica cuero negro en pasillo dorado) */}
-            <div className="w-44 h-60 bg-white p-2 shadow-lg absolute bottom-12 right-2 overflow-hidden">
-               <div className="absolute -bottom-8 -right-8 w-16 h-16 bg-[#8eb243] rotate-45 z-10"></div>
-               <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" alt="Modelo 3" />
+
+            {/* Foto Solapada Terciaria (Fondo dorado) */}
+            <div className="absolute bottom-0 right-12 w-40 h-56 bg-gus-gold/10 p-2 border border-gus-gold/30 z-10 group backdrop-blur-sm -rotate-3">
+               <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" alt="Editorial Gold" />
             </div>
           </div>
         </div>
-
-        {/* Planta (flor) decorativa derecha inferior asomando */}
-        <img src="https://images.unsplash.com/photo-1599380909062-8e10b10be5a7?auto=format&fit=crop&q=80&w=500" className="absolute -right-20 -bottom-20 w-80 h-96 object-contain mix-blend-multiply opacity-90 hidden lg:block pointer-events-none" alt="" />
       </div>
 
     </div>
