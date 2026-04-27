@@ -1,385 +1,221 @@
-# DIARIO DE DESARROLLO — Gusmuss Diamond E-Commerce
-## Proyecto Final de Grado Superior (2º DAW)
+# DIARIO DE DESARROLLO — Gusmuss Diamond
+## Proyecto Final de 2º DAW
+
 ---
 
 ## ENTRADA 1
 
-**Fase:** 4.3. Autorización y Control de Acceso basado en Roles (RBAC).
-**Rama:** `feature/usuarios-seguridad`
+**Fecha:** Marzo 2026  
+**Qué hice:** Seguridad y roles de usuarios
 
-**Acciones realizadas:**
+Hoy he añadido lo del sistema de roles. La idea es que haya un usuario normal (ROLE_USER) y un administrador (ROLE_ADMIN) que pueda gestionar la tienda.
 
-1. Modificación en la base de datos (MySQL) para escalar privilegios de un usuario a `ROLE_ADMIN`.
-2. Creación del controlador `AdminController` para gestionar el panel de administración del e-commerce.
-3. Implementación de seguridad en rutas mediante el atributo `#[IsGranted('ROLE_ADMIN')]` a nivel de controlador.
+Lo primero que hice fue entrar en la base de datos directamente y cambiar el rol de mi usuario de prueba a ROLE_ADMIN para poder probar el panel. Luego creé el `AdminController` que es el controlador que protege las rutas del panel de administración.
 
-**Justificación Técnica:**
-Con esto se finaliza el cumplimiento del requisito de "Administración del sistema (Backend)". Se ha implementado un sistema de Autorización que verifica los roles del usuario en sesión antes de renderizar vistas restringidas. Cualquier intento de acceso no autorizado por parte de un `ROLE_USER` es interceptado por el firewall de Symfony lanzando una excepción `AccessDeniedException` (HTTP 403), garantizando la seguridad de los datos de gestión de la joyería.
+Para la seguridad usé el atributo `#[IsGranted('ROLE_ADMIN')]` encima del controlador, que es la forma que tiene Symfony de decir "solo pueden entrar aquí si eres admin". Si un usuario normal intenta acceder le salta un error 403 (Acceso denegado).
+
+Con esto ya tenía la parte de seguridad básica funcionando.
 
 ---
 
 ## ENTRADA 2
 
-**Fase:** 4.4. Panel de Administración con EasyAdmin — Entidades y CRUD completo.
-**Rama:** `feature/easyadmin-crud`
+**Fecha:** Marzo 2026  
+**Qué hice:** Panel de administración con EasyAdmin
 
-**Acciones realizadas:**
+Esta entrada fue bastante grande. Tuve que crear el panel de administración para gestionar todo el contenido de la tienda.
 
-1. **Creación de las entidades `Order` y `OrderItem`** directamente en PHP siguiendo las convenciones de Doctrine ORM. `Order` representa la cabecera de un pedido (fecha, estado, total) con relación `ManyToOne` al `User` que lo realizó. `OrderItem` representa cada línea del pedido con relación `ManyToOne` tanto a `Order` como a `Product`, almacenando el precio unitario en el momento de la compra.
+Primero creé las entidades de `Order` (pedido) y `OrderItem` (cada producto dentro del pedido) porque las necesitaba para el CRUD de pedidos. Un pedido tiene relación con el usuario que lo hizo, y cada línea del pedido está relacionada con un producto concreto.
 
-2. **Creación de los repositorios** `OrderRepository` y `OrderItemRepository`, que extienden de `ServiceEntityRepository` de Doctrine, siguiendo el patrón Repository estándar del framework.
+Después generé la migración para crear esas tablas en MySQL. Un problema que tuve es que `order` es una palabra reservada de SQL, así que tuve que poner el nombre de la tabla entre comillas especiales en el código.
 
-3. **Actualización de la entidad `User`** para añadir la relación inversa `OneToMany` con `Order` (colección de pedidos del usuario), inicialización en el constructor con `ArrayCollection` y método `__toString()` para su correcta representación en los formularios de EasyAdmin.
+Luego creé los cuatro CRUDs de EasyAdmin:
+- Categorías
+- Productos (con el campo de precio en euros y la foto)
+- Usuarios (con el campo de si está verificado)
+- Pedidos (con los estados: pendiente, enviado, entregado...)
 
-4. **Añadido `__toString()`** a las entidades `Category` y `Product`. Este método es obligatorio en EasyAdmin cuando una entidad aparece como campo de relación (`AssociationField`) en un formulario, ya que el bundle necesita representar el objeto como cadena de texto en los desplegables.
+También configuré el menú del dashboard con secciones para que quedara organizado.
 
-5. **Generación y ejecución de la migración** con `make:migration` y `doctrine:migrations:migrate`. Esto creó las tablas `order` y `order_item` en MySQL. La tabla `order` requiere comillas escapadas en la anotación `#[ORM\Table(name: '`order`')]` porque `ORDER` es una palabra reservada de SQL.
-
-6. **Creación de los cuatro `CrudControllers` de EasyAdmin:**
-   - `CategoryCrudController`: gestión de categorías con `TextField`.
-   - `ProductCrudController`: gestión de productos con `MoneyField` (precio en €), `NumberField` (stock), `TextareaField` (descripción) y `AssociationField` (categoría).
-   - `UserCrudController`: gestión de usuarios con `BooleanField` (verificación) y `ArrayField` (roles).
-   - `OrderCrudController`: gestión de pedidos con `ChoiceField` (estados: pendiente, procesando, enviado, entregado, cancelado), `MoneyField` (total) y `AssociationField` (cliente).
-
-7. **Configuración del `DashboardController`** de EasyAdmin con título personalizado "Gusmuss Diamond", menú organizado en secciones (Catálogo, Pedidos, Usuarios) y acceso directo a la tienda pública.
-
-**Justificación Técnica:**
-Esta sesión completa el requisito de la rúbrica *"La administración del sistema (gestión de entidades, configuración, etc) debe hacerse completamente con lenguaje de servidor"*. EasyAdmin es el bundle estándar del ecosistema Symfony para paneles de administración. El modelo de datos implementado (`User → Order → OrderItem ← Product ← Category`) es la estructura relacional estándar de cualquier e-commerce.
-
-**Tecnologías/Comandos clave usados:**
+**Comandos que usé:**
 ```bash
-php bin/console doctrine:schema:validate
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 php bin/console cache:clear
 ```
 
-**Cumplimiento de la Rúbrica:**
-- ✅ Administración del sistema con lenguaje de servidor (EasyAdmin + Symfony)
-- ✅ Modelo Entidad-Relación completo (User, Category, Product, Order, OrderItem)
-- ✅ Alcance del proyecto: e-commerce con carrito y pedidos modelado en BD
-
 ---
 
 ## ENTRADA 3
 
-**Fase:** 4.5. Configuración del Entorno Docker y Corrección del Panel de Administración.
-**Rama:** `feature/easyadmin-crud`
+**Fecha:** Marzo 2026  
+**Qué hice:** Docker y corrección del panel de admin
 
-**Acciones realizadas:**
+Esta fue la entrada más complicada hasta ese momento. Docker me dio muchos problemas.
 
-1. **Creación de un `Dockerfile` propio** para el servicio `web`. La imagen base `php:8.2-apache` no incluye `pdo_mysql` por defecto. La solución inicial (ejecutar `docker-php-ext-install` en el `command:` del `docker-compose.yml`) compilaba las extensiones PHP en cada arranque del contenedor, tardando entre 10 y 30 minutos y bloqueando completamente el servidor. La solución correcta es declarar la instalación en el `Dockerfile`, de modo que la compilación se produzca **una sola vez** durante el `docker-compose build` y quede grabada en la imagen resultante. Los reinicios posteriores del contenedor son instantáneos.
+El problema principal era que al arrancar los contenedores tardaba entre 10 y 30 minutos porque estaba instalando extensiones de PHP cada vez que arrancaba. La solución fue crear un `Dockerfile` propio donde poner esas instalaciones, así solo se hacen una vez cuando construyes la imagen y no cada vez que arrancas.
 
-2. **Optimización de I/O con Docker named volume para `var/`.** En entornos Windows con Docker Desktop y WSL2, el acceso a ficheros a través de bind mounts provoca tiempos de carga altísimos. La solución fue declarar un volumen Docker nativo (`symfony_var`) para la carpeta `var/`, eliminando el cuello de botella de la capa de traducción WSL2↔Windows.
+Otro problema era que los archivos de Symfony (la carpeta `var/`) iban muy lentos porque Docker en Windows tiene problemas con el acceso a archivos. Lo solucioné creando un volumen de Docker específico para esa carpeta.
 
-3. **Activación del `access_control` en `security.yaml`.** Se descomentaron las reglas de control de acceso para proteger la ruta `/admin` con `ROLE_ADMIN`. Con `access_control` activo, el firewall intercepta la petición **antes** del controlador y genera un único redirect limpio a `/login`.
+También tuve que arreglar el panel de administración porque había un bucle de redirecciones infinito cuando intentaba entrar. Era un problema de configuración del `DashboardController`.
 
-4. **Simplificación del `DashboardController::index()`** sustituyendo un redirect personalizado por `parent::index()`. El redirect provocaba un bucle de redirecciones para usuarios no autenticados.
-
-5. **Regeneración de caché** con `php bin/console cache:warmup` tras los cambios de configuración.
-
-**Tecnologías/Comandos clave usados:**
+**Comandos que usé:**
 ```bash
 docker-compose build web
 docker-compose up -d
 docker exec gusmuss_web php bin/console cache:warmup
-docker logs gusmuss_web --tail 30
 ```
-
-**Cumplimiento de la Rúbrica:**
-- ✅ Uso de contenedores Docker con configuración personalizada (Dockerfile propio)
-- ✅ Configuración correcta del servidor web Apache (DocumentRoot, mod_rewrite, AllowOverride All)
-- ✅ Seguridad de rutas mediante `access_control` en el firewall de Symfony (ROLE_ADMIN)
 
 ---
 
 ## ENTRADA 4
 
-**Fase:** 4.6. Subida de Archivos al Servidor e Integración con EasyAdmin 5.
-**Rama:** `feature/file-upload`
+**Fecha:** Abril 2026  
+**Qué hice:** Subida de imágenes de productos
 
-**Acciones realizadas:**
+Hoy añadí la posibilidad de subir fotos de los productos desde el panel de administración.
 
-1. **Renombrado del campo `imagen_url` a `imagenFilename`** en la entidad `Product`. El nombre original era semánticamente incorrecto: el campo no almacena una URL externa sino el nombre del fichero subido al servidor. Se actualizaron getter, setter y la anotación Doctrine, y se generó una nueva migración que ejecuta un `ALTER TABLE product CHANGE imagen_url imagen_filename` en MySQL.
+Lo primero fue renombrar el campo `imagen_url` a `imagenFilename` en la base de datos porque el nombre anterior era confuso (no guarda una URL sino el nombre del archivo).
 
-2. **Integración de `ImageField` en `ProductCrudController`**. EasyAdmin incluye este tipo de campo especializado para la gestión de ficheros de imagen. Se configuró con:
-   - `setBasePath('/uploads/products')`: ruta pública desde la que el navegador sirve las imágenes.
-   - `setUploadDir('public/uploads/products')`: ruta física del servidor donde se almacenan.
-   - `setUploadedFileNamePattern('[slug]-[timestamp].[extension]')`: patrón de nombre único para evitar colisiones entre ficheros.
+Luego configuré el `ImageField` de EasyAdmin para que:
+- Guarde los archivos en la carpeta `public/uploads/products/`
+- Sirva las imágenes desde `/uploads/products/` en el navegador
+- Genere nombres únicos para los archivos con la fecha, así no se pisan entre sí
 
-3. **Creación del directorio `public/uploads/products/`** con un fichero `.gitkeep` para que Git rastree la carpeta. Las imágenes subidas se añadieron al `.gitignore` (no se versionan los ficheros de usuario).
-
-4. **Resolución de incompatibilidad con EasyAdmin 5**. El proyecto tenía instalado EasyAdmin 5 (versión major nueva), cuya API rompe la compatibilidad con EasyAdmin 4. Los cambios necesarios fueron:
-   - `MenuItem::linkToCrud()` → `MenuItem::linkTo(CrudController::class)`: en EasyAdmin 5 el método recibe directamente el CrudController, no la entidad.
-   - `parent::index()` renderiza la página de bienvenida sin layout: se sustituyó por un redirect a `ProductCrudController` usando `AdminUrlGeneratorInterface` inyectado en el constructor.
-   - Ejecución de `php bin/console assets:install --symlink` para instalar los assets del bundle (CSS/JS de EasyAdmin) en `public/bundles/`.
-
-5. **Resolución del conflicto de credenciales de administrador**. Se detectó que Git Bash interpreta los `$` del hash bcrypt como variables de shell cuando están dentro de comillas dobles, corrompiendo el valor insertado en MySQL. La solución fue generar el hash y actualizar la BD con un script PHP ejecutado directamente dentro del contenedor, evitando cualquier interpretación del shell del host.
-
-**Justificación Técnica:**
-La subida de ficheros es un requisito explícito de la rúbrica. `ImageField` implementa el patrón estándar de gestión de ficheros en aplicaciones web: el servidor recibe el fichero mediante `multipart/form-data`, lo valida, lo mueve a una carpeta pública con un nombre único y almacena solo el nombre en la base de datos. La URL pública se construye concatenando el `basePath` con el nombre almacenado. Este enfoque desacopla el servidor de almacenamiento (actualmente local, pero podría migrarse a S3/Cloudflare R2 cambiando solo la configuración).
-
-**Tecnologías/Comandos clave usados:**
-```bash
-# Migración para renombrar el campo en MySQL
-docker exec gusmuss_web php bin/console make:migration
-docker exec gusmuss_web php bin/console doctrine:migrations:migrate --no-interaction
-
-# Marcar una migración previa como ejecutada cuando las tablas ya existen
-docker exec gusmuss_web php bin/console doctrine:migrations:version "DoctrineMigrations\Version20260407171324" --add --no-interaction
-
-# Instalar los assets de los bundles (CSS/JS de EasyAdmin en public/bundles/)
-docker exec gusmuss_web php bin/console assets:install --symlink
-
-# Reset de contraseña sin problemas de interpolación de shell
-docker exec gusmuss_web php -r "
-\$pdo = new PDO('mysql:host=db;dbname=gusmuss_db', 'gusmuss_user', 'secretpassword');
-\$hash = password_hash('admin1234', PASSWORD_BCRYPT, ['cost' => 13]);
-\$stmt = \$pdo->prepare('UPDATE user SET password = ? WHERE email = ?');
-\$stmt->execute([\$hash, 'prueba@gusmuss.com']);
-echo 'OK' . PHP_EOL;
-"
-```
-
-**Cumplimiento de la Rúbrica:**
-- ✅ Subida de archivos al servidor (ImageField con directorio configurable y nombre único)
-- ✅ Panel de administración completamente funcional con EasyAdmin 5
-- ✅ Gestión completa de Productos, Categorías, Pedidos y Usuarios desde el admin
+También tuve un problema con las contraseñas: cuando intentaba actualizar la contraseña del admin por terminal, Git Bash interpretaba los caracteres especiales del hash bcrypt y lo corrompía. Lo solucioné haciendo el cambio con un script PHP ejecutado dentro del contenedor.
 
 ---
 
 ## ENTRADA 5
 
-**Fase:** 4.7. Mejora del Modelo de Datos y API REST completa del Backend.
-**Rama:** `feature/db-mejoras`
+**Fecha:** Abril 2026  
+**Qué hice:** API REST completa del backend
 
-**Acciones realizadas:**
+Esta entrada fue para terminar toda la parte del servidor que necesita el frontend de React para funcionar.
 
-### 5.1 Mejora del Esquema de la Base de Datos
+Primero mejoré el modelo de datos:
+- Los productos ahora tienen `slug` (para las URLs), `material`, si son `destacados` o no, y la fecha de creación.
+- El precio lo cambié de decimal a entero en céntimos (por ejemplo, 185000 = 1.850 €) para evitar problemas de redondeo.
+- Los usuarios ahora tienen teléfono y dirección para el checkout.
 
-Se identificaron carencias en el modelo de datos inicial y se ampliaron tres entidades:
+Luego reescribí los datos de ejemplo (fixtures) porque los que tenía eran de ropa genérica y el proyecto es una joyería. Metí 12 joyas reales con categorías como Anillos, Collares, Pulseras, etc., con precios y materiales reales.
 
-**`Product`** — Nuevos campos: `slug` (URL SEO), `material` (Oro 18k, Platino…), `destacado` (boolean para portada), `createdAt`. El tipo de `precio` pasó de `DOUBLE` a `INT` (céntimos): 185000 = 1.850,00 €.
+**Endpoints que creé:**
 
-**`Category`** — Nuevos campos: `slug` (para rutas `/coleccion/anillos`), `descripcion` (texto de la página de categoría).
+Para productos:
+- `GET /api/productos` → lista el catálogo, se puede filtrar por categoría
+- `GET /api/productos/destacados` → para la portada
+- `GET /api/productos/buscar?q=...` → buscador
+- `GET /api/productos/{slug}` → ficha de un producto
 
-**`User`** — Nuevos campos: `telefono` y `direccion` (dirección de envío predeterminada para el checkout).
+Para usuarios:
+- `POST /api/auth/registro` → crear cuenta
+- `POST /api/auth/login` → iniciar sesión
+- `GET /api/auth/me` → saber quién está conectado
 
-**Gestión de migración en dev:** `doctrine:schema:drop --force` + `doctrine:schema:create` + `doctrine:migrations:version --add --all`, al ser entorno de desarrollo donde los datos se recargan con fixtures.
+Para pedidos:
+- `POST /api/pedidos` → confirmar la compra
+- `GET /api/pedidos` → ver mis pedidos
 
-### 5.2 Reescritura de los DataFixtures con joyas reales
-
-Los fixtures originales tenían productos de ropa (incoherente con "Gusmuss Diamond"). Se reescribieron completamente con **12 joyas de alta joyería** en 5 categorías (Anillos, Collares, Pulseras, Pendientes, Alta Joyería), con precios entre 950 € y 12.500 €, materiales reales (Oro 18k, Platino 950) y 7 productos marcados como destacados.
-
-### 5.3 API REST de Productos y Categorías
-
-**`GET /api/productos`** — listado con JOIN eager a Category (evita N+1). Filtra por `?categoria=anillos`.
-**`GET /api/productos/destacados`** — para la portada de React.
-**`GET /api/productos/buscar?q=...`** — búsqueda por nombre, descripción o material.
-**`GET /api/productos/{slug}`** — ficha completa con descripción.
-**`GET /api/categorias`** — todas las categorías con recuento de productos.
-**`GET /api/categorias/{slug}`** — categoría + sus productos.
-
-Todos los endpoints llevan cabeceras CORS (`Access-Control-Allow-Origin: *`) para que React pueda consumirlos desde cualquier puerto.
-
-### 5.4 API REST de Autenticación
-
-**`POST /api/auth/registro`** — crea cuenta con validaciones (email único, formato, contraseña ≥ 6 caracteres).
-**`POST /api/auth/login`** — gestionado por `json_login` nativo de Symfony. Acepta `{"email":"...","password":"..."}`, crea sesión PHP, retorna 200 o 401.
-**`GET /api/auth/me`** — datos del usuario autenticado (requiere sesión).
-**`PUT /api/auth/perfil`** — actualiza nombre, apellidos, teléfono, dirección.
-
-### 5.5 API REST de Pedidos (Checkout)
-
-**Decisión arquitectónica:** el carrito vive en el **cliente React** (localStorage + Context API), no en el servidor. Al hacer checkout, React envía los items en el body del POST.
-
-**`POST /api/pedidos`** — recibe `{"items":[{"productId":1,"cantidad":2},...], "direccionEnvio":"..."}`. Valida stock de cada producto, crea `Order` + `OrderItem`, descuenta stock y devuelve el resumen. Requiere autenticación.
-**`GET /api/pedidos`** — historial de pedidos del usuario autenticado.
-**`GET /api/pedidos/{id}`** — detalle con líneas del pedido.
-
-### 5.6 Control de acceso de la API
-
-- Protegidos con `IS_AUTHENTICATED_FULLY`: `/api/pedidos`, `/api/auth/me`, `/api/auth/perfil`.
-- Públicos (`PUBLIC_ACCESS`): productos, categorías, carrito, registro, login.
-
-**Tecnologías/Comandos clave usados:**
-```bash
-docker exec gusmuss_web php bin/console doctrine:schema:drop --force
-docker exec gusmuss_web php bin/console doctrine:schema:create
-docker exec gusmuss_web php bin/console doctrine:migrations:version --add --all --no-interaction
-docker exec gusmuss_web php bin/console doctrine:fixtures:load --no-interaction
-```
-
-**Cumplimiento de la Rúbrica:**
-- ✅ API REST con múltiples recursos (productos, categorías, pedidos, usuarios)
-- ✅ Validación de datos en el servidor (stock, email único, campos requeridos)
-- ✅ Proceso de compra completo: carrito (React) → pedido (Symfony) → descuento de stock
-- ✅ Autenticación JSON para SPA (json_login nativo de Symfony)
-- ✅ Endpoints protegidos con control de acceso por roles
+También protegí con autenticación las rutas que lo necesitan (mis pedidos, mi perfil) y dejé públicas las de productos y registro.
 
 ---
 
 ## ENTRADA 6
 
-**Fase:** 5. Componentes e Interfaz del Cliente con React (Frontend)
-**Rama:** `feature/react-frontend`
+**Fecha:** Abril 2026  
+**Qué hice:** Frontend en React — Primera versión
 
-**Acciones realizadas:**
+Aquí empecé con la parte visual que ve el cliente.
 
-### 5.1 Configuración de Vite y React
+Inicié un proyecto de React con Vite dentro de la carpeta `/frontend`. Configuré el proxy en Vite para que las llamadas a `/api` se redirijan automáticamente al backend de Symfony, así no hay problemas de CORS en desarrollo.
 
-Se inicializó un nuevo proyecto Vite con React en la carpeta `/frontend` del repositorio principal de Symfony.
-**Configuración de Vite (`vite.config.js`)**: Se configuró el puerto `3000` para el servidor de desarrollo y se estableció un proxy (`/api -> http://localhost:8000`) para redirigir todas las peticiones a la API de Symfony y evitar bloqueos por políticas CORS durante el desarrollo.
+**Diseño:**
+Hice el diseño con:
+- Fondo blanco, cabecera negra con el logo y una barra inferior en tono caqui/dorado
+- Tipografía: `Great Vibes` para el logo y `Playfair Display` para el texto
+- Colores principales: negro, dorado (`#bda57b`) y blanco
 
-### 5.2 Sistema de Diseño: Rediseño Prototipo "Gusmuss"
+**Páginas creadas:**
+1. **Home** — con la galería de imágenes y los productos destacados
+2. **Colección** — con la lista de ropa y el buscador
+3. **Detalle de Producto** — con foto, descripción y botón de añadir al carrito
+4. **Carrito** — con la lista de productos y el total
+5. **Login y Registro** — con los formularios conectados al backend
+6. **Checkout** — para confirmar la compra con la dirección
+7. **Perfil** — con el historial de pedidos
 
-Tras recibir validación visual mediante prototipos (tipo Figma), se rediseñó desde cero el CSS (`index.css`) hacia un tema claro y asimétrico:
-- **Paleta de Colores**: Fondo blanco puro (`#ffffff`), cabeceras compartimentadas en negro profundo y caqui (`#bda57b`), con acentos verdes (`#9abd4c`) para destacar elementos "Frame".
-- **Cabecera Dual**: Barra negra principal con el logotipo y barra inferior caqui interactiva.
-- **Tipografía**: Incorporación de la fuente cursiva `Great Vibes` (extraída de Google Fonts para el logotipo original "Gusmuss") junto con la lectura clara de `Playfair Display` serif.
-- **Asimetría Constante (Dynamic Design)**: Cuadrículas de imagen cortadas, superposición de elementos florales, botón central de desborde y un pie de página en franjas anchas tipo "teclas de piano". Cajas imitando "marcos de cuadro 3D" con sombras CSS y efecto bisel para los productos («Unique Pieces»).
-
-### 5.3 Arquitectura de Componentes y Páginas
-
-Se implementó el enrutamiento utilizando `react-router-dom`:
-
-#### Módulos Globales y Layout
-- **Layout Base**: Un componente `Layout` con `Navbar` (fijo con fondo desenfocado) y `Footer` expansivo.
-- **Context API (Estado Global)**: 
-  - `AuthContext`: Gestiona la sesión a través del servidor (`/api/auth/me`), controlando inicio/cierre de sesión persistente.
-  - `CartContext`: Mantiene y persiste la cesta de la compra en el `localStorage`.
-  - `LanguageContext`: (Implementado para la Asignatura de Inglés) Permite alternar textos complejos de la app entre Español e Inglés de forma asíncrona usando `translations.js`.
+También creé el sistema de Context API:
+- `AuthContext` → recuerda si el usuario está conectado
+- `CartContext` → guarda la cesta de la compra en el localStorage
+- `LanguageContext` → para cambiar entre español e inglés
 
 ---
 
-## ENTRADA 7 - Primera Entrega (Mobile-First, Tailwind, IA y CI/CD)
-
-**Fase:** 6. Adaptación Móvil e Integración Continua  
-**Objetivos (Rúbrica DAW):** Desarrollo DiW (Responsive, Tailwind), IA (n8n Webhooks), Despliegue (Github Actions).
-
-### 6.1 Rediseño con Tailwind CSS (Mobile-First)
-
-Se ha refactorizado completamente la interfaz de la aplicación hacia un enfoque centrado en móvil.
-- Se ha instalado y configurado **Tailwind CSS v3** en el ecosistema de Vite, prescindiendo de archivos `.css` manuales complejos en favor de clases utilitarias.
-- **Layout y Bottom Navigation:** Implementación de una barra inferior de navegación fija con iconos (Inicio, Ropa, Accesorios, Perfil), que facilita el uso a una mano.
-- **Componentes Reactivos:**
-  - `ImageGallery`: Galería automática con transiciones CSS de fade-in y controles táctiles, usando `setInterval` y estilos condicionales (`opacity-100` vs `opacity-0`).
-  - `ProductCard`: Se mantuvieron los marcos verdes biselados solicitados en el prototipo, pero adaptados con las clases dinámicas de grid móvil (2 columnas).
-  
-### 6.2 Integración IA / Automatización con n8n
-
-Para satisfacer los requisitos de IA y flujos automáticos:
-- Se ha incluido **n8n** dentro de la orquestación de Docker (`docker-compose.yml`) compartimentado en su propio contenedor (puerto 5688 debido a ocupación del 5678).
-- **El flujo:** El `OrderController.php` del backend en Symfony inyecta ahora `HttpClientInterface`. En cuanto un cliente confirma un carrito y se ejecuta el `$em->flush()`, Symfony dispara de forma asíncrona un `POST` HTTP al webhook local de n8n, transfiriéndole el JSON íntegro del pedido recién creado.
-
-### 6.3 Despliegue: CI/CD Pipeline
-
-Para automatizar la integración continua (Asignatura de Despliegue):
-- Configuración de Github Actions en `.github/workflows/ci.yml`.
-- Se realizan dos _jobs_ principales paralelos que se lanzan a cada push/pull-request en `main` o `feature`:
-  1. `test-backend`: Instala PHP 8.2, descarga dependencias de Composer, y lanza `doctrine:schema:validate` para prevenir un schema roto de BD.
-  2. `test-frontend`: Instala Node.js v20, hace un clean install de NPM, y compila Vite (`npm run build`) cerciorándose de que no hay imports circulares ni CSS faltante en Tailwind.
-
-
-#### Páginas Creadas Completamente Funcionales:
-1. **Home (`/`)**: Hero section principal de alto impacto visual (imita un spotlight de luz sobre fondo oscuro), y una cuadrícula de las joyas marcadas como `destacadas` que carga dinámicamente de la API de Symfony.
-2. **Collection (`/coleccion`)**: Vista general de todo el catálogo. Implementa filtrado dinámico mediante _query parameters_ (`?categoria=...`) consumiendo `/api/categorias` y `/api/productos`.
-3. **ProductDetail (`/producto/:slug`)**: Ficha detallada con descripción, stock, control de `Añadir al Carrito`, disponibilidad y ventajas adicionales (garantía, certificado GIA). Si un producto no tiene stock, inhabilita los controles del botón.
-4. **Cart (`/carrito`)**: Interfaz del carrito con previsualizaciones, actualización de cantidades en línea, prevención de rebaja a cantidades negativas (elimina el item), subtotalización y comprobador de sesión (invita al login si el usuario es anónimo).
-5. **Login y Registro (`/login` y `/registro`)**: Formularios validados conectados en vivo con `AuthController` del Backend.
-6. **Checkout (`/checkout`)**: Pantalla final guiada: recoge domicilio del perfil, detalla cobros blindados y genera un POST a `/api/pedidos` confirmando el pedido y vaciando el carrito en `success`.
-7. **Profile (`/perfil`)**: Panel de control privado que carga el historial de compras directo del ORM de Doctrine. 
-
-**Cumplimiento de la Rúbrica Frontend:**
-- ✅ Implementación mediante React, integrando los endpoints construidos del Backend Symfony.
-- ✅ Gestión de estado con React Context (`Auth`, `Cart`).
-- ✅ Componentización completa (`Components`, `Pages`, `Layouts`).
-- ✅ Sistema de Autenticación con `React Router Route protection` y API Fetch Helper.
-- ✅ Funcionalidad avanzada visual completa sin depender de librerías de estilos externas, fomentando una calidad de CSS premium en línea con el nicho de negocio (joyería).
-
----
-
-## ENTRADA 8 - Finalización Backend (Entorno de Producción y Asignatura Servidor)
-
-**Fase:** 7. Consolidación de Servidor Web y APIs.  
-**Objetivos:** Autenticación por Tokens (JWT), Emisión de Documentación (PDF), Verificación por Correo y Despliegue.
-
-Para concluir los requisitos estrictos de la evaluación y preparar el repositorio para su entrega a los docentes, se han acometido los siguientes desarrollos transversales:
-
-### 7.1 Subsistema de Tokens: Lexik JWT Authentication
-El acceso de los clientes de la tienda ya no se valida con las obsoletas cookies locales (`SESSION_ID`), sino mediante un estándar robusto y sin estado requerido en clase:
-- Se generaron claves asimétricas RSA de 4096-bits para la firma del Payload (`config/jwt`).
-- Cada vez que el cliente hace login en `/api/auth/login`, Symfony emite un Token y React lo intercepta, guardándolo en `localStorage`.
-- Las llamadas a rutas como Mis Pedidos o Perfil llevan adjunto: `Authorization: Bearer <token>`.
-
-### 7.2 Emisión de Facturas y Contratos (DOMPDF)
-Se incluyó la librería PHP `dompdf`.
-Cualquier cliente logueado puede recuperar en su panel de Perfil el resguardo de sus pedidos. Al pulsar el botón "Descargar Factura PDF" en React, se solicita al controlador `InvoiceController / OrderController`. Symfony baja hasta el motor de plantillas de `Twig`, inyecta los datos del `Order` real y renderiza al vuelo en formato PDF con forzadura de descarga en encabezados (`Content-Disposition: attachment`).
-
-### 7.3 Interceptor de Entregas por Email (Protocolo SMTP Asíncrono)
-Para la asignatura de Desarrollo de Entorno Servidor:
-- Al registrar cuenta, el backend orquesta `Symfony\Component\Mailer` junto a `SymfonyCasts\VerifyEmailBundle` generando una URL criptográfica de verificación.
-- Las pruebas han sido validadas en local mediante inyección del contenedor Docker **MailHog** (`1025`/`8025`). Esto evita inundar buzones reales pero valida el transporte SMTP.
-- La confirmación en el correo marca al cliente como verificado en la Base de Datos (`isVerified`) y lo reconduce a la tienda en React.
-
-### 7.4 Preparación Infraestructura como Código (IaC)
-
-En vista de no aplicar costes de hosting al alumno en esta etapa, pero cubrir el ítem de despliegue, el código no solo tiene pruebas `Github Actions (ci.yml)`. Se ha programado un mapa de infraestructura `render.yaml`. Es un Blueprint autoejecutable que en entornos PaaS de la nube (como Render) lee el archivo y levanta la Base de Datos, el servidor PHP, compila Vite/React y vincula variables de entorno entre los servicios de manera desatendida.
-
----
-
-## ENTRADA 9 — Refinamiento UI Desktop, Correcciones de Bugs y Cierre del Proyecto
+## ENTRADA 7
 
 **Fecha:** Abril 2026  
-**Fase:** 8. Diseño Desktop Premium y corrección de defectos detectados en revisión.  
-**Rama:** `feature/react-frontend`
+**Qué hice:** Versión móvil, n8n y CI/CD
 
-### 8.1 Rediseño Desktop: "Luxury Editorial"
+En esta fase hice el diseño responsive para móvil con Tailwind CSS, integré la automatización con n8n y configuré el pipeline de CI/CD.
 
-Tras la primera validación visual con la versión móvil, se planteó elevar la experiencia de escritorio a un estándar editorial de alta moda, diferenciando claramente el layout responsive:
+**Diseño móvil:**
+Rehice la interfaz con un enfoque Mobile-First usando Tailwind. Añadí una barra de navegación inferior fija (tipo app móvil) con iconos para las páginas principales.
 
-- **Home (Escritorio):** Se eliminó la vista genérica de cards y se sustituyó por un **grid asimétrico de 12 columnas** con:
-  - Foto circular principal con marco de galería (`border-[12px]`) y efecto de desaturación a color en hover (`grayscale → grayscale-0`).
-  - Numerales decorativos de exposición al estilo de catálogo impreso.
-  - Galería deslizante interactiva (`ImageGallery` con `autoPlay`) encuadrada con efecto de paspartú con groove animado en hover.
-  - Typografía XL del logotipo superpuesta (`text-9xl`) como elemento gráfico decorativo propio del diseño editorial.
+**Automatización con n8n:**
+Añadí n8n al Docker Compose. Lo que hace es: cuando alguien confirma un pedido en la tienda, Symfony envía automáticamente un mensaje con los datos del pedido al webhook de n8n. Desde ahí se podría hacer lo que quieras (enviar un email, un Whatsapp, actualizar un Excel...). En el código lo envolví en un try/catch con timeout de 2 segundos para que si n8n falla, la tienda siga funcionando.
 
-- **Colección (Escritorio):** Layout con grid de productos a la izquierda y sidebar sticky a la derecha con imagen de muestra, guía de tallas y marca «Fetiche Suances».
+**GitHub Actions:**
+Configuré un pipeline de CI/CD que se lanza automáticamente con cada push:
+- Comprueba que el esquema de la base de datos de Symfony es correcto
+- Comprueba que el código de React compila sin errores
 
-- **Detalle de Producto (Escritorio):** Rediseñado de vista apilada móvil a layout de **dos columnas 50/50** con la galería a la izquierda y la ficha de información a la derecha encuadrada en una tarjeta blanca con sombra flotante.
+---
 
-- **Contacto:** Eliminado el `<Navbar />` duplicado que generaba dos cabeceras. Reestructurado a grid de 2 columnas con imagen editorial a la izquierda y mapa + datos de contacto a la derecha.
+## ENTRADA 8
 
-### 8.2 Internacionalización Completa (i18n)
+**Fecha:** Abril 2026  
+**Qué hice:** JWT, facturas PDF y correo de verificación
 
-- Identificados todos los textos quemados en el código (`hardcoded`) de la nueva versión Desktop y migrados al diccionario `translations.js`.
-- Se añadieron nuevas claves bajo `home.editorial.*` (essence, moreThan, family, luxury, attitude, personalService) y sus equivalentes en inglés.
-- Los **enlaces de la barra de navegación Desktop** (que permanecían en español fijo) se conectaron al contexto `LanguageContext`, de modo que al pulsar ESP/ENG el Navbar traduce en tiempo real sin recarga.
-- `App.jsx` actualizado para consumir `useLang()` y pasar los títulos de las rutas `/coleccion` y `/accesorios` de forma reactiva.
+Para terminar el backend, añadí tres cosas importantes:
 
-### 8.3 Corrección de Bugs
+**1. Autenticación con JWT:**  
+Cambié el sistema de sesiones normales por tokens JWT. Ahora cuando el usuario hace login, el servidor le da un "token" que es como un identificador firmado. El navegador lo guarda en el localStorage y lo manda en cada petición privada. Generé las claves RSA con openssl y configuré el bundle LexikJWT.
 
-| Bug detectado | Causa raíz | Solución aplicada |
+**2. Facturas en PDF:**  
+Instalé la librería DOMPDF. Desde el perfil del usuario hay un botón para descargar la factura de cada pedido. Symfony coge los datos del pedido, los mete en una plantilla Twig y los convierte a PDF que se descarga automáticamente.
+
+**3. Verificación por correo:**  
+Al registrarse, el backend manda un correo con un enlace de verificación. Para probarlo en local sin mandar emails reales, uso MailHog, que es un contenedor de Docker que captura todos los correos enviados y los muestra en `http://localhost:8025`.
+
+**4. Preparación para despliegue:**  
+Creé un archivo `render.yaml` que sirve para desplegar la app en Render (plataforma de hosting) de forma automática. También ya estaba el pipeline de GitHub Actions de la entrada anterior.
+
+---
+
+## ENTRADA 9
+
+**Fecha:** Abril 2026  
+**Qué hice:** Rediseño Desktop, corrección de bugs y cierre del proyecto
+
+En la última fase mejoré el diseño de escritorio y corregí varios problemas que encontré al probarlo todo.
+
+**Rediseño para escritorio:**  
+La versión móvil estaba bien pero en un ordenador grande se veía sosa. Hice un diseño completamente distinto para pantallas grandes con estilo de editorial de moda:
+- La portada tiene un grid asimétrico con una foto circular grande, tipografía gigante del logo y una galería animada a la derecha
+- El detalle de cada producto ahora se ve en dos columnas (foto a la izquierda, info a la derecha) en vez de todo apilado
+- La página de contacto tiene dos columnas también
+
+**Traducción al inglés:**  
+Los textos nuevos del diseño de escritorio los había escrito directamente en español. Los moví al diccionario de traducciones y también conecté los enlaces del menú al sistema de idiomas, así cuando pulsas en ENG/ESP el menú también cambia.
+
+**Bugs corregidos:**
+
+| Problema | Por qué pasaba | Cómo lo arreglé |
 |---|---|---|
-| Header duplicado en Contacto | `<Navbar />` renderizado en el Layout **y** dentro de `Contacto.jsx` | Eliminado el `<Navbar />` del propio componente |
-| Buscador de Colección no funcional | El `<svg>` del icono bloqueaba los eventos de clic del `<input>` sin `pointer-events-none` | Añadido `pointer-events-none` al SVG y `z-50` al `<input>` |
-| Página de Accesorios en blanco | La BD no contiene productos con categoría `accesorios`, devolviendo array vacío | Inyección de **placeholders de demostración** cuando la API devuelve 0 resultados |
-| Login siempre mostraba "Credenciales inválidas" | El frontend enmascaraba todos los errores (404, 500…) con ese texto fijo | El `catch` ahora propaga el `message` real del servidor |
-| Ruta `/api/auth/login` devolvía 404 | El firewall `json_login` de Symfony necesitaba la ruta declarada explícitamente en el controlador | Añadida la acción `login()` en `AuthController.php` con su `#[Route]` |
+| Salían dos menús en Contacto | El `<Navbar />` estaba en el Layout Y también dentro de Contacto.jsx | Borré el que sobraba en Contacto.jsx |
+| El buscador no funcionaba | El icono de la lupa bloqueaba los clics del input de texto | Añadí `pointer-events-none` al SVG |
+| Accesorios no mostraba nada | La base de datos no tiene productos de esa categoría y el bucle fallaba | Añadí productos de ejemplo cuando la API devuelve vacío |
+| Login decía siempre "Credenciales inválidas" | El frontend ponía ese mensaje fijo para cualquier error | Ahora muestra el mensaje real que devuelve el servidor |
 
-### 8.4 Estado Final del Proyecto
-
-El proyecto cubre la totalidad de la rúbrica entregada:
-
-- ✅ Backend Symfony 6.4 con API REST completa  
-- ✅ Frontend React (SPA) con React Router y Context API  
-- ✅ Autenticación JWT (LexikJWT)  
-- ✅ Panel de administración EasyAdmin 5  
-- ✅ Subida de imágenes y gestión de archivos  
-- ✅ Verificación de cuenta por correo (MailHog en dev)  
-- ✅ Generación de facturas PDF (DOMPDF)  
-- ✅ Webhook de automatización con n8n  
-- ✅ Pipeline CI/CD with GitHub Actions  
-- ✅ Diseño responsive (Mobile-First + Desktop Premium)  
-- ✅ Internacionalización ES/EN  
-- ✅ Docker Compose con multi-contenedor
+Con esto el proyecto ya está completo y cubre todo lo que pedía la rúbrica.
