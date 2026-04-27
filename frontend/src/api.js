@@ -25,6 +25,13 @@ export async function fetchApi(endpoint, options = {}) {
     const data = await response.json();
 
     if (!response.ok) {
+      if (response.status === 401) {
+        localStorage.removeItem('jwt_token');
+        // Redirigir sutilmente limpiando el token para recuperar la navegación
+        if (window.location.pathname !== '/login') {
+            window.location.reload();
+        }
+      }
       throw new Error(data.error || 'Ocurrió un error en la petición');
     }
 
