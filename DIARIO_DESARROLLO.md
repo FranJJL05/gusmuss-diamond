@@ -323,4 +323,63 @@ Para la asignatura de Desarrollo de Entorno Servidor:
 - La confirmación en el correo marca al cliente como verificado en la Base de Datos (`isVerified`) y lo reconduce a la tienda en React.
 
 ### 7.4 Preparación Infraestructura como Código (IaC)
+
 En vista de no aplicar costes de hosting al alumno en esta etapa, pero cubrir el ítem de despliegue, el código no solo tiene pruebas `Github Actions (ci.yml)`. Se ha programado un mapa de infraestructura `render.yaml`. Es un Blueprint autoejecutable que en entornos PaaS de la nube (como Render) lee el archivo y levanta la Base de Datos, el servidor PHP, compila Vite/React y vincula variables de entorno entre los servicios de manera desatendida.
+
+---
+
+## ENTRADA 9 — Refinamiento UI Desktop, Correcciones de Bugs y Cierre del Proyecto
+
+**Fecha:** Abril 2026  
+**Fase:** 8. Diseño Desktop Premium y corrección de defectos detectados en revisión.  
+**Rama:** `feature/react-frontend`
+
+### 8.1 Rediseño Desktop: "Luxury Editorial"
+
+Tras la primera validación visual con la versión móvil, se planteó elevar la experiencia de escritorio a un estándar editorial de alta moda, diferenciando claramente el layout responsive:
+
+- **Home (Escritorio):** Se eliminó la vista genérica de cards y se sustituyó por un **grid asimétrico de 12 columnas** con:
+  - Foto circular principal con marco de galería (`border-[12px]`) y efecto de desaturación a color en hover (`grayscale → grayscale-0`).
+  - Numerales decorativos de exposición al estilo de catálogo impreso.
+  - Galería deslizante interactiva (`ImageGallery` con `autoPlay`) encuadrada con efecto de paspartú con groove animado en hover.
+  - Typografía XL del logotipo superpuesta (`text-9xl`) como elemento gráfico decorativo propio del diseño editorial.
+
+- **Colección (Escritorio):** Layout con grid de productos a la izquierda y sidebar sticky a la derecha con imagen de muestra, guía de tallas y marca «Fetiche Suances».
+
+- **Detalle de Producto (Escritorio):** Rediseñado de vista apilada móvil a layout de **dos columnas 50/50** con la galería a la izquierda y la ficha de información a la derecha encuadrada en una tarjeta blanca con sombra flotante.
+
+- **Contacto:** Eliminado el `<Navbar />` duplicado que generaba dos cabeceras. Reestructurado a grid de 2 columnas con imagen editorial a la izquierda y mapa + datos de contacto a la derecha.
+
+### 8.2 Internacionalización Completa (i18n)
+
+- Identificados todos los textos quemados en el código (`hardcoded`) de la nueva versión Desktop y migrados al diccionario `translations.js`.
+- Se añadieron nuevas claves bajo `home.editorial.*` (essence, moreThan, family, luxury, attitude, personalService) y sus equivalentes en inglés.
+- Los **enlaces de la barra de navegación Desktop** (que permanecían en español fijo) se conectaron al contexto `LanguageContext`, de modo que al pulsar ESP/ENG el Navbar traduce en tiempo real sin recarga.
+- `App.jsx` actualizado para consumir `useLang()` y pasar los títulos de las rutas `/coleccion` y `/accesorios` de forma reactiva.
+
+### 8.3 Corrección de Bugs
+
+| Bug detectado | Causa raíz | Solución aplicada |
+|---|---|---|
+| Header duplicado en Contacto | `<Navbar />` renderizado en el Layout **y** dentro de `Contacto.jsx` | Eliminado el `<Navbar />` del propio componente |
+| Buscador de Colección no funcional | El `<svg>` del icono bloqueaba los eventos de clic del `<input>` sin `pointer-events-none` | Añadido `pointer-events-none` al SVG y `z-50` al `<input>` |
+| Página de Accesorios en blanco | La BD no contiene productos con categoría `accesorios`, devolviendo array vacío | Inyección de **placeholders de demostración** cuando la API devuelve 0 resultados |
+| Login siempre mostraba "Credenciales inválidas" | El frontend enmascaraba todos los errores (404, 500…) con ese texto fijo | El `catch` ahora propaga el `message` real del servidor |
+| Ruta `/api/auth/login` devolvía 404 | El firewall `json_login` de Symfony necesitaba la ruta declarada explícitamente en el controlador | Añadida la acción `login()` en `AuthController.php` con su `#[Route]` |
+
+### 8.4 Estado Final del Proyecto
+
+El proyecto cubre la totalidad de la rúbrica entregada:
+
+- ✅ Backend Symfony 6.4 con API REST completa  
+- ✅ Frontend React (SPA) con React Router y Context API  
+- ✅ Autenticación JWT (LexikJWT)  
+- ✅ Panel de administración EasyAdmin 5  
+- ✅ Subida de imágenes y gestión de archivos  
+- ✅ Verificación de cuenta por correo (MailHog en dev)  
+- ✅ Generación de facturas PDF (DOMPDF)  
+- ✅ Webhook de automatización con n8n  
+- ✅ Pipeline CI/CD with GitHub Actions  
+- ✅ Diseño responsive (Mobile-First + Desktop Premium)  
+- ✅ Internacionalización ES/EN  
+- ✅ Docker Compose con multi-contenedor
