@@ -81,7 +81,17 @@ class AppFixtures extends Fixture
             [
                 'nombre'      => 'Alta Joyería',
                 'slug'        => 'alta-joyeria',
-                'descripcion' => 'Piezas únicas y exclusivas de nuestra colección más prestig iosa. Joyería de firma para ocasiones inolvidables.',
+                'descripcion' => 'Piezas únicas y exclusivas de nuestra colección más prestigiosa. Joyería de firma para ocasiones inolvidables.',
+            ],
+            [
+                'nombre'      => 'Ropa',
+                'slug'        => 'ropa',
+                'descripcion' => 'Colección de moda de lujo. Vestidos de noche, conjuntos de alta costura y prendas exclusivas para mujeres con estilo.',
+            ],
+            [
+                'nombre'      => 'Accesorios',
+                'slug'        => 'accesorios',
+                'descripcion' => 'Sombreros de lujo, bolsos artesanales y complementos exclusivos que elevan cualquier look a otro nivel.',
             ],
         ];
 
@@ -226,6 +236,80 @@ class AppFixtures extends Fixture
                 'destacado'  => true,
                 'cat'        => 'alta-joyeria',
                 'imagen'     => 'pendientes-zafiro-diamantes.jpg',
+            ],
+
+            // --- ROPA ---
+            [
+                'nombre'     => 'Vestido de Noche en Seda Negra',
+                'desc'       => 'Vestido de noche en seda negra con corpiño estructurado, detalle drapeado y falda con pequeña cola. Confeccionado a mano. Tallas XS-XL.',
+                'precio'     => 58000,
+                'stock'      => 6,
+                'material'   => 'Seda Natural',
+                'destacado'  => true,
+                'cat'        => 'ropa',
+                'imagen'     => 'vestido-noche-seda.jpg',
+            ],
+            [
+                'nombre'     => 'Vestido Cóctel Bordado Dorado',
+                'desc'       => 'Vestido cóctel de longitud midi en champagne con bordado de abalorios sobre el corpiño. Elegante y luminoso para cualquier ocasión especial.',
+                'precio'     => 42000,
+                'stock'      => 8,
+                'material'   => 'Tejido Bordado',
+                'destacado'  => true,
+                'cat'        => 'ropa',
+                'imagen'     => 'vestido-coctel-dorado.jpg',
+            ],
+            [
+                'nombre'     => 'Conjunto Blazer y Pantalón Blanco',
+                'desc'       => 'Conjunto de poder femenino: blazer oversize en crema con botones dorados y pantalón de pierna ancha a juego. Tejido premium italiano.',
+                'precio'     => 35000,
+                'stock'      => 10,
+                'material'   => 'Lana Italiana',
+                'destacado'  => false,
+                'cat'        => 'ropa',
+                'imagen'     => 'conjunto-blazer-pantalon.jpg',
+            ],
+            [
+                'nombre'     => 'Vestido Verano Bordado en Oro',
+                'desc'       => 'Vestido midi de verano en blanco puro con bordado floral en hilo dorado en el escote y el bajo. Ligero y romántico para eventos al aire libre.',
+                'precio'     => 28000,
+                'stock'      => 12,
+                'material'   => 'Algodón Premium',
+                'destacado'  => false,
+                'cat'        => 'ropa',
+                'imagen'     => 'vestido-verano-bordado.jpg',
+            ],
+
+            // --- ACCESORIOS (solo sombreros) ---
+            [
+                'nombre'     => 'Sombrero Bucket Beige',
+                'desc'       => 'Sombrero bucket en algodón beige de corte limpio y moderno. Ligero, lavable y con aro interior ajustable. Perfecto para verano y días de playa.',
+                'precio'     => 8500,
+                'stock'      => 20,
+                'material'   => 'Algodón',
+                'destacado'  => true,
+                'cat'        => 'accesorios',
+                'imagen'     => 'sombrero-ala-ancha.jpg',
+            ],
+            [
+                'nombre'     => 'Sombrero Fedora Blanco',
+                'desc'       => 'Fedora de ala ancha en fieltro blanco prémium con cinta de seda negra. Atemporal y elegante, ideal para eventos al aire libre y garden parties.',
+                'precio'     => 18500,
+                'stock'      => 15,
+                'material'   => 'Fieltro Premium',
+                'destacado'  => false,
+                'cat'        => 'accesorios',
+                'imagen'     => 'sombrero-ala-ancha-blanco.jpg',
+            ],
+            [
+                'nombre'     => 'Sombrero Panamá Artesanal',
+                'desc'       => 'Auténtico sombrero panamá tejido a mano en Ecuador con cinta de seda negra y certificado de origen. El complemento veraniego de lujo por excelencia.',
+                'precio'     => 24500,
+                'stock'      => 10,
+                'material'   => 'Paja Toquilla',
+                'destacado'  => true,
+                'cat'        => 'accesorios',
+                'imagen'     => 'sombrero-panama.jpg',
             ],
         ];
 

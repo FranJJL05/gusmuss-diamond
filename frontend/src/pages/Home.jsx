@@ -126,6 +126,32 @@ export default function Home() {
              </div>
           </div>
         </div>
+        {/* BANNER EDITORIAL: Debajo de la galería */}
+        <div className="relative w-full max-w-[1400px] mx-auto px-8 lg:px-20 mt-20 overflow-hidden z-10">
+          <div className="relative w-full h-[340px] overflow-hidden shadow-2xl group">
+            <img
+              src="/uploads/home-banner.jpg"
+              alt="Gusmuss Diamond — Nueva Colección"
+              className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
+            />
+            {/* Overlay oscuro degradado */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
+            {/* Texto sobre el banner */}
+            <div className="absolute inset-0 z-20 flex flex-col justify-center pl-16">
+              <p className="font-serif text-[0.65rem] tracking-[0.5em] text-gus-gold uppercase mb-3">Nueva Temporada</p>
+              <h2 className="font-logo text-white text-6xl leading-none mb-4">Colección <br/>Verano</h2>
+              <div className="w-16 h-px bg-gus-gold mb-6" />
+              <Link
+                to="/coleccion"
+                className="inline-flex items-center gap-3 text-white font-serif text-xs tracking-widest uppercase border border-white/40 px-6 py-3 w-fit hover:bg-white hover:text-gus-black transition-all duration-300"
+              >
+                Ver Colección
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
