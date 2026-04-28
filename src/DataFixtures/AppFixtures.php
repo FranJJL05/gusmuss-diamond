@@ -465,6 +465,24 @@ class AppFixtures extends Fixture
                 ]);
             }
 
+            // Assign standard sizes if category is ropa
+            if ($data['cat'] === 'ropa') {
+                $allSizes = ['XS', 'S', 'M', 'L', 'XL'];
+                // Give each piece of clothing a random set of sizes to simulate stock
+                // At least one size, at most all 5. Let's make some miss sizes to test the UI!
+                $randomSizeCount = rand(2, 5); 
+                shuffle($allSizes);
+                $assignedSizes = array_slice($allSizes, 0, $randomSizeCount);
+                // Sort them conventionally
+                $sortIndex = ['XS'=>0, 'S'=>1, 'M'=>2, 'L'=>3, 'XL'=>4];
+                usort($assignedSizes, fn($a, $b) => $sortIndex[$a] <=> $sortIndex[$b]);
+                
+                $product->setTallasDisponibles($assignedSizes);
+            } else {
+                // Accessories / Jewelry
+                $product->setTallasDisponibles([]);
+            }
+
             // El slug se genera automáticamente con el nombre
             $product->setSlug($this->makeSlug($data['nombre']) . '-' . uniqid());
 

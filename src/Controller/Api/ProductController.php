@@ -112,6 +112,7 @@ class ProductController extends AbstractController
             'galeria'         => array_map(function($img) {
                 return '/uploads/products/' . $img;
             }, $p->getImagenesExtra() ?? []),
+            'tallas'          => $p->getTallasDisponibles() ?? [],
             'categoria'       => $p->getCategory() ? [
                 'id'     => $p->getCategory()->getId(),
                 'nombre' => $p->getCategory()->getNombre(),

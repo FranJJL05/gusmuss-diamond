@@ -56,6 +56,9 @@ class Product
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $imagenesExtra = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $tallasDisponibles = null;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -171,6 +174,14 @@ class Product
     public function setImagenesExtra(?array $imagenesExtra): static
     {
         $this->imagenesExtra = $imagenesExtra;
+        return $this;
+    }
+
+    public function getTallasDisponibles(): ?array { return $this->tallasDisponibles; }
+
+    public function setTallasDisponibles(?array $tallasDisponibles): static
+    {
+        $this->tallasDisponibles = $tallasDisponibles;
         return $this;
     }
 }

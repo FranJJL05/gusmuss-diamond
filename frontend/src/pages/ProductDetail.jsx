@@ -14,8 +14,11 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  const [selectedSize, setSelectedSize] = useState(null);
 
-  const cartItem = cartItems.find(item => item.productId === product?.id);
+  // Rebuscamos con cartId en vez de productId
+  const cartId = product ? (product.id + (selectedSize ? '-' + selectedSize : '')) : null;
+  const cartItem = cartItems.find(item => item.cartId === cartId);
   const currentStockInCart = cartItem ? cartItem.cantidad : 0;
 
   useEffect(() => {
@@ -45,12 +48,16 @@ export default function ProductDetail() {
 
   const handleAdd = () => {
     setAdding(true);
-    addToCart(product, 1);
+    addToCart(product, selectedSize, 1);
     setTimeout(() => {
       setAdding(false);
       navigate('/carrito');
     }, 700);
   };
+
+  const hasSizes = product.tallas && product.tallas.length > 0;
+  const isSizeRequired = true; // Forzamos q si tienen array de tallas, debe seleccionar
+  const canAdd = !hasSizes || selectedSize !== null;
 
   return (
     <div className="bg-white md:bg-[#faf9f7] min-h-screen pb-24 md:pb-0">
@@ -88,6 +95,31 @@ export default function ProductDetail() {
             </p>
           </div>
 
+          {/* Selector de Tallas */}
+          {hasSizes && (
+            <div className="mb-8">
+               <h3 className="font-serif font-semibold text-gus-black tracking-widest text-xs uppercase mb-3">Selecciona tu Talla</h3>
+               <div className="flex gap-3">
+                 {['XS', 'S', 'M', 'L', 'XL'].map(size => {
+                    const available = product.tallas.includes(size);
+                    return (
+                        <button 
+                          key={size}
+                          disabled={!available}
+                          onClick={() => setSelectedSize(size)}
+                          className={`w-12 h-12 flex items-center justify-center font-serif text-sm transition-colors border
+                            ${!available ? 'border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed hidden md:flex' : 
+                               (selectedSize === size ? 'bg-gus-black text-white border-gus-black' : 'bg-white text-gus-black border-gray-300 hover:border-gus-black')}
+                          `}
+                        >
+                          {size}
+                        </button>
+                    )
+                 })}
+               </div>
+            </div>
+          )}
+
           {/* Descripción */}
           {product.descripcion && (
             <div className="mb-10">
@@ -100,14 +132,15 @@ export default function ProductDetail() {
             {/* Botón Añadir al Carrito */}
             <button
               onClick={handleAdd}
-              disabled={product.stock < 1 || adding || currentStockInCart >= product.stock}
+              disabled={product.stock < 1 || adding || currentStockInCart >= product.stock || !canAdd}
               className="w-full bg-gus-black text-white font-serif italic text-xl py-5 rounded-none shadow-lg
                 hover:bg-gus-gold hover:text-black transition-all duration-300 transform hover:-translate-y-1
                 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
             >
               {adding ? '...' : 
                 (product.stock < 1 ? t.product.outOfStock : 
-                  (currentStockInCart >= product.stock ? 'Límite de stock alcanzado' : t.product.addToCart))}
+                  (currentStockInCart >= product.stock ? 'Límite de stock alcanzado' : 
+                     (!canAdd ? 'Selecciona una talla' : t.product.addToCart)))}
             </button>
 
             {/* Garantías */}
