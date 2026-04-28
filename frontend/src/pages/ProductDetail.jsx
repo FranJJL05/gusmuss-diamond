@@ -30,12 +30,15 @@ export default function ProductDetail() {
   if (!product) return null;
 
   const placeholder = `https://placehold.co/800x1000/1a1a1a/bda57b?text=${encodeURIComponent(product.nombre)}`;
-  // Galería: imagen principal + 2 variaciones de color simuladas
-  const images = [
-    product.imagen || placeholder,
-    `https://placehold.co/800x1000/2a2a2a/bda57b?text=Vista+2`,
-    `https://placehold.co/800x1000/111111/bda57b?text=Vista+3`,
-  ];
+  let images = [product.imagen || placeholder];
+  
+  if (product.galeria && product.galeria.length > 0) {
+      images = [images[0], ...product.galeria];
+  } else {
+      // Fallback a 3 imágenes si no hay galería real
+      images.push(`https://placehold.co/800x1000/2a2a2a/bda57b?text=Vista+2`);
+      images.push(`https://placehold.co/800x1000/111111/bda57b?text=Vista+3`);
+  }
 
   const handleAdd = () => {
     setAdding(true);

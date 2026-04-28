@@ -322,6 +322,26 @@ class AppFixtures extends Fixture
 
             // --- ACCESORIOS (sombreros + joyería) ---
             [
+                'nombre'     => 'Anillo Solitario Oro 18k',
+                'desc'       => 'Anillo solitario de diseño minimalista fabricado artesanalmente en oro amarillo de 18 quilates con un pequeño diamante corte brillante coronando la pieza.',
+                'precio'     => 145000,
+                'stock'      => 4,
+                'material'   => 'Oro Amarillo 18k, Diamante',
+                'destacado'  => true,
+                'cat'        => 'accesorios',
+                'imagen'     => 'anillo-solitario.jpg',
+            ],
+            [
+                'nombre'     => 'Anillo Banda Platino',
+                'desc'       => 'Anillo estilo alianza en platino pulido. Un diseño liso, grueso y ergonómico que transmite elegancia silenciosa en cada detalle.',
+                'precio'     => 185000,
+                'stock'      => 3,
+                'material'   => 'Platino 950',
+                'destacado'  => false,
+                'cat'        => 'accesorios',
+                'imagen'     => 'anillo-solitario-platino.jpg',
+            ],
+            [
                 'nombre'     => 'Sombrero Bucket Beige',
                 'desc'       => 'Sombrero bucket en algodón beige de corte limpio y moderno. Ligero, lavable y con aro interior ajustable. Perfecto para verano y días de playa.',
                 'precio'     => 8500,
@@ -394,6 +414,16 @@ class AppFixtures extends Fixture
                     ->setCategory($categoriaEntidades[$data['cat']])
                     ->setImagenFilename($data['imagen'] ?? null)
                     ->setCreatedAt(new \DateTimeImmutable());
+
+            // Add automatic imagenesExtra based on primary image
+            if (isset($data['imagen'])) {
+                $baseName = pathinfo($data['imagen'], PATHINFO_FILENAME);
+                $ext = pathinfo($data['imagen'], PATHINFO_EXTENSION);
+                $product->setImagenesExtra([
+                    "{$baseName}-2.{$ext}",
+                    "{$baseName}-3.{$ext}",
+                ]);
+            }
 
             // El slug se genera automáticamente con el nombre
             $product->setSlug($this->makeSlug($data['nombre']) . '-' . uniqid());

@@ -109,6 +109,9 @@ class ProductController extends AbstractController
             'imagen'          => $p->getImagenFilename()
                 ? '/uploads/products/' . $p->getImagenFilename()
                 : null,
+            'galeria'         => array_map(function($img) {
+                return '/uploads/products/' . $img;
+            }, $p->getImagenesExtra() ?? []),
             'categoria'       => $p->getCategory() ? [
                 'id'     => $p->getCategory()->getId(),
                 'nombre' => $p->getCategory()->getNombre(),

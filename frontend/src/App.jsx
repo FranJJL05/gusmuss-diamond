@@ -34,7 +34,7 @@ export default function App() {
 
         {/* Colección y Accesorios tienen su propio Navbar con title */}
         <Route path="/coleccion" element={<Layout title={t.nav.ropa} />}>
-          <Route index element={<Collection category={null} />} />
+          <Route index element={<Collection category="ropa" pageTitle={t.nav.ropa} />} />
         </Route>
         <Route path="/accesorios" element={<Layout title={t.nav.accessories} />}>
           <Route index element={<Collection category="accesorios" pageTitle={t.nav.accessories} />} />

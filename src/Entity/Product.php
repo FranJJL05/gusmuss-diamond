@@ -53,6 +53,9 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imagenFilename = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $imagenesExtra = null;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -160,6 +163,14 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+        return $this;
+    }
+
+    public function getImagenesExtra(): ?array { return $this->imagenesExtra; }
+
+    public function setImagenesExtra(?array $imagenesExtra): static
+    {
+        $this->imagenesExtra = $imagenesExtra;
         return $this;
     }
 }
