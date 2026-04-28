@@ -238,7 +238,7 @@ class AppFixtures extends Fixture
                 'imagen'     => 'pendientes-zafiro-diamantes.jpg',
             ],
 
-            // --- ROPA ---
+            // --- ROPA (solo prendas de vestir) ---
             [
                 'nombre'     => 'Vestido de Noche en Seda Negra',
                 'desc'       => 'Vestido de noche en seda negra con corpiño estructurado, detalle drapeado y falda con pequeña cola. Confeccionado a mano. Tallas XS-XL.',
@@ -250,17 +250,17 @@ class AppFixtures extends Fixture
                 'imagen'     => 'vestido-noche-seda.jpg',
             ],
             [
-                'nombre'     => 'Vestido Cóctel Bordado Dorado',
-                'desc'       => 'Vestido cóctel de longitud midi en champagne con bordado de abalorios sobre el corpiño. Elegante y luminoso para cualquier ocasión especial.',
+                'nombre'     => 'Vestido Cóctel Midi Beige',
+                'desc'       => 'Vestido cóctel de longitud midi en satén beige con finos tirantes y vuelo sutil. Elegante y luminoso para cualquier ocasión especial.',
                 'precio'     => 42000,
                 'stock'      => 8,
-                'material'   => 'Tejido Bordado',
+                'material'   => 'Satén',
                 'destacado'  => true,
                 'cat'        => 'ropa',
                 'imagen'     => 'vestido-coctel-dorado.jpg',
             ],
             [
-                'nombre'     => 'Conjunto Blazer y Pantalón Blanco',
+                'nombre'     => 'Conjunto Blazer y Pantalón Crema',
                 'desc'       => 'Conjunto de poder femenino: blazer oversize en crema con botones dorados y pantalón de pierna ancha a juego. Tejido premium italiano.',
                 'precio'     => 35000,
                 'stock'      => 10,
@@ -270,7 +270,7 @@ class AppFixtures extends Fixture
                 'imagen'     => 'conjunto-blazer-pantalon.jpg',
             ],
             [
-                'nombre'     => 'Vestido Verano Bordado en Oro',
+                'nombre'     => 'Vestido Verano Bordado',
                 'desc'       => 'Vestido midi de verano en blanco puro con bordado floral en hilo dorado en el escote y el bajo. Ligero y romántico para eventos al aire libre.',
                 'precio'     => 28000,
                 'stock'      => 12,
@@ -279,8 +279,48 @@ class AppFixtures extends Fixture
                 'cat'        => 'ropa',
                 'imagen'     => 'vestido-verano-bordado.jpg',
             ],
+            [
+                'nombre'     => 'Falda Midi Plisada Champagne',
+                'desc'       => 'Falda midi plisada en satén champagne con cintura elástica y caída fluida. Versátil y femenina, perfecta para combinar con blusa o body.',
+                'precio'     => 19500,
+                'stock'      => 14,
+                'material'   => 'Satén Plisado',
+                'destacado'  => true,
+                'cat'        => 'ropa',
+                'imagen'     => 'falda-midi-plisada.jpg',
+            ],
+            [
+                'nombre'     => 'Blusa de Seda con Volantes',
+                'desc'       => 'Blusa de seda blanca con cuello de volantes y manga larga. Sofisticada y atemporal, ideal para combinar con falda o pantalón de sastre.',
+                'precio'     => 22000,
+                'stock'      => 10,
+                'material'   => 'Seda',
+                'destacado'  => false,
+                'cat'        => 'ropa',
+                'imagen'     => 'blusa-seda-blanca.jpg',
+            ],
+            [
+                'nombre'     => 'Abrigo Largo de Lana Negra',
+                'desc'       => 'Abrigo largo de lana negra con solapas limpias y corte recto. Cálido, elegante y atemporal. El básico de lujo que nunca pasa de moda.',
+                'precio'     => 89000,
+                'stock'      => 5,
+                'material'   => 'Lana',
+                'destacado'  => true,
+                'cat'        => 'ropa',
+                'imagen'     => 'abrigo-largo-negro.jpg',
+            ],
+            [
+                'nombre'     => 'Vestido Wrap Verde Bosque',
+                'desc'       => 'Vestido cruzado en verde bosque con escote en V y manga larga. Silueta fluida y favorecedora para cualquier tipo de cuerpo. Tallas XS-XL.',
+                'precio'     => 31000,
+                'stock'      => 9,
+                'material'   => 'Tejido Fluido',
+                'destacado'  => false,
+                'cat'        => 'ropa',
+                'imagen'     => 'vestido-wrap-verde.jpg',
+            ],
 
-            // --- ACCESORIOS (solo sombreros) ---
+            // --- ACCESORIOS (sombreros + joyería) ---
             [
                 'nombre'     => 'Sombrero Bucket Beige',
                 'desc'       => 'Sombrero bucket en algodón beige de corte limpio y moderno. Ligero, lavable y con aro interior ajustable. Perfecto para verano y días de playa.',
@@ -310,6 +350,36 @@ class AppFixtures extends Fixture
                 'destacado'  => true,
                 'cat'        => 'accesorios',
                 'imagen'     => 'sombrero-panama.jpg',
+            ],
+            [
+                'nombre'     => 'Collar de Perlas Clásico',
+                'desc'       => 'Collar de perlas cultivadas de primera calidad con cierre en oro de 18k. Un clásico intemporale que eleva cualquier look al instante.',
+                'precio'     => 32000,
+                'stock'      => 8,
+                'material'   => 'Perlas y Oro 18k',
+                'destacado'  => true,
+                'cat'        => 'accesorios',
+                'imagen'     => 'collar-perlas.jpg',
+            ],
+            [
+                'nombre'     => 'Pendientes Aro Dorado',
+                'desc'       => 'Pendientes de aro en oro amarillo 18k pulido. Tamaño medio, ligeros y versátiles. El complemento perfecto para el día a día con un toque de lujo.',
+                'precio'     => 14500,
+                'stock'      => 18,
+                'material'   => 'Oro Amarillo 18k',
+                'destacado'  => false,
+                'cat'        => 'accesorios',
+                'imagen'     => 'pendientes-aro-dorado.jpg',
+            ],
+            [
+                'nombre'     => 'Pulsera Cadena de Oro',
+                'desc'       => 'Pulsera de cadena fina en oro de 18k, delicada y elegante. Perfecta para llevar sola o apilada con otras pulseras. Cierre de mosquetón.',
+                'precio'     => 19000,
+                'stock'      => 12,
+                'material'   => 'Oro 18k',
+                'destacado'  => false,
+                'cat'        => 'accesorios',
+                'imagen'     => 'pulsera-cadena-dorada.jpg',
             ],
         ];
 
