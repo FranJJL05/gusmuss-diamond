@@ -8,12 +8,15 @@ import ImageGallery from '../components/ui/ImageGallery';
 export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   const { t } = useLang();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+
+  const cartItem = cartItems.find(item => item.productId === product?.id);
+  const currentStockInCart = cartItem ? cartItem.cantidad : 0;
 
   useEffect(() => {
     fetchApi(`/productos/${slug}`)
@@ -97,12 +100,14 @@ export default function ProductDetail() {
             {/* Botón Añadir al Carrito */}
             <button
               onClick={handleAdd}
-              disabled={product.stock < 1 || adding}
+              disabled={product.stock < 1 || adding || currentStockInCart >= product.stock}
               className="w-full bg-gus-black text-white font-serif italic text-xl py-5 rounded-none shadow-lg
                 hover:bg-gus-gold hover:text-black transition-all duration-300 transform hover:-translate-y-1
                 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {adding ? '...' : product.stock > 0 ? t.product.addToCart : t.product.outOfStock}
+              {adding ? '...' : 
+                (product.stock < 1 ? t.product.outOfStock : 
+                  (currentStockInCart >= product.stock ? 'Límite de stock alcanzado' : t.product.addToCart))}
             </button>
 
             {/* Garantías */}

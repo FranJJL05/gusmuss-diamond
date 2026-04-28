@@ -18,20 +18,24 @@ export function CartProvider({ children }) {
     setCartItems(prev => {
       const existing = prev.find(item => item.productId === product.id);
       if (existing) {
-        return prev.map(item => 
-          item.productId === product.id 
-            ? { ...item, cantidad: item.cantidad + cantidad }
-            : item
-        );
+        return prev.map(item => {
+          if (item.productId === product.id) {
+             const newQuantity = item.cantidad + cantidad;
+             // Limitar al stock máximo
+             return { ...item, cantidad: newQuantity > item.stock ? item.stock : newQuantity };
+          }
+          return item;
+        });
       }
       return [...prev, { 
         productId: product.id, 
-        cantidad,
+        cantidad: cantidad > product.stock ? product.stock : cantidad,
         nombre: product.nombre,
         precioUnitario: product.precio,
         precioFormateado: product.precioFormateado,
         imagen: product.imagen,
-        slug: product.slug
+        slug: product.slug,
+        stock: product.stock
       }];
     });
   };
@@ -41,9 +45,14 @@ export function CartProvider({ children }) {
       removeFromCart(productId);
       return;
     }
-    setCartItems(prev => prev.map(item => 
-      item.productId === productId ? { ...item, cantidad } : item
-    ));
+    setCartItems(prev => prev.map(item => {
+      if (item.productId === productId) {
+         // Capping at item.stock
+         const cappedQuantity = cantidad > item.stock ? item.stock : cantidad;
+         return { ...item, cantidad: cappedQuantity };
+      }
+      return item;
+    }));
   };
 
   const removeFromCart = (productId) => {

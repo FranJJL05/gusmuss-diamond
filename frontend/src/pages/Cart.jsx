@@ -45,7 +45,8 @@ export default function Cart() {
                 <span className="text-sm">{item.cantidad}</span>
                 <button
                   onClick={() => updateQuantity(item.productId, item.cantidad + 1)}
-                  className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-sm hover:border-gus-gold transition-colors"
+                  disabled={item.cantidad >= item.stock}
+                  className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-sm hover:border-gus-gold transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >+</button>
               </div>
 
