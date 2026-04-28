@@ -26,13 +26,10 @@ export async function fetchApi(endpoint, options = {}) {
 
     if (!response.ok) {
       if (response.status === 401) {
+        // Limpiar token expirado/inválido sin recargar (evitar bucle infinito)
         localStorage.removeItem('jwt_token');
-        // Redirigir sutilmente limpiando el token para recuperar la navegación
-        if (window.location.pathname !== '/login') {
-            window.location.reload();
-        }
       }
-      throw new Error(data.error || 'Ocurrió un error en la petición');
+      throw new Error(data.error || data.message || 'Ocurrió un error en la petición');
     }
 
     return data;
