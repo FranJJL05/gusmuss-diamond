@@ -31,21 +31,32 @@ export function CartProvider({ children }) {
     setCartItems(prev => {
       const cartId = product.id + (selectedTalla ? '-' + selectedTalla : '');
       const existing = prev.find(item => item.cartId === cartId);
+      
+      const totalInCartOthers = prev
+         .filter(item => item.productId === product.id && item.cartId !== cartId)
+         .reduce((sum, item) => sum + item.cantidad, 0);
+         
+      const maxAllowed = product.stock - totalInCartOthers;
+
       if (existing) {
         return prev.map(item => {
           if (item.cartId === cartId) {
              const newQuantity = item.cantidad + cantidad;
-             // Limitar al stock máximo
-             return { ...item, cantidad: newQuantity > item.stock ? item.stock : newQuantity };
+             // Limitar al stock máximo restando los de otras tallas
+             return { ...item, cantidad: newQuantity > maxAllowed ? maxAllowed : newQuantity };
           }
           return item;
         });
       }
+      
+      const cappedCantidad = cantidad > maxAllowed ? maxAllowed : cantidad;
+      if (cappedCantidad <= 0) return prev; // Límite por todas las tallas tocado
+
       return [...prev, { 
         cartId,
         productId: product.id, 
         talla: selectedTalla,
-        cantidad: cantidad > product.stock ? product.stock : cantidad,
+        cantidad: cappedCantidad,
         nombre: product.nombre,
         precioUnitario: product.precio,
         precioFormateado: product.precioFormateado,
@@ -61,14 +72,24 @@ export function CartProvider({ children }) {
       removeFromCart(cartId);
       return;
     }
-    setCartItems(prev => prev.map(item => {
-      if (item.cartId === cartId) {
-         // Capping at item.stock
-         const cappedQuantity = cantidad > item.stock ? item.stock : cantidad;
-         return { ...item, cantidad: cappedQuantity };
-      }
-      return item;
-    }));
+    setCartItems(prev => {
+       const itemUpdating = prev.find(i => i.cartId === cartId);
+       if (!itemUpdating) return prev;
+       
+       const totalInCartOthers = prev
+           .filter(i => i.productId === itemUpdating.productId && i.cartId !== cartId)
+           .reduce((sum, i) => sum + i.cantidad, 0);
+           
+       const maxAllowed = itemUpdating.stock - totalInCartOthers;
+
+       return prev.map(item => {
+         if (item.cartId === cartId) {
+            const cappedQuantity = cantidad > maxAllowed ? maxAllowed : cantidad;
+            return { ...item, cantidad: cappedQuantity };
+         }
+         return item;
+       });
+    });
   };
 
   const removeFromCart = (cartId) => {

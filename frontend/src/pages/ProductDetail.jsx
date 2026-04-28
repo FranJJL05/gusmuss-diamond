@@ -16,10 +16,10 @@ export default function ProductDetail() {
   const [adding, setAdding] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
 
-  // Rebuscamos con cartId en vez de productId
-  const cartId = product ? (product.id + (selectedSize ? '-' + selectedSize : '')) : null;
-  const cartItem = cartItems.find(item => item.cartId === cartId);
-  const currentStockInCart = cartItem ? cartItem.cantidad : 0;
+  // Rebuscamos la cantidad TOTAL que ya hemos metido en el carrito para ESTE producto (juntando todas las tallas)
+  const currentStockInCart = cartItems
+      .filter(item => item.productId === product?.id)
+      .reduce((sum, item) => sum + item.cantidad, 0);
 
   useEffect(() => {
     fetchApi(`/productos/${slug}`)
