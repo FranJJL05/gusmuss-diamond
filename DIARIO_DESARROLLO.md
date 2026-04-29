@@ -219,3 +219,29 @@ Los textos nuevos del diseño de escritorio los había escrito directamente en e
 | Login decía siempre "Credenciales inválidas" | El frontend ponía ese mensaje fijo para cualquier error | Ahora muestra el mensaje real que devuelve el servidor |
 
 Con esto el proyecto ya está completo y cubre todo lo que pedía la rúbrica.
+
+---
+
+## ENTRADA 10
+
+**Fecha:** Abril 2026  
+**Qué hice:** Lógica de inventario (Tallas, Límite Global), Múltiples Imágenes y Reorganización de Categorías
+
+En esta última fase he aplicado un rediseño estructural fuerte sobre cómo funciona el catálogo visual y el núcleo del carrito de la compra:
+
+**1. Categorías y Diseño Unificado:**
+- Separemos estrictamente la tienda en dos secciones de menú: **Ropa** (`/coleccion`) y **Accesorios** (`/accesorios`). La API ahora filtra para que los collares o anillos nunca aparezcan en la sección de vestidos.
+- Se eliminó el layout "fragmentado" o hardcodeado antiguo que había para sombreros y bolsos. Ahora todo usa el diseño premium, logrando que los anillos y joyas minimalistas recién añadidos se luzcan en el grid asimétrico.
+
+**2. Sistema de Galería de Imágenes:**
+- Añadí una columna JSON `imagenesExtra` a la entidad `Product`. 
+- Modifiqué `ProductDetail.jsx` para que ya no use *placeholders*. Ahora lee el array de la API y renderiza un carrusel interactivo real con 3 vistas por producto (añadiendo duplicados temporalmente de las imágenes generadas por IA para simular los ángulos hasta la sesión fotográfica).
+
+**3. Sistema de Tallas (UI / Base de Datos):**
+- Incorporé la propiedad `tallasDisponibles` (JSON) en la base de datos para la Ropa.
+- La página de detalle ahora pinta botones `XS, S, M, L, XL`. Utilicé un script en los *Fixtures* para que asigne tallas de manera aleatoria. Las tallas sin stock quedan grises y deshabilitadas.
+- **Forzado UI:** No puedes añadir al carrito si no eliges talla, y la talla elegida se mostrará textualmente en el resumen de `Cart.jsx`.
+
+**4. Blindaje del Carrito y Stock Global:**
+- Modifiqué la clave primaria del carrito en React. Ahora un ítem no se guarda como `productId: 5`, sino como `cartId: "5-M"`. Así conviven la talla M y la L del mismo producto separadas.
+- **Lógica de límite global:** Evité un bug grave. Aunque la M y la L sean filas separadas en el carrito, reducen el **mismo stock físico**. Programé un "filtro espía" en `CartContext.jsx` que suma dinámicamente todo lo que lleves de un modelo y lo resta del almacén. Si añades muchas M, el botón de añadir la L se desactivará automáticamente diciendo *"Límite de stock alcanzado"* porque superaste el stock global de esa prenda.
