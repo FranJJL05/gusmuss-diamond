@@ -19,6 +19,9 @@ class OrderItem
     #[ORM\Column]
     private ?float $precioUnitario = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $talla = null;
+
     #[ORM\ManyToOne(inversedBy: 'orderItems')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderRef = null;
@@ -81,6 +84,18 @@ class OrderItem
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getTalla(): ?string
+    {
+        return $this->talla;
+    }
+
+    public function setTalla(?string $talla): static
+    {
+        $this->talla = $talla;
 
         return $this;
     }

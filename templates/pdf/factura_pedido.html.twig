@@ -54,7 +54,12 @@
     <tbody>
         {% for item in pedido.orderItems %}
         <tr>
-            <td>{{ item.product.nombre }}</td>
+            <td>
+                {{ item.product.nombre }}
+                {% if item.talla %}
+                    <br><small style="color: #666;">Talla: {{ item.talla }}</small>
+                {% endif %}
+            </td>
             <td>{{ (item.precioUnitario)|number_format(2, ',', '.') }} €</td>
             <td>{{ item.cantidad }}</td>
             <td>{{ (item.precioUnitario * item.cantidad)|number_format(2, ',', '.') }} €</td>

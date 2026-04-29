@@ -76,6 +76,7 @@ class OrderController extends AbstractController
         foreach ($items as $cartItem) {
             $productId = (int) ($cartItem['productId'] ?? 0);
             $cantidad  = max(1, (int) ($cartItem['cantidad'] ?? 1));
+            $talla     = $cartItem['talla'] ?? null;
 
             $product = $this->productRepository->find($productId);
 
@@ -95,6 +96,7 @@ class OrderController extends AbstractController
             $orderItem = new OrderItem();
             $orderItem->setProduct($product)
                       ->setCantidad($cantidad)
+                      ->setTalla($talla)
                       ->setPrecioUnitario($product->getPrecio() / 100); // euros (float)
 
             $order->addOrderItem($orderItem);
@@ -107,6 +109,7 @@ class OrderController extends AbstractController
 
             $resumenItems[] = [
                 'nombre'           => $product->getNombre(),
+                'talla'            => $talla,
                 'cantidad'         => $cantidad,
                 'precioUnitario'   => number_format($product->getPrecio() / 100, 2, ',', '.') . ' €',
                 'subtotalFormateado' => number_format($subtotal / 100, 2, ',', '.') . ' €',
@@ -258,6 +261,7 @@ class OrderController extends AbstractController
                     'imagen'              => $item->getProduct()?->getImagenFilename()
                         ? '/uploads/products/' . $item->getProduct()->getImagenFilename()
                         : null,
+                    'talla'               => $item->getTalla(),
                     'cantidad'            => $item->getCantidad(),
                     'precioUnitario'      => $item->getPrecioUnitario(),
                     'subtotalFormateado'  => number_format($item->getPrecioUnitario() * $item->getCantidad(), 2, ',', '.') . ' €',

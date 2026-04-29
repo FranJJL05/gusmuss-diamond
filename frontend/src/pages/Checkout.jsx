@@ -54,7 +54,7 @@ export default function Checkout() {
       await fetchApi('/pedidos', {
         method: 'POST',
         body: JSON.stringify({
-          items: cartItems.map(i => ({ productId: i.productId, cantidad: i.cantidad })),
+          items: cartItems.map(i => ({ productId: i.productId, cantidad: i.cantidad, talla: i.talla })),
           direccionEnvio
         })
       });
@@ -76,8 +76,10 @@ export default function Checkout() {
       {/* Resumen */}
       <div className="bg-gray-50 p-4 rounded mb-6">
         {cartItems.map(item => (
-          <div key={item.productId} className="flex justify-between text-sm py-1.5 border-b border-gray-200">
-            <span className="font-serif truncate flex-1 mr-2">{item.nombre} x{item.cantidad}</span>
+          <div key={item.cartId} className="flex justify-between text-sm py-1.5 border-b border-gray-200">
+            <span className="font-serif truncate flex-1 mr-2">
+                {item.nombre} {item.talla && <span className="text-gray-400 text-xs tracking-widest">(Talla: {item.talla})</span>} x{item.cantidad}
+            </span>
             <span>{new Intl.NumberFormat('es-ES', { style:'currency', currency:'EUR' }).format((item.precioUnitario * item.cantidad)/100)}</span>
           </div>
         ))}
