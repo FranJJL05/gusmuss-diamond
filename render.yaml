@@ -16,7 +16,7 @@ services:
       - key: JWT_PASSPHRASE
         generateValue: true
       - key: MAILER_DSN
-        value: null://null  # Sustituir por brevo, mailgun, sendgrid en el hosting
+        value: null://null
 
   # Frontend React (Vite)
   - type: static
@@ -37,8 +37,7 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
 
 databases:
-  # Base de datos MySQL / MariaDB (via Docker o nativa)
-  # Render usa PostgreSQL de forma nativa, pero la declaramos para la demo
+  # Base de datos
   - name: gusmuss-db
     databaseName: gusmuss_production
     user: gusmuss_user
