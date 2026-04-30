@@ -19,12 +19,10 @@ services:
         value: null://null
 
   # Frontend React (Vite)
-  - type: web
+  - type: static_site
     name: gusmuss-frontend
-    env: static
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
-    plan: free
     routes:
       - type: rewrite
         source: /*
