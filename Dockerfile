@@ -17,3 +17,17 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
     && sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
 WORKDIR /var/www/html
+
+# Instalar dependencias necesarias de sistema para Composer/Symfony
+RUN apt-get update && apt-get install -y git unzip libzip-dev \
+    && docker-php-ext-install zip
+
+# Copiar todo el proyecto al contenedor
+COPY . /var/www/html/
+
+# Instalar dependencias de Symfony (evitando scripts que requieran BBDD en build time)
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Dar permisos a la carpeta var y uploads para que Apache pueda escribir
+RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public/uploads || true
