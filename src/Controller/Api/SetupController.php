@@ -59,6 +59,23 @@ class SetupController extends AbstractController
     {
         try {
             $products = $productRepo->findAll();
+            
+            // Solo estos 11 productos tienen una imagen generada por IA única.
+            // Para el resto, no mostraremos galería (evitando duplicados).
+            $customImages = [
+                'anillo-solitario-diamante-05ct',
+                'anillo-diamante-solitario-1ct',
+                'anillo-rubi-birmano-diamantes',
+                'colgante-diamante-corazon',
+                'collar-riviere-diamantes',
+                'pulsera-tennis-diamantes-3ct',
+                'pendientes-solitario-diamante-03ct',
+                'pendientes-zafiro-diamantes',
+                'vestido-noche-seda',
+                'vestido-coctel-dorado',
+                'falda-midi-plisada'
+            ];
+
             $count = 0;
 
             foreach ($products as $product) {
@@ -66,17 +83,23 @@ class SetupController extends AbstractController
                 if ($imagen) {
                     $baseName = pathinfo($imagen, PATHINFO_FILENAME);
                     $ext = pathinfo($imagen, PATHINFO_EXTENSION);
-                    $product->setImagenesExtra([
-                        "{$baseName}-2.{$ext}",
-                        "{$baseName}-3.{$ext}",
-                    ]);
-                    $count++;
+                    
+                    if (in_array($baseName, $customImages)) {
+                        // Solo añadimos la imagen secundaria -2.jpg, la -3.jpg era un duplicado
+                        $product->setImagenesExtra([
+                            "{$baseName}-2.{$ext}"
+                        ]);
+                        $count++;
+                    } else {
+                        // Para el resto, borramos la galería para que no haya fotos repetidas
+                        $product->setImagenesExtra([]);
+                    }
                 }
             }
 
             $em->flush();
 
-            return new Response("<div style='font-family: monospace; background: #111; color: #0f0; padding: 20px; border-radius: 5px; height: 100vh;'><h1>Galerías Restauradas</h1><p>Se han restaurado las imágenes secundarias correctas a $count productos de la base de datos.</p><p>Ya puedes volver a la página web.</p></div>");
+            return new Response("<div style='font-family: monospace; background: #111; color: #0f0; padding: 20px; border-radius: 5px; height: 100vh;'><h1>Galerías Limpias</h1><p>Se han eliminado las fotos duplicadas y se han configurado $count productos con fotos secundarias a medida.</p><p>Ya puedes volver a la página web.</p></div>");
         } catch (\Throwable $e) {
             return new Response("<div style='font-family: monospace; background: #111; color: red; padding: 20px;'><h1>Error 500</h1><pre>" . $e->getMessage() . "\n\n" . $e->getTraceAsString() . "</pre></div>");
         }
