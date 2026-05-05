@@ -1,5 +1,6 @@
 export async function fetchApi(endpoint, options = {}) {
-  const url = `/api${endpoint}`;
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+  const url = `${baseUrl}/api${endpoint}`;
 
   const headers = {
     'Content-Type': 'application/json',
