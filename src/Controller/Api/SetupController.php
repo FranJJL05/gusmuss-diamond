@@ -59,28 +59,24 @@ class SetupController extends AbstractController
     {
         try {
             $products = $productRepo->findAll();
-            $galleryImages = [
-                'gallery-box.png',
-                'gallery-macro.png',
-                'gallery-silk.png',
-                'gallery-model.png',
-                'gallery-gold.png',
-                'gallery-woman.png'
-            ];
-
             $count = 0;
+
             foreach ($products as $product) {
-                $randomKeys = array_rand($galleryImages, 2);
-                $product->setImagenesExtra([
-                    $galleryImages[$randomKeys[0]],
-                    $galleryImages[$randomKeys[1]]
-                ]);
-                $count++;
+                $imagen = $product->getImagenFilename();
+                if ($imagen) {
+                    $baseName = pathinfo($imagen, PATHINFO_FILENAME);
+                    $ext = pathinfo($imagen, PATHINFO_EXTENSION);
+                    $product->setImagenesExtra([
+                        "{$baseName}-2.{$ext}",
+                        "{$baseName}-3.{$ext}",
+                    ]);
+                    $count++;
+                }
             }
 
             $em->flush();
 
-            return new Response("<div style='font-family: monospace; background: #111; color: #0f0; padding: 20px; border-radius: 5px; height: 100vh;'><h1>Galerías Actualizadas</h1><p>Se han asignado imágenes secundarias de lujo a $count productos de la base de datos.</p><p>Ya puedes volver a la página web.</p></div>");
+            return new Response("<div style='font-family: monospace; background: #111; color: #0f0; padding: 20px; border-radius: 5px; height: 100vh;'><h1>Galerías Restauradas</h1><p>Se han restaurado las imágenes secundarias correctas a $count productos de la base de datos.</p><p>Ya puedes volver a la página web.</p></div>");
         } catch (\Throwable $e) {
             return new Response("<div style='font-family: monospace; background: #111; color: red; padding: 20px;'><h1>Error 500</h1><pre>" . $e->getMessage() . "\n\n" . $e->getTraceAsString() . "</pre></div>");
         }
