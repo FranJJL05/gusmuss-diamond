@@ -98,6 +98,11 @@ class ProductController extends AbstractController
     private function serializeProduct(\App\Entity\Product $p, Request $request, bool $full = false): array
     {
         $baseUrl = $request->getSchemeAndHttpHost();
+        
+        // Forzar HTTPS en producción (Render) para evitar errores de Mixed Content
+        if (str_contains($baseUrl, 'onrender.com')) {
+            $baseUrl = str_replace('http://', 'https://', $baseUrl);
+        }
 
         $data = [
             'id'              => $p->getId(),
