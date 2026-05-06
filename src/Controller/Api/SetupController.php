@@ -71,9 +71,9 @@ class SetupController extends AbstractController
                 'pulsera-tennis-diamantes-3ct',
                 'pendientes-solitario-diamante-03ct',
                 'pendientes-zafiro-diamantes',
-                'vestido-noche-seda',
-                'vestido-coctel-dorado',
-                'falda-midi-plisada'
+                // Ropa nueva (19 prendas con galería completa de 3 fotos)
+                'ropa-0', 'ropa-1', 'ropa-2', 'ropa-3', 'ropa-4', 'ropa-5', 'ropa-6', 'ropa-7', 'ropa-8', 'ropa-9', 
+                'ropa-10', 'ropa-11', 'ropa-12', 'ropa-13', 'ropa-14', 'ropa-15', 'ropa-16', 'ropa-17', 'ropa-18'
             ];
 
             $count = 0;
@@ -85,13 +85,21 @@ class SetupController extends AbstractController
                     $ext = pathinfo($imagen, PATHINFO_EXTENSION);
                     
                     if (in_array($baseName, $customImages)) {
-                        // Solo añadimos la imagen secundaria -2.jpg, la -3.jpg era un duplicado
-                        $product->setImagenesExtra([
-                            "{$baseName}-2.{$ext}"
-                        ]);
+                        if (str_starts_with($baseName, 'ropa-')) {
+                            // La ropa nueva tiene 3 fotos (prenda, modelo, detalle)
+                            $product->setImagenesExtra([
+                                "{$baseName}-2.{$ext}",
+                                "{$baseName}-3.{$ext}"
+                            ]);
+                        } else {
+                            // Las joyas con IA solo tienen la foto -2 (la -3 era duplicado)
+                            $product->setImagenesExtra([
+                                "{$baseName}-2.{$ext}"
+                            ]);
+                        }
                         $count++;
                     } else {
-                        // Para el resto, borramos la galería para que no haya fotos repetidas
+                        // Para el resto de joyas antiguas sin foto IA, borramos la galería para evitar duplicados
                         $product->setImagenesExtra([]);
                     }
                 }
