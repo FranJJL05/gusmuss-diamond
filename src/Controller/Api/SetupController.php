@@ -73,7 +73,9 @@ class SetupController extends AbstractController
                 'pendientes-zafiro-diamantes',
                 // Ropa nueva (19 prendas con galería completa de 3 fotos)
                 'ropa-0', 'ropa-1', 'ropa-2', 'ropa-3', 'ropa-4', 'ropa-5', 'ropa-6', 'ropa-7', 'ropa-8', 'ropa-9', 
-                'ropa-10', 'ropa-11', 'ropa-12', 'ropa-13', 'ropa-14', 'ropa-15', 'ropa-16', 'ropa-17', 'ropa-18'
+                'ropa-10', 'ropa-11', 'ropa-12', 'ropa-13', 'ropa-14', 'ropa-15', 'ropa-16', 'ropa-17', 'ropa-18',
+                // Accesorios nuevos (10 accesorios con galería completa de 3 fotos)
+                'accesorio-0', 'accesorio-1', 'accesorio-2', 'accesorio-3', 'accesorio-4', 'accesorio-5', 'accesorio-6', 'accesorio-7', 'accesorio-8', 'accesorio-9'
             ];
 
             $count = 0;
@@ -85,8 +87,8 @@ class SetupController extends AbstractController
                     $ext = pathinfo($imagen, PATHINFO_EXTENSION);
                     
                     if (in_array($baseName, $customImages)) {
-                        if (str_starts_with($baseName, 'ropa-')) {
-                            // La ropa nueva tiene 3 fotos (prenda, modelo, detalle)
+                        if (str_starts_with($baseName, 'ropa-') || str_starts_with($baseName, 'accesorio-')) {
+                            // La ropa y accesorios nuevos tienen 3 fotos (prenda, modelo, detalle)
                             $product->setImagenesExtra([
                                 "{$baseName}-2.{$ext}",
                                 "{$baseName}-3.{$ext}"
