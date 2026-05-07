@@ -27,16 +27,16 @@ export default function Home() {
   return (
     <div className="bg-gus-black md:bg-[#faf9f7] min-h-screen flex flex-col -mt-14 -mb-20 md:mt-0 md:mb-0 pt-14 pb-20 md:pt-0 md:pb-0">
       {/* Galería hero con transición (Sólo Móvil) */}
-      <div className="relative w-full h-56 md:hidden">
+      <div className="relative w-full h-64 md:hidden">
         <ImageGallery images={galleryImages} interval={4000} />
-        {/* Overlay oscuro */}
-        <div className="absolute inset-0 bg-black/40 pointer-events-none z-[1]"></div>
+        {/* Overlay degradado inferior */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-gus-black pointer-events-none z-[1]"></div>
       </div>
 
       {/* ==================================================== */}
-      {/* VERSIÓN MOBILE (Conservada) */}
+      {/* VERSIÓN MOBILE */}
       {/* ==================================================== */}
-      <div className="flex flex-col items-center justify-center flex-1 px-8 py-12 gap-8 md:hidden">
+      <div className="flex flex-col items-center px-8 pt-6 pb-8 gap-5 md:hidden">
         {/* Logo grande */}
         <div className="text-center animate-fade-in">
           <h1 className="font-logo text-gus-gold text-7xl leading-none">{t.home.tagline.split(' ')[0]}</h1>
@@ -50,14 +50,23 @@ export default function Home() {
           {t.home.subtitle}
         </p>
 
-        {/* Botón principal ovalado blanco */}
-        <Link
-          to="/coleccion"
-          className="bg-white text-gus-black font-serif text-lg px-12 py-3 rounded-full
-            hover:bg-gus-gold hover:text-white transition-all duration-300 shadow-lg hover:shadow-gus-gold/30"
-        >
-          {t.home.cta}
-        </Link>
+        {/* Botones */}
+        <div className="flex flex-col gap-3 w-full items-center">
+          <Link
+            to="/coleccion"
+            className="bg-white text-gus-black font-serif text-lg px-12 py-3 rounded-full w-full text-center
+              hover:bg-gus-gold hover:text-white transition-all duration-300 shadow-lg"
+          >
+            {t.home.cta}
+          </Link>
+          <Link
+            to="/accesorios"
+            className="border border-gus-gold text-gus-gold font-serif text-sm px-8 py-2 rounded-full w-full text-center
+              hover:bg-gus-gold hover:text-white transition-all duration-300"
+          >
+            {t.nav.accessories}
+          </Link>
+        </div>
       </div>
 
       {/* ==================================================== */}
