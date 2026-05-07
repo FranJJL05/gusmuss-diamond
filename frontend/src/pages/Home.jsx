@@ -110,7 +110,7 @@ export default function Home() {
           </div>
 
           {/* Bloque Derecho: Galería Interactiva con Marco de Revista */}
-          <div className="col-span-4 relative h-[600px] shadow-2xl mt-16 bg-white flex items-center justify-center group overflow-hidden z-40">
+          <div className="col-span-4 relative h-[600px] shadow-2xl mt-16 bg-white flex items-center justify-center group z-40">
              {/* Marco súper grueso interior tipo cuadro */}
              <div className="absolute inset-0 border-[16px] border-white pointer-events-none z-20 transition-all duration-500 group-hover:border-[24px]"></div>
              
