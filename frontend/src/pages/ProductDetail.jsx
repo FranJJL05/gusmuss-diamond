@@ -51,7 +51,7 @@ export default function ProductDetail() {
     addToCart(product, selectedSize, 1);
     setTimeout(() => {
       setAdding(false);
-      navigate('/carrito');
+      navigate(-1); // Vuelve a la pantalla anterior
     }, 700);
   };
 

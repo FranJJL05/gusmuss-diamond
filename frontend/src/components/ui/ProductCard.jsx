@@ -19,13 +19,16 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Info — BEM: product-card__info */}
-      <div className="product-card__info flex items-center justify-between mt-2 px-1">
-        <span className="product-card__price text-gus-green font-serif font-semibold text-sm">
-          {product.precioFormateado}
-        </span>
-        <span className="product-card__buy bg-gus-black text-white text-xs px-4 py-1 rounded-full font-serif italic hover:bg-gray-800 transition-colors">
-          {t.collection.buy}
-        </span>
+      <div className="product-card__info mt-3 px-1">
+        <h3 className="font-serif text-sm text-gus-black truncate pr-4">{product.nombre}</h3>
+        <div className="flex items-center justify-between mt-1">
+          <span className="product-card__price text-gus-green font-serif font-semibold text-sm">
+            {product.precioFormateado}
+          </span>
+          <span className="product-card__buy bg-gus-black text-white text-[10px] px-3 py-1 rounded-full font-serif italic hover:bg-gray-800 transition-colors">
+            {t.collection.buy}
+          </span>
+        </div>
       </div>
     </Link>
   );
