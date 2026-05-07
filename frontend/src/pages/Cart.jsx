@@ -21,7 +21,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="px-4 py-6">
+    <div className="px-4 py-6 bg-white min-h-screen md:min-h-0">
       <h1 className="font-serif text-2xl text-gus-black mb-6">{t.cart.title}</h1>
 
       <div className="space-y-4 mb-6">

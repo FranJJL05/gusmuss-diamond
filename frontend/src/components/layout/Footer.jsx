@@ -1,7 +1,7 @@
 // BEM: .piano-footer / .piano-footer__center / .piano-footer__logo
 export default function Footer() {
   return (
-    <footer className="piano-footer mt-8">
+    <footer className="piano-footer mt-8 pb-20 md:pb-0">
       {/* Franjas de piano con bloque negro central */}
       <div className="piano-stripes h-32 flex items-center justify-center">
         <div className="piano-footer__center bg-gus-black w-3/4 h-full flex flex-col items-center justify-center gap-1">

@@ -25,7 +25,7 @@ export default function Home() {
       ];
 
   return (
-    <div className="bg-gus-black md:bg-[#faf9f7] min-h-screen flex flex-col">
+    <div className="bg-gus-black md:bg-[#faf9f7] min-h-screen flex flex-col -mt-14 -mb-20 md:mt-0 md:mb-0 pt-14 pb-20 md:pt-0 md:pb-0">
       {/* Galería hero con transición (Sólo Móvil) */}
       <div className="relative w-full h-72 md:hidden">
         <ImageGallery images={galleryImages} interval={4000} />
