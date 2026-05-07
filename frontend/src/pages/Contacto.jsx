@@ -21,7 +21,7 @@ export default function Contacto() {
 
           {/* Imagen Desktop */}
           <div className="hidden md:block w-[80%] h-auto shadow-2xl rounded-lg overflow-hidden border-4 border-white">
-             <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover" />
+             <img src="/uploads/tienda3.jpeg" className="w-full h-full object-cover" />
           </div>
 
           {/* Dirección en Desktop vs Móvil */}

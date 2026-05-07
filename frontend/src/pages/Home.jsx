@@ -83,7 +83,7 @@ export default function Home() {
             {/* Foto circular con marco */}
             <div className="relative w-96 h-96 rounded-full overflow-hidden shadow-2xl z-20 border-[12px] border-white group">
               <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10"></div>
-              <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&q=80&w=600" alt="Gusmuss Shop" className="w-full h-full object-cover scale-110 group-hover:scale-105 transition-transform duration-1000" />
+              <img src="/uploads/tienda1.jpeg" alt="Gusmuss Shop" className="w-full h-full object-cover scale-110 group-hover:scale-105 transition-transform duration-1000" />
             </div>
 
             {/* Typography Decorativa */}
@@ -110,7 +110,7 @@ export default function Home() {
           </div>
 
           {/* Bloque Derecho: Galería Interactiva con Marco de Revista */}
-          <div className="col-span-4 relative h-[600px] shadow-2xl mt-16 bg-white flex items-center justify-center group overflow-hidden">
+          <div className="col-span-4 relative h-[600px] shadow-2xl mt-16 bg-white flex items-center justify-center group overflow-hidden z-40">
              {/* Marco súper grueso interior tipo cuadro */}
              <div className="absolute inset-0 border-[16px] border-white pointer-events-none z-20 transition-all duration-500 group-hover:border-[24px]"></div>
              
@@ -130,7 +130,7 @@ export default function Home() {
         <div className="relative w-full max-w-[1400px] mx-auto px-8 lg:px-20 mt-20 overflow-hidden z-10">
           <div className="relative w-full h-[340px] overflow-hidden shadow-2xl group">
             <img
-              src="/uploads/home-banner.jpg"
+              src="/uploads/tienda2.jpeg"
               alt="Gusmuss Diamond — Nueva Colección"
               className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
             />
