@@ -245,3 +245,95 @@ En esta última fase he aplicado un rediseño estructural fuerte sobre cómo fun
 **4. Blindaje del Carrito y Stock Global:**
 - Modifiqué la clave primaria del carrito en React. Ahora un ítem no se guarda como `productId: 5`, sino como `cartId: "5-M"`. Así conviven la talla M y la L del mismo producto separadas.
 - **Lógica de límite global:** Evité un bug grave. Aunque la M y la L sean filas separadas en el carrito, reducen el **mismo stock físico**. Programé un "filtro espía" en `CartContext.jsx` que suma dinámicamente todo lo que lleves de un modelo y lo resta del almacén. Si añades muchas M, el botón de añadir la L se desactivará automáticamente diciendo *"Límite de stock alcanzado"* porque superaste el stock global de esa prenda.
+
+---
+
+## ENTRADA 11
+
+**Fecha:** Mayo 2026
+**Qué hice:** Integración de imágenes reales de la tienda + correcciones visuales móvil
+
+En esta fase pasé de usar imágenes genéricas de Internet a usar fotografías reales de la tienda física Gusmuss Diamond.
+
+**Imágenes reales integradas:**
+- `tienda1.jpeg` → foto circular en el Home de escritorio (portada editorial)
+- `tienda2.jpeg` → banner "Colección Verano" en el Home de escritorio
+- `tienda3.jpeg` → imagen de fondo de la página de Contacto
+
+Las imágenes se colocan en `frontend/public/uploads/` para que estén disponibles tanto en local como en producción sin necesidad de subirlas a la base de datos.
+
+**Correcciones de layout móvil:**
+
+| Problema | Causa | Solución |
+|---|---|---|
+| Texto e iconos del carrito invisibles | `Layout.jsx` tenía `bg-gus-black` fijo en móvil | Se cambió a `bg-white` en móvil |
+| Footer oculto bajo la barra de navegación inferior | No tenía padding-bottom | Añadido `pb-20` en móvil |
+| Etiqueta "Destacados" cortada | `overflow-hidden` en el contenedor padre | Eliminado el overflow y añadido `z-40` |
+
+**Mejoras de UX:**
+- El botón "Comprar" ya no lleva al carrito automáticamente, sino que vuelve a la pantalla anterior (`navigate(-1)`) para que el usuario pueda seguir comprando
+- Las tarjetas de producto ahora muestran el nombre del artículo encima del precio
+
+**Commits realizados:**
+- `feat(ui): integrar imágenes reales de la tienda física`
+- `fix(ui): arreglar recorte de etiqueta en piezas destacadas`
+- `feat(ux): volver a pantalla anterior al añadir al carrito + nombre en tarjeta`
+- `fix(ui): correcciones de layout móvil en carrito, footer y home`
+
+---
+
+## ENTRADA 12
+
+**Fecha:** Mayo 2026
+**Qué hice:** Correcciones de seguridad JWT, bugs en producción y reestructuración del Home móvil
+
+Esta entrada fue de resolución de bugs críticos en el entorno de producción (Render) y de mejoras de UX en la versión móvil.
+
+**Bug crítico: "JWT Token not found" en el registro**
+
+El problema: al intentar crear una cuenta, el servidor devolvía este error antes de llegar al controlador.
+
+La causa: en Symfony los firewalls tienen prioridad absoluta sobre el `access_control`. El firewall `api` con `jwt: ~` interceptaba TODAS las rutas `/api/*` y exigía un token, incluso la ruta pública de registro.
+
+La solución: añadir un firewall `public_api` antes del firewall `api` con `security: false` para las rutas de registro, verificación y setup:
+
+```yaml
+public_api:
+    pattern: ^/api/(auth/registro|auth/verify|dev|productos|categorias)
+    stateless: true
+    security: false
+```
+
+**Bug: login automático fallaba después del registro**
+
+La causa: `AuthContext.jsx` usaba una URL relativa `/api/auth/login` sin el prefijo `VITE_API_BASE_URL`. En producción apuntaba al servidor estático del frontend, no al backend de Render.
+
+Solución: añadir `const baseUrl = import.meta.env.VITE_API_BASE_URL || ''` antes de la petición.
+
+**Bug: claves JWT desaparecen al redesplegar en Render**
+
+Render usa un sistema de archivos efímero: cada redespliegue vacía `config/jwt/`. El setup usaba `--skip-if-exists` y no regeneraba las claves aunque hubieran desaparecido.
+
+Solución: cambiar el flag a `--overwrite` para regenerar las claves siempre al visitar el setup.
+
+**Bug: descarga del PDF fallaba en producción**
+
+Mismo patrón: URL relativa en `Profile.jsx`. Se corrigió con `VITE_API_BASE_URL`.
+
+**Reestructuración completa del Home móvil:**
+
+El diseño anterior tenía un degradado que creaba una zona de transparencia extraña en el centro de la pantalla.
+
+- **Antes:** galería pequeña + logo flotando descolocado debajo
+- **Ahora:** galería a pantalla completa (55vh) con overlay oscuro uniforme, logo centrado encima al estilo portada de revista, y zona de botones negra limpia debajo con acceso a Colección, Accesorios y Contacto
+
+**Documentación actualizada:**
+Se añadió al `GUIA_PRIVADA_DEFENSA.md` una sección completa de 6 partes con el paso a paso para demostrar n8n y MailHog durante la presentación, incluyendo el discurso exacto para el profesor de IA.
+
+**Commits realizados:**
+- `fix(security): añadir firewall público para /api/auth/registro sin exigir JWT`
+- `fix(auth): usar VITE_API_BASE_URL en la llamada de login para producción`
+- `fix(jwt): forzar regeneración de claves JWT en setup (filesystem efímero de Render)`
+- `fix(pdf): usar VITE_API_BASE_URL para la descarga del PDF de factura`
+- `fix(ui): reestructurar home móvil — hero pantalla completa con logo superpuesto`
+- `docs: añadir guía paso a paso para demostrar n8n y MailHog en la defensa`
