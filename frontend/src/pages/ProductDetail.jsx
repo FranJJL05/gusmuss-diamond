@@ -89,7 +89,7 @@ export default function ProductDetail() {
             <p className="flex justify-between border-b border-gray-100 pb-2">
               <span className="font-semibold tracking-widest uppercase text-gus-black text-xs">{t.product.stock}</span>
               {product.stock > 0
-                ? <span className="text-green-600 italic">En stock ({product.stock})</span>
+                ? <span className="text-green-600 italic">{t.product.inStock} ({product.stock})</span>
                 : <span className="text-red-500 italic">{t.product.outOfStock}</span>
               }
             </p>
@@ -98,7 +98,7 @@ export default function ProductDetail() {
           {/* Selector de Tallas */}
           {hasSizes && (
             <div className="mb-8">
-               <h3 className="font-serif font-semibold text-gus-black tracking-widest text-xs uppercase mb-3">Selecciona tu Talla</h3>
+               <h3 className="font-serif font-semibold text-gus-black tracking-widest text-xs uppercase mb-3">{t.product.selectSize}</h3>
                <div className="flex gap-3">
                  {['XS', 'S', 'M', 'L', 'XL'].map(size => {
                     const available = product.tallas.includes(size);
@@ -139,14 +139,14 @@ export default function ProductDetail() {
             >
               {adding ? '...' : 
                 (product.stock < 1 ? t.product.outOfStock : 
-                  (currentStockInCart >= product.stock ? 'Límite de stock alcanzado' : 
-                     (!canAdd ? 'Selecciona una talla' : t.product.addToCart)))}
+                  (currentStockInCart >= product.stock ? t.product.stockLimit : 
+                     (!canAdd ? t.product.selectSizeFirst : t.product.addToCart)))}
             </button>
 
             {/* Garantías */}
             <div className="mt-8 flex justify-between text-xs font-serif text-gray-500 border-t border-gray-100 pt-6">
-              <p className="flex items-center gap-2"><span className="text-gus-gold text-lg">✦</span> Envío asegurado gratuito</p>
-              <p className="flex items-center gap-2"><span className="text-gus-gold text-lg">✦</span> Garantía de por vida</p>
+              <p className="flex items-center gap-2"><span className="text-gus-gold text-lg">✦</span> {t.product.freeShipping}</p>
+              <p className="flex items-center gap-2"><span className="text-gus-gold text-lg">✦</span> {t.product.warranty}</p>
             </div>
           </div>
         </div>
