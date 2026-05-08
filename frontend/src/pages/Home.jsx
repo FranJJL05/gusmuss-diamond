@@ -26,47 +26,59 @@ export default function Home() {
 
   return (
     <div className="bg-gus-black md:bg-[#faf9f7] min-h-screen flex flex-col -mt-14 -mb-20 md:mt-0 md:mb-0 pt-14 pb-20 md:pt-0 md:pb-0">
-      {/* Galería hero con transición (Sólo Móvil) */}
-      <div className="relative w-full h-64 md:hidden">
-        <ImageGallery images={galleryImages} interval={4000} />
-        {/* Overlay degradado inferior */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-gus-black pointer-events-none z-[1]"></div>
-      </div>
+      {/* ======================================== */}
+      {/* HOME MÓVIL - Hero pantalla completa      */}
+      {/* ======================================== */}
+      <div className="md:hidden flex flex-col flex-1">
 
-      {/* ==================================================== */}
-      {/* VERSIÓN MOBILE */}
-      {/* ==================================================== */}
-      <div className="flex flex-col items-center px-8 pt-6 pb-8 gap-5 md:hidden">
-        {/* Logo grande */}
-        <div className="text-center animate-fade-in">
-          <h1 className="font-logo text-gus-gold text-7xl leading-none">{t.home.tagline.split(' ')[0]}</h1>
-          <p className="font-serif text-gus-gold text-lg tracking-widest mt-1">Diamond</p>
+        {/* Hero: galería a pantalla completa con logo encima */}
+        <div className="relative w-full h-[55vh] min-h-[300px]">
+          {/* Galería */}
+          <div className="absolute inset-0">
+            <ImageGallery images={galleryImages} interval={4000} />
+          </div>
+
+          {/* Overlay oscuro uniforme, sin gradiente raro */}
+          <div className="absolute inset-0 bg-black/50 z-[2]" />
+
+          {/* Logo centrado encima de la imagen */}
+          <div className="absolute inset-0 z-[3] flex flex-col items-center justify-center text-center px-6">
+            <h1 className="font-logo text-gus-gold text-7xl leading-none drop-shadow-lg">
+              {t.home.tagline.split(' ')[0]}
+            </h1>
+            <p className="font-serif text-gus-gold text-lg tracking-[0.4em] mt-1 uppercase">Diamond</p>
+            <div className="w-20 h-px bg-gus-gold/70 mt-4" />
+            <p className="text-white/80 text-xs font-serif italic mt-3 tracking-widest">
+              {t.home.subtitle}
+            </p>
+          </div>
         </div>
 
-        {/* Separador dorado */}
-        <div className="w-24 h-px bg-gus-gold opacity-60"></div>
-
-        <p className="text-white/70 text-sm text-center font-serif italic">
-          {t.home.subtitle}
-        </p>
-
-        {/* Botones */}
-        <div className="flex flex-col gap-3 w-full items-center">
+        {/* Botones de acción debajo */}
+        <div className="bg-gus-black flex flex-col items-center gap-3 px-8 py-8">
           <Link
             to="/coleccion"
-            className="bg-white text-gus-black font-serif text-lg px-12 py-3 rounded-full w-full text-center
+            className="bg-white text-gus-black font-serif text-base px-10 py-3 rounded-full w-full text-center
               hover:bg-gus-gold hover:text-white transition-all duration-300 shadow-lg"
           >
             {t.home.cta}
           </Link>
           <Link
             to="/accesorios"
-            className="border border-gus-gold text-gus-gold font-serif text-sm px-8 py-2 rounded-full w-full text-center
+            className="border border-gus-gold text-gus-gold font-serif text-sm px-8 py-2.5 rounded-full w-full text-center
               hover:bg-gus-gold hover:text-white transition-all duration-300"
           >
             {t.nav.accessories}
           </Link>
+          <Link
+            to="/contacto"
+            className="text-white/50 font-serif text-xs tracking-widest uppercase mt-1
+              hover:text-gus-gold transition-colors"
+          >
+            {t.nav.contact}
+          </Link>
         </div>
+
       </div>
 
       {/* ==================================================== */}
