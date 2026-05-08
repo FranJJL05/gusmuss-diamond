@@ -29,7 +29,8 @@ export default function Profile() {
   const handleDownloadInvoice = async (pedidoId) => {
     try {
       const token = localStorage.getItem('jwt_token');
-      const response = await fetch(`/api/pedidos/${pedidoId}/pdf`, {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${baseUrl}/api/pedidos/${pedidoId}/pdf`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
