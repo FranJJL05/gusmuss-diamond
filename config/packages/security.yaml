@@ -24,14 +24,16 @@ security:
 
         # Rutas públicas que NO necesitan JWT (deben ir antes del firewall 'api')
         public_api:
-            pattern: ^/api/(auth/registro|auth/verify|dev/)
+            pattern: ^/api/(auth/registro|auth/verify|dev|productos|categorias)
             stateless: true
             security: false
 
         api:
             pattern: ^/api
             stateless: true
-            jwt: ~
+            jwt:
+                # Permite que si no hay token pase igualmente (lo controla access_control)
+                authenticator: lexik_jwt_authentication.security.jwt_authenticator
 
         main:
             lazy: true
