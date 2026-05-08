@@ -22,6 +22,12 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
+        # Rutas públicas que NO necesitan JWT (deben ir antes del firewall 'api')
+        public_api:
+            pattern: ^/api/(auth/registro|auth/verify|dev/)
+            stateless: true
+            security: false
+
         api:
             pattern: ^/api
             stateless: true
