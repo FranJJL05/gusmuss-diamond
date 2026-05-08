@@ -13,7 +13,7 @@ export default function Footer() {
         </div>
 
         <div className="w-16 h-px bg-gus-gold mx-auto mb-2" />
-        <span className="font-logo text-gus-gold text-2xl tracking-widest block">G U S M U S S</span>
+        <span className="font-logo text-gus-gold text-2xl tracking-widest block">Gusmuss</span>
         <div className="w-16 h-px bg-gus-gold mx-auto mt-2 mb-3" />
         <p className="text-white/50 text-[10px] tracking-widest">
           © {new Date().getFullYear()} Gusmuss Diamond · @_gusmuss_
@@ -35,7 +35,7 @@ export default function Footer() {
         {/* Bloque central — 60% */}
         <div className="w-[60%] bg-gus-black flex flex-col items-center justify-center gap-1">
           <div className="w-20 h-px bg-gus-gold mb-1" />
-          <span className="font-logo text-gus-gold text-2xl tracking-widest">G U S M U S S</span>
+          <span className="font-logo text-gus-gold text-2xl tracking-widest">Gusmuss</span>
           <div className="w-20 h-px bg-gus-gold mt-1" />
           <p className="text-white/50 text-[10px] mt-2">
             © {new Date().getFullYear()} Gusmuss Diamond · @_gusmuss_
