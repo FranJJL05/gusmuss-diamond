@@ -1,7 +1,7 @@
 // BEM: .piano-footer / .piano-footer__center / .piano-footer__logo
 export default function Footer() {
   return (
-    <footer className="pb-20 md:pb-0">
+    <footer className="mt-6 md:mt-0">
 
       {/* Footer compacto para móvil */}
       <div className="md:hidden bg-gus-black py-6 px-4 text-center">
