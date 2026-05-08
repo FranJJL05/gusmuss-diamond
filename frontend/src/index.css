@@ -10,11 +10,12 @@ html { scroll-behavior: smooth; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Clase BEM para las "teclas de piano" horizontales del footer */
+/* 5 franjas iguales: negro | blanco | negro | blanco | negro */
 .piano-stripes {
   background: repeating-linear-gradient(
     90deg,
-    #000 0px, #000 40px,
-    #fff 40px, #fff 80px
+    #000 0%, #000 10%,
+    #fff 10%, #fff 20%
   );
 }
 
