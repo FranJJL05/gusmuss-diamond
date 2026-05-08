@@ -39,9 +39,9 @@ class SetupController extends AbstractController
             $application->run($input2, $output);
             $html .= nl2br($output->fetch());
 
-            // 3. Generar JWT Keys si no existen
+            // 3. Generar JWT Keys (siempre, el filesystem de Render es efímero)
             $html .= "<br><br><b>[3/3] Comprobando claves de seguridad JWT...</b><br>";
-            $input3 = new ArrayInput(['command' => 'lexik:jwt:generate-keypair', '--skip-if-exists' => true]);
+            $input3 = new ArrayInput(['command' => 'lexik:jwt:generate-keypair', '--overwrite' => true]);
             $application->run($input3, $output);
             $html .= nl2br($output->fetch());
 
