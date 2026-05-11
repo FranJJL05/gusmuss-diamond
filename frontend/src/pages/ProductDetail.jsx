@@ -56,8 +56,23 @@ export default function ProductDetail() {
   };
 
   const hasSizes = product.tallas && product.tallas.length > 0;
-  const isSizeRequired = true; // Forzamos q si tienen array de tallas, debe seleccionar
+  const isSizeRequired = true;
   const canAdd = !hasSizes || selectedSize !== null;
+
+  const categoryTranslations = {
+    'Anillos': 'Rings',
+    'Collares y Colgantes': 'Necklaces & Pendants',
+    'Pulseras': 'Bracelets',
+    'Pendientes': 'Earrings',
+    'Alta Joyería': 'Fine Jewellery',
+    'Ropa': 'Clothing',
+    'Accesorios': 'Accessories',
+  };
+
+  const catNombre = product.categoria?.nombre;
+  const catLabel = lang === 'en'
+    ? (categoryTranslations[catNombre] || catNombre)
+    : catNombre;
 
   return (
     <div className="bg-white md:bg-[#faf9f7] min-h-screen pb-24 md:pb-0">
@@ -71,7 +86,7 @@ export default function ProductDetail() {
         <div className="px-5 py-8 md:w-1/2 md:p-16 md:bg-white md:shadow-2xl md:relative md:top-8 flex flex-col">
           {/* Categoría */}
           <p className="text-gus-gold text-xs font-serif uppercase tracking-[0.3em] mb-3">
-            {product.categoria?.nombre || t.collection.all}
+            {catLabel || t.collection.all}
           </p>
 
           {/* Nombre */}
