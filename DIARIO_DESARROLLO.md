@@ -337,3 +337,94 @@ Se añadió al `GUIA_PRIVADA_DEFENSA.md` una sección completa de 6 partes con e
 - `fix(pdf): usar VITE_API_BASE_URL para la descarga del PDF de factura`
 - `fix(ui): reestructurar home móvil — hero pantalla completa con logo superpuesto`
 - `docs: añadir guía paso a paso para demostrar n8n y MailHog en la defensa`
+
+---
+
+## ENTRADA 13
+
+**Fecha:** Mayo 2026
+**Qué hice:** Internacionalización completa de productos (ES/EN) + correcciones de UI en footer y contacto
+
+### Internacionalización de productos
+
+Hasta esta entrada, el botón de idioma ya traducía la interfaz (menú, etiquetas, botones) pero el **nombre y la descripción de cada producto** seguían en español independientemente del idioma seleccionado.
+
+Para resolverlo implementé una solución completa de tres capas:
+
+**1. Backend — Nuevos campos en la entidad Product:**
+Añadí dos campos nuevos a `Product.php`:
+```php
+#[ORM\Column(length: 255, nullable: true)]
+private ?string $nombreEn = null;
+
+#[ORM\Column(type: Types::TEXT, nullable: true)]
+private ?string $descripcionEn = null;
+```
+
+**2. API — Serialización bilingüe en ProductController:**
+El método `serializeProduct()` ahora devuelve siempre ambos campos:
+```php
+'nombreEn'    => $p->getNombreEn() ?: $p->getNombre(),  // fallback al español
+'descripcionEn' => $p->getDescripcionEn() ?: $p->getDescripcion(),
+```
+
+**3. Fixtures — Traducciones al inglés para los 29 productos:**
+Añadí la clave `nombreEn` y `descEn` a cada producto en `AppFixtures.php`. Ejemplo:
+```php
+'nombre'   => 'Vestido de Noche Azul Marino',
+'nombreEn' => 'Navy Blue Evening Dress',
+'desc'     => 'Elegante vestido de noche fluido...',
+'descEn'   => 'Elegant flowing evening dress in deep navy blue...',
+```
+
+**4. Frontend — Lectura condicional según idioma:**
+En `ProductDetail.jsx` uso el `lang` del contexto para decidir qué campo mostrar:
+```jsx
+const { t, lang } = useLang();
+// Nombre:
+{lang === 'en' ? (product.nombreEn || product.nombre) : product.nombre}
+// Descripción:
+{lang === 'en' ? (product.descripcionEn || product.descripcion) : product.descripcion}
+```
+
+**5. Traducciones de categoría en frontend:**
+Añadí un mapa de traducción en el propio componente para traducir el nombre de categoría sin necesidad de tocar el backend:
+```jsx
+const categoryTranslations = {
+  'Ropa': 'Clothing',
+  'Accesorios': 'Accessories',
+  'Anillos': 'Rings',
+  // ...
+};
+```
+
+### Correcciones de UI — Footer
+
+- Quitado el `mt-8` del footer que generaba un espacio blanco visible entre el contenido y el pie de página.
+- Cambiado `pb-20` (que creaba un área negra vacía en móvil) por `mt-6 md:mt-0` para dar solo una pequeña separación arriba en móvil.
+- Texto del logo del footer cambiado de `G U S M U S S` (espaciado entre letras) a `Gusmuss` (escritura natural con G mayúscula).
+
+### Correcciones de UI — Contacto
+
+- Restaurado el layout original de la página de Contacto (imagen a la izquierda en escritorio, texto a la derecha).
+- Añadida foto de la tienda (`tienda3.jpeg`) **debajo del enlace de Instagram** en la vista móvil, eliminando el espacio vacío que quedaba al final de la página.
+
+### Setup endpoint — Corrección crítica
+
+El endpoint `/api/dev/setup` fallaba con error 500 porque usaba `doctrine:schema:update` (comando deprecado en versiones recientes de Doctrine). Lo reemplacé por la secuencia más fiable:
+1. `doctrine:schema:drop --force`
+2. `doctrine:schema:create`
+3. `doctrine:fixtures:load --no-interaction`
+4. `lexik:jwt:generate-keypair --overwrite`
+
+Además mejoré el manejo de errores para que muestre el mensaje exacto del fallo en vez de una página genérica 500.
+
+**Commits realizados:**
+- `feat(i18n): añadir campos nombreEn/descripcionEn para traducción de productos`
+- `feat(i18n): fixtures soporte nombreEn/descEn + frontend usa campo según idioma`
+- `feat(i18n): añadir traducciones EN a todos los productos en fixtures`
+- `fix(i18n): traducir categoría del producto según idioma`
+- `fix(ui): corregir footer móvil — quitar margen inferior y añadir separación arriba`
+- `fix(ui): cambiar texto del footer de G U S M U S S a Gusmuss`
+- `fix(setup): reemplazar schema:update deprecado por drop+create para mayor fiabilidad`
+- `docs: actualizar PRESENTACION_DEFENSA.md con guión diapositiva por diapositiva para Canva`
