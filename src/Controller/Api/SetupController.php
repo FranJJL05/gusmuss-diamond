@@ -23,32 +23,39 @@ class SetupController extends AbstractController
         $application->setAutoExit(false);
 
         $output = new BufferedOutput();
-        $html = "<div style='font-family: monospace; background: #111; color: #0f0; padding: 20px; border-radius: 5px; height: 100vh;'>";
+        $html = "<div style='font-family: monospace; background: #111; color: #0f0; padding: 20px; border-radius: 5px; min-height: 100vh;'>";
         $html .= "<h1>Inicializando Servidor (Gusmuss Diamond)</h1>";
 
         try {
-            // 1. Crear Schema / Migrar
-            $html .= "<br><b>[1/3] Actualizando estructura de Base de Datos...</b><br>";
-            $input1 = new ArrayInput(['command' => 'doctrine:schema:update', '--force' => true]);
+            // 1. Borrar schema existente
+            $html .= "<br><b>[1/4] Borrando base de datos existente...</b><br>";
+            $input1 = new ArrayInput(['command' => 'doctrine:schema:drop', '--force' => true]);
             $application->run($input1, $output);
             $html .= nl2br($output->fetch());
 
-            // 2. Cargar Fixtures
-            $html .= "<br><br><b>[2/3] Creando catálogo de productos y usuarios (Fixtures)...</b><br>";
-            $input2 = new ArrayInput(['command' => 'doctrine:fixtures:load', '--no-interaction' => true]);
+            // 2. Crear schema desde cero con TODAS las columnas actuales
+            $html .= "<br><br><b>[2/4] Creando estructura de Base de Datos...</b><br>";
+            $input2 = new ArrayInput(['command' => 'doctrine:schema:create']);
             $application->run($input2, $output);
             $html .= nl2br($output->fetch());
 
-            // 3. Generar JWT Keys (siempre, el filesystem de Render es efímero)
-            $html .= "<br><br><b>[3/3] Comprobando claves de seguridad JWT...</b><br>";
-            $input3 = new ArrayInput(['command' => 'lexik:jwt:generate-keypair', '--overwrite' => true]);
+            // 3. Cargar Fixtures
+            $html .= "<br><br><b>[3/4] Creando catálogo de productos y usuarios (Fixtures)...</b><br>";
+            $input3 = new ArrayInput(['command' => 'doctrine:fixtures:load', '--no-interaction' => true]);
             $application->run($input3, $output);
             $html .= nl2br($output->fetch());
 
-            $html .= "<br><br><h2 style='color: yellow;'>¡TODO LISTO!</h2><p>La base de datos se ha creado. Ya puedes cerrar esta ventana y entrar a tu dominio principal.</p></div>";
+            // 4. Generar JWT Keys
+            $html .= "<br><br><b>[4/4] Generando claves de seguridad JWT...</b><br>";
+            $input4 = new ArrayInput(['command' => 'lexik:jwt:generate-keypair', '--overwrite' => true]);
+            $application->run($input4, $output);
+            $html .= nl2br($output->fetch());
+
+            $html .= "<br><br><h2 style='color: yellow;'>¡TODO LISTO!</h2><p>La base de datos se ha creado con todos los campos. Ya puedes cerrar esta ventana y entrar a tu dominio principal.</p></div>";
 
         } catch (\Exception $e) {
-            $html .= "<br><br><b style='color: red;'>ERROR: " . $e->getMessage() . "</b></div>";
+            $html .= "<br><br><b style='color: red;'>ERROR: " . htmlspecialchars($e->getMessage()) . "</b>";
+            $html .= "<pre style='color: #f88;'>" . htmlspecialchars($e->getTraceAsString()) . "</pre></div>";
         }
 
         return new Response($html);
