@@ -107,6 +107,7 @@ class ProductController extends AbstractController
         $data = [
             'id'              => $p->getId(),
             'nombre'          => $p->getNombre(),
+            'nombreEn'        => $p->getNombreEn() ?: $p->getNombre(),
             'slug'            => $p->getSlug(),
             'material'        => $p->getMaterial(),
             'precio'          => $p->getPrecio(),          // en céntimos
@@ -128,9 +129,10 @@ class ProductController extends AbstractController
             'createdAt'       => $p->getCreatedAt()?->format('Y-m-d'),
         ];
 
-        // En la vista de detalle, incluimos la descripción completa
+        // En la vista de detalle, incluimos la descripción completa (ES + EN)
         if ($full) {
-            $data['descripcion'] = $p->getDescripcion();
+            $data['descripcion']   = $p->getDescripcion();
+            $data['descripcionEn'] = $p->getDescripcionEn() ?: $p->getDescripcion();
         }
 
         return $data;

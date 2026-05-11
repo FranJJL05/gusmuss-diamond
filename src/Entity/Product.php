@@ -19,6 +19,9 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nombreEn = null;
+
     /**
      * Slug único para URLs SEO-friendly (ej: "anillo-solitario-diamante-18k")
      */
@@ -27,6 +30,9 @@ class Product
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descripcionEn = null;
 
     /**
      * Precio almacenado en céntimos de euro (ej: 250000 = 2500,00 €)
@@ -97,6 +103,14 @@ class Product
         return $this;
     }
 
+    public function getNombreEn(): ?string { return $this->nombreEn; }
+
+    public function setNombreEn(?string $nombreEn): static
+    {
+        $this->nombreEn = $nombreEn;
+        return $this;
+    }
+
     public function getSlug(): ?string { return $this->slug; }
 
     public function setSlug(?string $slug): static
@@ -110,6 +124,14 @@ class Product
     public function setDescripcion(?string $descripcion): static
     {
         $this->descripcion = $descripcion;
+        return $this;
+    }
+
+    public function getDescripcionEn(): ?string { return $this->descripcionEn; }
+
+    public function setDescripcionEn(?string $descripcionEn): static
+    {
+        $this->descripcionEn = $descripcionEn;
         return $this;
     }
 

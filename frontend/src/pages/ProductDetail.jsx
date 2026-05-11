@@ -9,7 +9,7 @@ export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart, cartItems } = useCart();
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -75,7 +75,9 @@ export default function ProductDetail() {
           </p>
 
           {/* Nombre */}
-          <h1 className="font-logo text-4xl md:text-5xl text-gus-black mb-4 leading-tight">{product.nombre}</h1>
+          <h1 className="font-logo text-4xl md:text-5xl text-gus-black mb-4 leading-tight">
+            {lang === 'en' ? (product.nombreEn || product.nombre) : product.nombre}
+          </h1>
 
           {/* Precio */}
           <p className="font-serif text-gus-green font-bold text-3xl mb-8">{product.precioFormateado}</p>
@@ -124,7 +126,9 @@ export default function ProductDetail() {
           {product.descripcion && (
             <div className="mb-10">
               <h3 className="font-serif font-semibold text-gus-black tracking-widest text-xs uppercase mb-3">{t.product.description}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed text-justify">{product.descripcion}</p>
+              <p className="text-gray-500 text-sm leading-relaxed text-justify">
+                {lang === 'en' ? (product.descripcionEn || product.descripcion) : product.descripcion}
+              </p>
             </div>
           )}
 
