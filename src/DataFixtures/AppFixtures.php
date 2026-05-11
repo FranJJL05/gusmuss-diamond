@@ -275,7 +275,9 @@ class AppFixtures extends Fixture
         foreach ($productos as $data) {
             $product = new Product();
             $product->setNombre($data['nombre'])
+                    ->setNombreEn($data['nombreEn'] ?? null)
                     ->setDescripcion($data['desc'])
+                    ->setDescripcionEn($data['descEn'] ?? null)
                     ->setPrecio($data['precio'])
                     ->setStock($data['stock'])
                     ->setMaterial($data['material'])
