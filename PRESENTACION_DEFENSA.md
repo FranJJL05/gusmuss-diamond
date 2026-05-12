@@ -1,139 +1,115 @@
 # 🎤 GUIÓN DE DIAPOSITIVAS — Gusmuss Diamond
-## Presentación de Defensa · Canva · ~30 minutos
+## Adaptado a los Criterios de Evaluación Oficiales (Rúbrica)
 
 > **Consejos para la presentación:** 
-> - Habla con naturalidad, como si le estuvieras explicando el proyecto a un compañero de trabajo. Demuestra que tú has picado el código y controlas lo que pasa por debajo.
-> - En Canva, usa fondo oscuro (negro/crema), poco texto y las capturas que te indico. Lo importante es lo que tú cuentas de viva voz.
+> Los profesores van a ir con una hoja marcando "checks" según lo que escuchen. He reestructurado tu presentación para **usar exactamente sus mismas palabras clave**. Cuando hables de React, di "SPA y enrutamiento", cuando hables de GitHub di "CI/CD", etc. 
 
 ---
 
 ## 📌 DIAPOSITIVA 1 — Portada
-
 **Visual en Canva:**
-- Foto elegante de la tienda o un producto (fondo oscuro).
-- Título grande: **Gusmuss Diamond**
-- Subtítulo: *E-commerce de Lujo con Arquitectura Full-Stack y Automatización*
+- Título: **Gusmuss Diamond**
+- Subtítulo: *E-commerce de Lujo SPA con Integración de IA y CI/CD*
 - Tu nombre y "2º DAW".
 
-**Qué tienes que decir:**
-> *"Buenos días al tribunal. Hoy os presento Gusmuss Diamond. No quería hacer la típica tienda online básica, así que me he propuesto construir una plataforma de lujo completa. Es una Single Page Application (SPA) real, dividida en frontend y backend, con autenticación segura, base de datos relacional y automatización con IA. Os voy a enseñar cómo he montado todo este ecosistema."*
+**Discurso:**
+> *"Buenos días al tribunal. Hoy presento Gusmuss Diamond, una plataforma de comercio electrónico de lujo. Mi objetivo principal era crear una solución técnica completa: desde el plan de negocio y la maquetación interactiva, hasta una arquitectura Full-Stack segura, desplegada en la nube con integración de IA. A continuación, desglosaré cómo he cubierto cada área de nuestro ciclo."*
 
 ---
 
-## 📌 DIAPOSITIVA 2 — El Problema y la Solución
-
+## 📌 DIAPOSITIVA 2 — Viabilidad y Modelo de Negocio (EIE)
 **Visual en Canva:**
-- Foto real de la tienda (tienda3.jpeg).
-- Dos columnas simples:
-  - **Problema:** Negocio local físico, gestión a mano, sin ventas online.
-  - **Solución:** Plataforma 24/7, stock en tiempo real, interfaz bilingüe.
+- Tres iconos: 💼 (Oportunidad), 💶 (Presupuesto), ⚖️ (Forma Jurídica).
 
-**Qué tienes que decir:**
-> *"Gusmuss es una tienda física real en Puerto Banús. El problema que tenían es que dependían 100% de la venta presencial y gestionaban el almacén un poco a ojo. Mi solución ha sido crearles un e-commerce que refleje la exclusividad de su marca, automatizando el control de stock y permitiendo a clientes internacionales comprar en inglés o en español de forma fluida."*
+**Discurso:**
+> *"Empezando por Empresa (EIE). Detecté una **oportunidad de negocio** clara: una joyería física en Puerto Banús que necesitaba digitalizarse para vender internacionalmente. He realizado un **estudio de viabilidad técnica e identificando las necesidades de financiación**. A nivel legal, he definido la constitución como S.L., asumiendo las obligaciones fiscales y laborales correspondientes para su puesta en marcha."*
 
 ---
 
-## 📌 DIAPOSITIVA 3 — Organización, Estructura y Git
-
+## 📌 DIAPOSITIVA 3 — Diseño e Interfaces (DIW)
 **Visual en Canva:**
-- Un esquema de carpetas muy sencillo:
-  - 📁 `gusmuss-diamond/` (Raíz, Docker, GitHub Actions)
-    - 📁 `frontend/` (React, Vite, Tailwind)
-    - 📁 `src/`, `config/`, `migrations/` (Backend Symfony)
-- Un diagrama pequeño de Git (ramas `main`, `dev`...).
+- Captura de tu prototipo (si tienes Figma) o del diseño de la web.
+- Logos: Tailwind, CSS, BEM.
 
-**Qué tienes que decir:**
-> *"He organizado el proyecto como se hace en las empresas de verdad, en un 'monorepo'. La carpeta `frontend` contiene toda la interfaz en React de forma aislada, y la raíz del proyecto levanta el backend en Symfony. A nivel de control de versiones con Git, he trabajado separando ramas por cada nueva característica o arreglo (ramas feature/fix) y haciendo 'merge' a la rama `main` solo cuando el código era estable y estaba listo para que Render lo desplegara a producción automáticamente."*
+**Discurso:**
+> *"Para el Diseño de Interfaces, partí de una **Guía de Estilos**. La web es **totalmente Responsive**, adaptándose a cualquier móvil. He utilizado una maquetación moderna combinando **Flexbox y Grid Layout**. Todo el estilo se ha manejado de forma homogénea con **Tailwind CSS**, añadiendo elementos interactivos, animaciones y transiciones para que el usuario sienta que está en una app de lujo y no en una web estática."*
 
 ---
 
-## 📌 DIAPOSITIVA 4 — Stack Tecnológico
-
+## 📌 DIAPOSITIVA 4 — Frontend: El Cliente React
 **Visual en Canva:**
-- Pon los logos de las tecnologías bien ordenados:
-  - **Frontend:** React + Vite + Tailwind
-  - **Backend:** Symfony 7 + PHP + MySQL
-  - **DevOps:** Docker + GitHub Actions + Render
-  - **IA/Automatización:** n8n + MailHog
+- Logo de React y Vite.
 
-**Qué tienes que decir:**
-> *"Sobre el stack tecnológico: por un lado tengo React, que es rapidísimo porque no recarga la página. Por otro, Symfony, que es el 'cerebro' y maneja la base de datos de forma segura. Todo esto lo he encapsulado en Docker para no tener problemas de versiones, desplegándolo en la nube de Render automáticamente. La automatización la gestiona n8n conectado a mi servidor local."*
+**Discurso:**
+> *"En el lado del Cliente, he construido una **SPA (Single Page Application)** usando React. Esto me permite hacer un uso intensivo de **enrutamiento** sin recargar la página. La arquitectura se basa en la **reutilización de componentes** (como las tarjetas de producto o selectores). El frontend se encarga del manejo de formularios y del **consumo de la API REST** que he desarrollado en el servidor, creando una interfaz altamente interactiva."*
 
 ---
 
-## 📌 DIAPOSITIVA 5 — Arquitectura del Sistema (Esquema)
-
+## 📌 DIAPOSITIVA 5 — Backend: El Servidor Symfony
 **Visual en Canva:**
-- Haz un esquema con cajas y flechas:
-`[Usuario con React]` ↔️ `[API Symfony]` ↔️ `[Base de Datos MySQL]`
-Abajo de Symfony saca una flecha hacia:
-`[n8n Webhook]` ➡️ `[MailHog (Correos)]`
+- Logo Symfony, MySQL.
+- Captura pequeñita del panel de administrador (EasyAdmin).
 
-**Qué tienes que decir:**
-> *"Fijaos en la arquitectura. El cliente entra con React y este solo habla con Symfony mediante archivos JSON. Symfony es el único que toca la base de datos MySQL. Lo guay de tenerlo desacoplado es que si mañana Gusmuss quiere una App móvil en iOS, me vale el mismo backend sin programar nada nuevo. Y como veis abajo, Symfony dispara notificaciones asíncronas hacia n8n cada vez que alguien hace una compra."*
+**Discurso:**
+> *"El cerebro del proyecto es Symfony. Toda la **administración del sistema y gestión de entidades** se hace de forma segura desde un panel de administrador generado en servidor, que permite **subir archivos** (imágenes de productos) y controlar el stock. El acceso a la API desde React está protegido con **autenticación mediante Token JWT** para los datos sensibles del carrito."*
 
 ---
 
-## 📌 DIAPOSITIVA 6 — 🎬 DEMO EN VIVO (El plato fuerte)
-
+## 📌 DIAPOSITIVA 6 — Despliegue, CI/CD y DevOps
 **Visual en Canva:**
-- Fondo oscuro con letras grandes: **DEMOSTRACIÓN EN VIVO**.
-- Sal de la presentación y vete al navegador.
+- Esquema: GitHub -> Actions -> Render.
+- Texto: `frandaw.com` (HTTPS).
 
-**Flujo paso a paso para la demo (Síguelo al pie de la letra):**
-1. **La web en Producción (`frandaw.com`):** Enseña el diseño elegante. Cambia de ES a EN para que vean cómo los productos se traducen al momento desde la base de datos.
-2. **El Carrito:** Intenta comprar un vestido sin elegir talla para demostrar las validaciones de React. Añade algo al carrito.
-3. **Seguridad JWT:** Dale a finalizar compra. Como no estás logueado, te pide acceso. Loguéate (con `cliente@gusmuss.com` / `cliente1234`) y verás cómo te devuelve al carrito gracias a que React guarda el token JWT en memoria.
-4. **Comprar y Correo (Localhost):** Vete a tu localhost para enseñar la compra. Haz el pedido, y abre la pestaña de `localhost:8025` (MailHog). **¡Enseña cómo llega el correo de confirmación al instante!**
-5. **Base de Datos y Panel Admin:** 
-   - Entra al backend: `http://localhost:8000/admin` (o en Render: `https://gusmuss-backend.onrender.com/admin`)
-   - Inicia sesión con el súper administrador: `admin@gusmuss.com` / `admin1234`
-   - Vete al apartado de Productos en el menú lateral de EasyAdmin. Bájale el stock a 0 a cualquier producto que tengas a la vista.
-   - Vuelve a la tienda pública (`localhost:5173`), busca ese mismo producto y enséñales cómo ahora pone "Agotado" en rojo y el botón de comprar está bloqueado. 
-   - *("Como veis, este panel me permite controlar toda la base de datos de manera visual, y el frontend reacciona en tiempo real").*
+**Discurso:**
+> *"Para el despliegue, he utilizado **contenedores Docker**. He configurado una metodología **CI/CD con GitHub Actions**, lo que hace que cada vez que subo código estable a la rama principal, se despliegue automáticamente en la **nube de Render**. El proyecto no usa IPs crudas, está vinculado a mi **nombre de dominio propio** y protegido con **certificados de seguridad HTTPS**."*
 
 ---
 
-## 📌 DIAPOSITIVA 7 — Automatización con n8n e IA
-
+## 📌 DIAPOSITIVA 7 — Automatización e Inteligencia Artificial
 **Visual en Canva:**
-- **Captura 1 (Izquierda):** Tu captura de pantalla de n8n con los dos nodos de Webhook y Email.
-- **Captura 2 (Derecha):** Tu captura de pantalla de MailHog con el correo de "Gusmuss Diamond" recibido por María.
+- Captura de tu flujo de n8n con los nodos.
 
-**Qué tienes que decir:**
-> *"Como habéis visto en la demo, cuando un usuario compra, recibe un correo al instante. Esto no lo programa el backend de forma síncrona. He montado un nodo de n8n. Cuando Symfony guarda la compra, lanza un webhook a n8n con los datos del carrito. n8n lo procesa y construye el correo HTML. En un futuro, aquí podríamos añadir una capa de IA para que analice la compra y proponga correos hiper-personalizados al cliente."*
+**Discurso:**
+> *"Cumpliendo con los requisitos de integración, he montado un **flujo de automatización (workflow)** utilizando n8n. Cuando el servidor detecta un nuevo pedido, lanza un Webhook que n8n atrapa. Aquí es donde conectamos los **agentes de IA** y servicios de correo, permitiendo generar respuestas dinámicas y notificar al cliente al instante, todo totalmente automatizado."*
 
 ---
 
-## 📌 DIAPOSITIVA 8 — Retos Técnicos que he superado
-
+## 📌 DIAPOSITIVA 8 — Internacionalización (Inglés)
 **Visual en Canva:**
-- 3 bloques de texto corto con iconos:
-  1. 🔐 Sesiones Seguras (Firewalls y JWT)
-  2. 🛒 Control de Inventario Híbrido
-  3. 📦 Despliegue en Render
+- Captura de la web mostrando el selector de idioma (ES / ENG).
+- Texto en inglés de la descripción de un diamante.
 
-**Qué tienes que decir:**
-> *"Me he peleado bastante con la seguridad: configurar los firewalls de Symfony para que la ruta de registro fuera pública pero el carrito exigiera un Token JWT válido fue un reto enorme. Además, programé un algoritmo en React para que sumara todas las tallas distintas de un modelo en el carrito y verificara que no excedes el stock real de la base de datos. Por último, pelearme con los despliegues en contenedores efímeros de Render me hizo aprender muchísimo sobre DevOps."*
+**Discurso:**
+> *"La internacionalización no se limita a traducir botones. He habilitado un **selector de lenguaje** en la web. Cuando se cambia a inglés, el sistema extrae textos de cierta complejidad técnica desde la base de datos (descripciones de quilates y pureza), demostrando que la app está preparada para el mercado B2C global."*
 
 ---
 
-## 📌 DIAPOSITIVA 9 — Internacionalización (Bilingüe)
-
+## 📌 DIAPOSITIVA 9 — Un Vistazo al Código (Dificultad técnica)
 **Visual en Canva:**
-- Pon dos capturas del mismo vestido (una con el texto en ES y otra en EN).
+- **Captura de código:** Tu controlador `OrderController` donde haces la llamada HTTP (CURL) al Webhook, o tu contexto de React gestionando el JWT.
 
-**Qué tienes que decir:**
-> *"Estando en Puerto Banús, la web tenía que estar en inglés sí o sí. Lo fácil habría sido traducir solo los botones de React, pero yo he internacionalizado la base de datos añadiendo columnas específicas de traducción ('nombreEn', 'descripcionEn'). El estado global de React envía el idioma actual a la API y el backend le sirve los datos correctos al vuelo. Es un sistema 100% dinámico."*
+**Discurso:**
+> *"A nivel técnico, quería destacar esta pieza de código. Aquí es donde el servidor **consume un servicio web** externo para la automatización. El alcance del proyecto ha sido ambicioso y la dificultad alta, especialmente para aislar el frontend del backend y lograr que el token JWT viaje de forma segura en las cabeceras HTTP en cada petición de React."*
 
 ---
 
-## 📌 DIAPOSITIVA 10 — Cierre y Futuro
-
+## 📌 DIAPOSITIVA 10 — 🎬 DEMO EN VIVO
 **Visual en Canva:**
-- Logo de Gusmuss.
-- GitHub: github.com/FranJJL05/gusmuss-diamond
-- Enlaces a la web.
+- Letras grandes: **DEMOSTRACIÓN FUNCIONAL**.
+- *(Aquí sales de la presentación).*
 
-**Qué tienes que decir:**
-> *"El proyecto está en una fase madura y lista para subir a un entorno B2C real. Los próximos pasos lógicos serían conectar la pasarela de pagos de Stripe y subir las imágenes a un bucket de AWS. Este proyecto me ha servido para tocar absolutamente todos los palos del desarrollo web profesional: desde hacer un `git init` hasta diseñar la base de datos, montar la API y automatizar los procesos. Muchas gracias y estoy a vuestra disposición."*
+**Discurso / Pasos a hacer:**
+1. **Paseo visual:** Enseña la web, animaciones, cambia el idioma a Inglés y vuelve a Español.
+2. **Carrito y JWT:** Intenta comprar, loguéate, enseña cómo React te reconoce al instante.
+3. **Admin (Backend):** Entra a `https://gusmuss-backend.onrender.com/admin`, pon el stock de un producto a 0.
+4. **Reactividad:** Vuelve a la web, recarga y enseña que pone "Agotado". 
+5. **n8n / IA:** Haz un pedido válido y enseña en tu MailHog/Bandeja cómo ha llegado el correo automático procesado por el Workflow.
+
+---
+
+## 📌 DIAPOSITIVA 11 — Conclusión
+**Visual en Canva:**
+- Enlace al repositorio y QR.
+
+**Discurso:**
+> *"Gusmuss Diamond cumple los requisitos establecidos aportando valor real a un negocio. Es un proyecto escalable, con código limpio y arquitecturas profesionales. Muchas gracias por vuestra atención, quedo a vuestra disposición para cualquier pregunta."*
