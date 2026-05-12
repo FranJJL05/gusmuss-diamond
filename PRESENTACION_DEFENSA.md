@@ -1,210 +1,120 @@
 # 🎤 GUIÓN DE DIAPOSITIVAS — Gusmuss Diamond
 ## Presentación de Defensa · Canva · ~30 minutos
 
-> **Consejo Canva:** Usa fondo negro o crema oscuro, tipografía serif dorada para títulos, fotos grandes de la tienda. Mínimo texto en pantalla — el texto largo es para que TÚ lo leas aquí.
+> **Consejos para la presentación:** 
+> - Habla con naturalidad, como si le estuvieras explicando el proyecto a un compañero de trabajo. Demuestra que tú has picado el código y controlas lo que pasa por debajo.
+> - En Canva, usa fondo oscuro (negro/crema), poco texto y las capturas que te indico. Lo importante es lo que tú cuentas de viva voz.
 
 ---
 
 ## 📌 DIAPOSITIVA 1 — Portada
 
-**Elementos visuales:**
-- Foto de portada: vestido de noche o joya sobre fondo negro
-- Logo "Gusmuss" centrado en tipografía elegante
-- Texto pequeño debajo: *"E-commerce de lujo · Puerto Banús"*
-- Tu nombre y curso abajo a la derecha
+**Visual en Canva:**
+- Foto elegante de la tienda o un producto (fondo oscuro).
+- Título grande: **Gusmuss Diamond**
+- Subtítulo: *E-commerce de Lujo con Arquitectura Full-Stack y Automatización*
+- Tu nombre y "2º DAW".
 
-**Qué dices al abrir:**
-> *"Buenos días. Os presento Gusmuss Diamond: una tienda online de alta moda y joyería de lujo, construida desde cero con una arquitectura profesional full-stack. No es un proyecto de formularios — es una SPA completa con API REST, autenticación JWT, automatizaciones y despliegue real en la nube."*
-
----
-
-## 📌 DIAPOSITIVA 2 — El Problema / La Oportunidad
-
-**Elementos visuales:**
-- Foto de la tienda física (tienda3.jpeg)
-- 2 columnas: **"El problema"** vs **"La solución"**
-
-| El problema | La solución |
-|---|---|
-| Gusmuss solo vendía físicamente en Puerto Banús | Plataforma digital 24/7 accessible desde cualquier lugar |
-| Gestión manual de stock e inventario | Sistema automatizado con stock en tiempo real |
-| Sin presencia digital más allá de Instagram | Tienda online con catálogo, carrito y pagos |
-
-**Qué dices:**
-> *"Gusmuss Diamond es una tienda real en Puerto Banús. El objetivo era digitalizarla: crear un canal de venta online que refleje la misma exclusividad del producto físico, con gestión automatizada de stock, pedidos y clientes."*
+**Qué tienes que decir:**
+> *"Buenos días al tribunal. Hoy os presento Gusmuss Diamond. No quería hacer la típica tienda online básica, así que me he propuesto construir una plataforma de lujo completa. Es una Single Page Application (SPA) real, dividida en frontend y backend, con autenticación segura, base de datos relacional y automatización con IA. Os voy a enseñar cómo he montado todo este ecosistema."*
 
 ---
 
-## 📌 DIAPOSITIVA 3 — Stack Tecnológico
+## 📌 DIAPOSITIVA 2 — El Problema y la Solución
 
-**Elementos visuales:**
-- Diagrama limpio con iconos/logos:
-  - 🖥️ React + Vite (Frontend SPA)
-  - ⚙️ Symfony 7 + PHP (Backend API REST)
-  - 🗄️ MySQL (Base de datos relacional)
-  - 🐳 Docker (Contenedores locales)
-  - ☁️ Render (Despliegue cloud)
-  - 🔗 n8n (Automatización workflows)
-  - 🔐 JWT (Autenticación)
+**Visual en Canva:**
+- Foto real de la tienda (tienda3.jpeg).
+- Dos columnas simples:
+  - **Problema:** Negocio local físico, gestión a mano, sin ventas online.
+  - **Solución:** Plataforma 24/7, stock en tiempo real, interfaz bilingüe.
 
-**Qué dices:**
-> *"Elegí este stack por razones técnicas concretas: Symfony me da una arquitectura robusta con inyección de dependencias y ORM Doctrine. React con Vite me permite una SPA sin recarga de página, con contextos globales para el carrito y la sesión. Toda la comunicación entre capas se hace mediante JSON sobre HTTP con tokens JWT para la autenticación. En local todo corre sobre Docker, y en producción está desplegado en Render con CI/CD automático desde GitHub."*
+**Qué tienes que decir:**
+> *"Gusmuss es una tienda física real en Puerto Banús. El problema que tenían es que dependían 100% de la venta presencial y gestionaban el almacén un poco a ojo. Mi solución ha sido crearles un e-commerce que refleje la exclusividad de su marca, automatizando el control de stock y permitiendo a clientes internacionales comprar en inglés o en español de forma fluida."*
 
 ---
 
-## 📌 DIAPOSITIVA 4 — Arquitectura del Sistema
+## 📌 DIAPOSITIVA 3 — Organización y Stack Tecnológico
 
-**Elementos visuales:**
-- Diagrama de flujo horizontal (hazlo en Canva con flechas):
-```
-[Usuario] → [React SPA frandaw.com] ←→ [API REST Symfony Render] ←→ [MySQL]
-                                              ↓
-                                         [n8n Webhooks]
-                                              ↓
-                                         [Email notif.]
-```
+**Visual en Canva:**
+- Pon los logos de las tecnologías bien ordenados:
+  - **Frontend:** React + Vite + Tailwind
+  - **Backend:** Symfony 7 + PHP + MySQL
+  - **DevOps:** Docker + GitHub Actions + Render
+  - **IA/Automatización:** n8n + MailHog
 
-**Qué dices:**
-> *"La arquitectura está completamente desacoplada. El frontend y el backend son servicios independientes que se comunican exclusivamente por JSON. Esto significa que si mañana quisiera una app móvil, reutilizaría el mismo backend sin tocar nada. Los webhooks de n8n escuchan los pedidos y disparan las notificaciones automáticas."*
+**Qué tienes que decir:**
+> *"He organizado el proyecto como se hace en las empresas de verdad. Nada de mezclar código. Por un lado tengo el Frontend hecho en React, que es rapidísimo porque no recarga la página. Por otro, el Backend en Symfony, que es el 'cerebro' y maneja la base de datos de forma segura. Y todo esto lo he encapsulado en Docker para no tener problemas de versiones, desplegándolo en la nube de Render automáticamente con cada 'push' que hago a GitHub."*
 
 ---
 
-## 📌 DIAPOSITIVA 5 — Modelo de Datos (Entidad-Relación)
+## 📌 DIAPOSITIVA 4 — Arquitectura del Sistema (Esquema)
 
-**Elementos visuales:**
-- Diagrama ER simplificado con las entidades principales:
-  - `User` → `Order` → `OrderItem` → `Product` → `Category`
+**Visual en Canva:**
+- Haz un esquema con cajas y flechas:
+`[Usuario con React]` ↔️ `[API Symfony]` ↔️ `[Base de Datos MySQL]`
+Abajo de Symfony saca una flecha hacia:
+`[n8n Webhook]` ➡️ `[MailHog (Correos)]`
 
-**Tabla rápida:**
-| Entidad | Campos clave |
-|---|---|
-| User | email, nombre, roles, isVerified |
-| Product | nombre, precio, stock, material, tallas |
-| Order | total, estado, fechaPedido |
-| OrderItem | cantidad, precioUnitario |
-| Category | nombre, slug |
-
-**Qué dices:**
-> *"El modelo relacional refleja la lógica de negocio: un usuario puede tener múltiples pedidos; cada pedido contiene líneas de pedido que apuntan a un producto concreto. El stock se descuenta de forma atómica en la base de datos para evitar condiciones de carrera — si dos usuarios compran el último artículo al mismo tiempo, solo uno consigue confirmación."*
+**Qué tienes que decir:**
+> *"Fijaos en la arquitectura. El cliente entra con React y este solo habla con Symfony mediante archivos JSON. Symfony es el único que toca la base de datos MySQL. Lo guay de tenerlo desacoplado es que si mañana Gusmuss quiere una App móvil en iOS, me vale el mismo backend. Y como veis abajo, Symfony está conectado a n8n para avisarle en tiempo real cuando hay ventas y disparar automatizaciones."*
 
 ---
 
-## 📌 DIAPOSITIVA 6 — 🎬 DEMO EN VIVO (anuncia que vas a la web)
+## 📌 DIAPOSITIVA 5 — 🎬 DEMO EN VIVO (El plato fuerte)
 
-**Elementos visuales:**
-- Fondo negro con texto grande: **"DEMO EN VIVO"**
-- URL pequeña: `frandaw.com`
+**Visual en Canva:**
+- Fondo oscuro con letras grandes: **DEMOSTRACIÓN EN VIVO**.
+- Sal de la presentación y vete al navegador.
 
-**Flujo de demo (10 min):**
-1. **Home** → muestra la portada elegante, cambio de idioma ES/EN
-2. **Colección** → filtro por Ropa / Accesorios, búsqueda
-3. **Producto** → galería 3 fotos, selector de talla, stock en tiempo real
-4. **Carrito sin login** → redirige a login (seguridad)
-5. **Login y Checkout** → finaliza compra, stock se resta
-6. **Perfil** → descarga PDF de factura generado automáticamente
-7. **EasyAdmin** → muestra el pedido en el panel de admin
+**Flujo paso a paso para la demo (Síguelo al pie de la letra):**
+1. **La web (frandaw.com):** Enseña el diseño, cambia de ES a EN para que vean cómo los productos se traducen al momento desde la base de datos.
+2. **El Carrito:** Intenta comprar un vestido sin elegir talla (para demostrar validaciones). Añade algo al carrito.
+3. **Seguridad JWT:** Dale a finalizar compra. Como no estás logueado, te pide acceso. Loguéate y verás cómo te devuelve al carrito gracias a que React guarda el token JWT en memoria.
+4. **Comprar y Correo (Localhost):** Vete a tu localhost para enseñar la compra. Haz el pedido, y abre la pestaña de `localhost:8025` (MailHog). **¡Enseña cómo llega el correo de confirmación al instante!**
+5. **Base de Datos y Stock en Directo:** Entra en el panel de administrador (`/admin`), vete a los Productos y bájale el stock a 0 a un anillo. Vuelve a la tienda pública, recarga y enséñales cómo ahora pone "Agotado" y el botón de comprar está bloqueado. *("Como veis, controlo la base de datos desde el backend y el frontend reacciona en tiempo real").*
 
 ---
 
-## 📌 DIAPOSITIVA 7 — Retos Técnicos Superados
+## 📌 DIAPOSITIVA 6 — Automatización con n8n e IA
 
-**Elementos visuales:**
-- 3 bloques/cards con icono, título y 2 líneas de explicación
+**Visual en Canva:**
+- **Captura 1 (Izquierda):** Tu captura de pantalla de n8n (la que me acabas de pasar) con los dos nodos de Webhook y Email.
+- **Captura 2 (Derecha):** Tu captura de pantalla de MailHog con el correo recibido.
 
-**Card 1 — 🔐 Seguridad JWT**
-> Firewall de Symfony bloqueaba el registro. Solución: `public_api` firewall con rutas explícitas antes del firewall JWT.
-
-**Card 2 — 🛒 Control de Stock Híbrido**
-> El carrito suma todas las tallas del mismo modelo y lo contrasta con el stock global para impedir sobrecompras.
-
-**Card 3 — ☁️ Filesystem Efímero en Render**
-> Las claves JWT desaparecen en cada redespliegue. Solución: endpoint `/api/dev/setup` que regenera claves + schema + fixtures automáticamente.
-
-**Qué dices:**
-> *"Estos tres retos son los que más me enseñaron. El de JWT fue especialmente frustrante porque el error no era evidente — el sistema de seguridad de Symfony interceptaba las rutas de registro antes de que nadie pudiera registrarse. Tuve que entender la cadena de firewalls para solucionarlo."*
+**Qué tienes que decir:**
+> *"Como habéis visto en la demo, cuando un usuario compra, recibe un correo. Esto no lo hace el backend directamente. He montado un nodo de n8n. Cuando Symfony guarda la compra en MySQL, lanza una petición HTTP (un webhook) a n8n con los datos del carrito en JSON. n8n lo atrapa, lo procesa y construye este correo HTML dinámico. En producción, aquí es donde conectaríamos una IA para personalizar el mensaje o enviar ofertas según lo que haya comprado la persona."*
 
 ---
 
-## 📌 DIAPOSITIVA 8 — Automatización con n8n (IA)
+## 📌 DIAPOSITIVA 7 — Retos Técnicos que he superado
 
-**Elementos visuales:**
-- Captura del workflow de n8n (flecha: Webhook → Procesar → Email)
-- Captura de MailHog con el email recibido
+**Visual en Canva:**
+- 3 bloques de texto corto con iconos:
+  1. 🔐 Sesiones Seguras (Firewalls y JWT)
+  2. 🛒 Control de Inventario Híbrido
+  3. 📦 Despliegue en Render
 
-**Qué dices:**
-> *"El requisito de IA y automatización lo resolví con n8n, una herramienta de workflow automation. Cuando un cliente completa una compra, mi backend Symfony dispara un webhook HTTP hacia n8n. El workflow procesa el evento y envía un email de confirmación con los detalles del pedido. Esto implementa el patrón event-driven sin acoplar el backend al sistema de email."*
-
----
-
-## 📌 DIAPOSITIVA 9 — Internacionalización (ES/EN)
-
-**Elementos visuales:**
-- Dos capturas lado a lado: producto en español vs en inglés
-- Flecha entre ellas con el botón de idioma
-
-**Qué dices:**
-> *"Dado que el negocio está en Puerto Banús — zona internacional — implementé un sistema de internacionalización completo. El contexto de idioma en React sirve las traducciones de la interfaz, y los nombres y descripciones de los productos en inglés se almacenan como campos separados en la base de datos y se devuelven por la API."*
+**Qué tienes que decir:**
+> *"No ha sido un camino fácil. Me he pegado bastante con la seguridad: configurar los firewalls de Symfony para que la ruta de registro fuera pública pero el carrito exigiera un Token JWT válido fue un reto enorme. Además, programé un interceptor en el frontend para que, si metes 3 vestidos talla S y 2 talla M, React sume todo y verifique contra el stock real de la base de datos para que no compres de más. Por último, pelearme con los despliegues en contenedores efímeros de Render me hizo aprender muchísimo sobre DevOps."*
 
 ---
 
-## 📌 DIAPOSITIVA 10 — Despliegue y DevOps
+## 📌 DIAPOSITIVA 8 — Internacionalización (Bilingüe)
 
-**Elementos visuales:**
-- Flujo: `Git push → GitHub Actions CI → Render Auto-Deploy`
-- Dos URLs: frontend (`frandaw.com`) y backend (`gusmuss-backend.onrender.com`)
+**Visual en Canva:**
+- Pon dos capturas del mismo vestido (una con el texto en ES y otra en EN).
 
-**Qué dices:**
-> *"El proyecto tiene un pipeline de CI/CD real. Cada push a main lanza los tests automáticos con GitHub Actions y, si pasan, Render despliega automáticamente. El frontend se sirve como sitio estático y el backend como web service con PHP. El dominio frandaw.com apunta al frontend con HTTPS automático."*
-
----
-
-## 📌 DIAPOSITIVA 11 — Plan de Negocio (resumen)
-
-**Elementos visuales:**
-- 3 columnas simples:
-
-| Modelo de negocio | Target | Escalabilidad |
-|---|---|---|
-| B2C directo con margen de lujo | Clienta 30-55 años, poder adquisitivo alto, zona Marbella-Banús | Stripe para pagos reales · AWS S3 para imágenes · App móvil |
-
-**Qué dices:**
-> *"El modelo de negocio es B2C con margen premium. El cliente objetivo es la misma clienta que ya conoce la tienda física pero quiere comprar desde casa o desde el extranjero. Los próximos pasos técnicos serían integrar Stripe para pagos reales y migrar las imágenes a AWS S3 para escalabilidad."*
+**Qué tienes que decir:**
+> *"Estando en Puerto Banús, la web tenía que estar en inglés. Lo fácil habría sido traducir solo los menús de React, pero yo he ido más allá. He modificado la base de datos añadiendo columnas específicas ('nombreEn', 'descripcionEn'). Cuando pulsas el botón, el estado global de React cambia y le pide a la API que devuelva los campos en inglés. Es una internacionalización completa de los datos de negocio."*
 
 ---
 
-## 📌 DIAPOSITIVA 12 — Cierre
+## 📌 DIAPOSITIVA 9 — Cierre y Futuro
 
-**Elementos visuales:**
-- Foto elegante de la colección
-- Texto grande: *"Gracias"*
-- GitHub: `github.com/FranJJL05/gusmuss-diamond`
-- Web: `frandaw.com`
-- Frase pequeña: *"Gusmuss Diamond · E-commerce de lujo · DAW 2025-26"*
+**Visual en Canva:**
+- Logo de Gusmuss.
+- GitHub: github.com/FranJJL05/gusmuss-diamond
+- Enlace a la web.
 
-**Qué dices:**
-> *"Este proyecto engloba diseño, backend, frontend, base de datos, seguridad, automatización y despliegue cloud — el ciclo completo de desarrollo de software profesional. Quedo a vuestra disposición para cualquier pregunta técnica sobre el código, la arquitectura o las decisiones de diseño. Gracias."*
-
----
-
-## ⏱️ TIMING RECOMENDADO
-
-| Diapositiva | Contenido | Tiempo |
-|---|---|---|
-| 1-2 | Presentación + problema | 3 min |
-| 3-4 | Stack + arquitectura | 4 min |
-| 5 | Modelo de datos | 2 min |
-| 6 | Demo en vivo | 10 min |
-| 7-8 | Retos + n8n | 5 min |
-| 9-10 | i18n + DevOps | 3 min |
-| 11-12 | Negocio + cierre | 3 min |
-| **Total** | | **~30 min** |
-
----
-
-## 💡 CONSEJOS PARA CANVA
-
-1. **Paleta:** Negro (#0a0a0a) + Dorado (#C5A55A) + Blanco (#FAFAFA)
-2. **Tipografía:** Cormorant Garamond (títulos) + Lato (cuerpo)
-3. **Fotos:** Usa las de la propia tienda — transmiten lujo real
-4. **Animaciones:** Fade in en cada elemento — evita transiciones llamativas
-5. **Máx. 6 líneas de texto por diapositiva** — el resto lo dices de memoria con este guión
+**Qué tienes que decir:**
+> *"Para terminar, el proyecto está en una fase madura y lista para subir a un entorno B2C real. Los próximos pasos lógicos serían conectar la pasarela de pagos de Stripe y subir las imágenes a un bucket de AWS. Este proyecto me ha servido para tocar absolutamente todos los palos del desarrollo web profesional: desde hacer un `git init` hasta diseñar la base de datos, montar la API y automatizar los procesos. Muchas gracias y estoy a vuestra disposición para cualquier duda del código."*

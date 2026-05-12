@@ -428,3 +428,35 @@ Además mejoré el manejo de errores para que muestre el mensaje exacto del fall
 - `fix(ui): cambiar texto del footer de G U S M U S S a Gusmuss`
 - `fix(setup): reemplazar schema:update deprecado por drop+create para mayor fiabilidad`
 - `docs: actualizar PRESENTACION_DEFENSA.md con guión diapositiva por diapositiva para Canva`
+
+---
+
+## ENTRADA 14
+
+**Fecha:** Mayo 2026
+**Qué hice:** Pruebas finales de Automatización con n8n y Preparación de la Defensa
+
+Hoy me he centrado en dejar la demo técnica lista para enseñarla al tribunal, especialmente la parte de automatización e IA. 
+
+### 1. Configuración de n8n y MailHog en Local
+Como en producción (Render) no tengo un servidor dedicado para n8n, monté toda la arquitectura de pruebas en local usando Docker. 
+- Creé mi cuenta de administrador en n8n a través del volumen local.
+- Importé el workflow que había diseñado, compuesto por dos nodos principales: 
+  1. Un **Webhook (POST)** escuchando en el endpoint `/nuevo-pedido`.
+  2. Un nodo de **Email (SMTP)** conectado internamente al puerto `1025` de mi contenedor MailHog.
+
+### 2. Sincronizando el Backend con el Webhook
+Me di cuenta de un detalle clave: en mi `OrderController.php`, cuando se guarda una compra, Symfony lanza una petición HTTP con CURL hacia `http://gusmuss_n8n:5678/webhook/nuevo-pedido`. 
+Tuve que asegurarme de que la URL en el nodo de n8n coincidiera exactamente con esa ruta, y que las variables JSON (`cliente_nombre`, `total`, `direccion`) cazaran perfectamente para que el HTML del correo se montara bien.
+
+### 3. Prueba de Fuego (¡Exitosa!)
+- Entré en `localhost:5173` (mi frontend en React).
+- Inicié sesión y compré un "Vestido Romántico Bordado Suizo" de la nueva colección.
+- Sin recargar nada, fui a `localhost:8025` (la bandeja de MailHog)... ¡Y ahí estaba el correo! Con su formato HTML, el logotipo, el asunto correcto y los datos dinámicos de mi compra. Funciona a la perfección.
+
+### 4. Preparando el Guión de Defensa
+He reestructurado mi guión de defensa. Voy a enfocarlo desde un punto de vista de Arquitectura Full-Stack. En lugar de enseñar diapositivas aburridas, voy a explicar cómo el **React (Frontend)**, **Symfony (Backend)**, **MySQL (BD)** y **n8n (Automatización)** están desacoplados pero hablan entre sí mediante JSON y webhooks. 
+
+El plato fuerte será cuando me meta en el panel de administrador de EasyAdmin, le quite el stock a un producto a mano en la base de datos, y les enseñe cómo en la web bloquea la compra al instante. Con esto y la demo del correo llegando en tiempo real, creo que va a quedar una presentación súper profesional y de sobresaliente.
+
+**Fin del desarrollo. ¡A preparar el Canva!**
