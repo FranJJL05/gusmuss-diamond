@@ -2,8 +2,9 @@ FROM php:8.2-apache
 
 # pdo y pdo_mysql usan librerías ya incluidas en la imagen base — no necesita apt-get
 # Añadimos libpq-dev para pdo_pgsql ya que Render usa PostgreSQL
-RUN apt-get update && apt-get install -y git unzip libzip-dev libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip
+RUN apt-get update && apt-get install -y git unzip libzip-dev libpq-dev libicu-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql zip intl
 
 # Habilitar mod_rewrite para que Symfony enrute correctamente
 RUN a2enmod rewrite
