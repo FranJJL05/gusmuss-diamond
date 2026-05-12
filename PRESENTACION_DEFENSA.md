@@ -26,7 +26,17 @@
 
 ---
 
-## 📌 DIAPOSITIVA 3 — Diseño e Interfaces (DIW)
+## 📌 DIAPOSITIVA 3 — Metodología y Fases de Desarrollo
+**Visual en Canva:**
+- Un esquema tipo línea de tiempo o un pequeño tablero Kanban (Por hacer, En curso, Hecho).
+- Fases: 1. Análisis y Diseño -> 2. Backend API -> 3. Frontend React -> 4. Integración CI/CD y Pruebas.
+
+**Discurso:**
+> *"Para garantizar que el proyecto llegara a buen puerto sin errores, he seguido una metodología ágil estructurada en 4 fases. Primero, planifiqué el modelo de base de datos y diseñé los prototipos visuales. En la segunda fase construí el cerebro del servidor (la API en Symfony). En la tercera levanté la SPA en React. Y finalmente, dediqué la última fase a automatizar los despliegues e integrar la IA, documentando los hitos y posibles mejoras en mi diario de desarrollo."*
+
+---
+
+## 📌 DIAPOSITIVA 4 — Diseño e Interfaces (DIW)
 **Visual en Canva:**
 - Captura de tu prototipo (si tienes Figma) o del diseño de la web.
 - Logos: Tailwind, CSS, BEM.
@@ -36,7 +46,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 4 — Frontend: El Cliente React
+## 📌 DIAPOSITIVA 5 — Frontend: El Cliente React
 **Visual en Canva:**
 - Logo de React y Vite.
 
@@ -45,7 +55,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 5 — Backend: El Servidor Symfony
+## 📌 DIAPOSITIVA 6 — Backend: El Servidor Symfony
 **Visual en Canva:**
 - Logo Symfony, MySQL.
 - Captura pequeñita del panel de administrador (EasyAdmin).
@@ -55,7 +65,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 6 — Despliegue, CI/CD y DevOps
+## 📌 DIAPOSITIVA 7 — Despliegue, CI/CD y DevOps
 **Visual en Canva:**
 - Esquema: GitHub -> Actions -> Render.
 - Texto: `frandaw.com` (HTTPS).
@@ -65,7 +75,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 7 — Automatización e Inteligencia Artificial
+## 📌 DIAPOSITIVA 8 — Automatización e Inteligencia Artificial
 **Visual en Canva:**
 - Captura de tu flujo de n8n con los nodos.
 
@@ -74,7 +84,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 8 — Internacionalización (Inglés)
+## 📌 DIAPOSITIVA 9 — Internacionalización (Inglés)
 **Visual en Canva:**
 - Captura de la web mostrando el selector de idioma (ES / ENG).
 - Texto en inglés de la descripción de un diamante.
@@ -84,7 +94,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 9 — Un Vistazo al Código (Dificultad técnica)
+## 📌 DIAPOSITIVA 10 — Un Vistazo al Código (Dificultad técnica)
 **Visual en Canva:**
 - **Captura de código:** Tu controlador `OrderController` donde haces la llamada HTTP (CURL) al Webhook, o tu contexto de React gestionando el JWT.
 
@@ -93,7 +103,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 10 — 🎬 DEMO EN VIVO
+## 📌 DIAPOSITIVA 11 — 🎬 DEMO EN VIVO
 **Visual en Canva:**
 - Letras grandes: **DEMOSTRACIÓN FUNCIONAL**.
 - *(Aquí sales de la presentación).*
@@ -107,7 +117,7 @@
 
 ---
 
-## 📌 DIAPOSITIVA 11 — Conclusión
+## 📌 DIAPOSITIVA 12 — Conclusión
 **Visual en Canva:**
 - Enlace al repositorio y QR.
 
