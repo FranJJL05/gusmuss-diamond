@@ -26,7 +26,9 @@ COPY . /var/www/html/
 
 # Instalar dependencias de Symfony (Quitamos --no-dev para que se instalen las Fixtures)
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --optimize-autoloader --no-scripts
+RUN composer install --optimize-autoloader --no-scripts \
+    && php bin/console importmap:install \
+    && php bin/console assets:install public
 
 # Dar permisos a la carpeta var, uploads y config para que Apache pueda crear los certificados JWT
 RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public/uploads /var/www/html/config || true
