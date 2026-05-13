@@ -22,7 +22,7 @@
 - Tres iconos: 💼 (Oportunidad), 💶 (Presupuesto), ⚖️ (Forma Jurídica).
 
 **Discurso:**
-> *"Empezando por Empresa (EIE). Detecté una **oportunidad de negocio** clara: una joyería física en Puerto Banús que necesitaba digitalizarse para vender internacionalmente. He realizado un **estudio de viabilidad técnica e identificando las necesidades de financiación**. A nivel legal, he definido la constitución como S.L., asumiendo las obligaciones fiscales y laborales correspondientes para su puesta en marcha."*
+> *"Empezando por Empresa (EIE). Detecté una **oportunidad de negocio** clara: una tienda física en Puerto Banús que necesitaba digitalizarse para vender internacionalmente. He realizado un **estudio de viabilidad técnica e identificando las necesidades de financiación**. A nivel legal, he definido la constitución como S.L., asumiendo las obligaciones fiscales y laborales correspondientes para su puesta en marcha."*
 
 ---
 
