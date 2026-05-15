@@ -30,24 +30,28 @@ class SetupController extends AbstractController
             // 1. Borrar schema existente
             $html .= "<br><b>[1/4] Borrando base de datos existente...</b><br>";
             $input1 = new ArrayInput(['command' => 'doctrine:schema:drop', '--force' => true]);
+            $input1->setInteractive(false);
             $application->run($input1, $output);
             $html .= nl2br($output->fetch());
 
             // 2. Crear schema desde cero con TODAS las columnas actuales
             $html .= "<br><br><b>[2/4] Creando estructura de Base de Datos...</b><br>";
             $input2 = new ArrayInput(['command' => 'doctrine:schema:create']);
+            $input2->setInteractive(false);
             $application->run($input2, $output);
             $html .= nl2br($output->fetch());
 
             // 3. Cargar Fixtures
             $html .= "<br><br><b>[3/4] Creando catálogo de productos y usuarios (Fixtures)...</b><br>";
-            $input3 = new ArrayInput(['command' => 'doctrine:fixtures:load', '--no-interaction' => true]);
+            $input3 = new ArrayInput(['command' => 'doctrine:fixtures:load', '--no-interaction' => true, '--append' => false]);
+            $input3->setInteractive(false);
             $application->run($input3, $output);
             $html .= nl2br($output->fetch());
 
             // 4. Generar JWT Keys
             $html .= "<br><br><b>[4/4] Generando claves de seguridad JWT...</b><br>";
             $input4 = new ArrayInput(['command' => 'lexik:jwt:generate-keypair', '--overwrite' => true]);
+            $input4->setInteractive(false);
             $application->run($input4, $output);
             $html .= nl2br($output->fetch());
 
