@@ -2,7 +2,7 @@
 
 Gusmuss Diamond es una plataforma e-commerce B2C de lujo desarrollada como Proyecto Integrado para el ciclo de **Desarrollo de Aplicaciones Web (DAW)**.
 
-🌐 **Demo en Vivo:** [www.frandaw.com](https://www.frandaw.com)
+🌐 **En Vivo:** [www.frandaw.com](https://www.frandaw.com)
 
 El sistema está diseñado para la digitalización de una joyería multimarca en Puerto Banús, ofreciendo una experiencia de compra exclusiva, multilingüe y altamente automatizada.
 
