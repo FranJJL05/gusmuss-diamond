@@ -1,5 +1,5 @@
 {
-  "name": "Agente IA - Asesor de Joyería Gusmuss Diamond",
+  "name": "Agente IA - Asesor de Joyería Gusmuss Diamond (Local Ollama)",
   "nodes": [
     {
       "parameters": {
@@ -16,8 +16,10 @@
     },
     {
       "parameters": {
+        "agent": "reActAgent",
+        "text": "={{ $json.chatInput }}",
         "options": {
-          "systemMessage": "Eres un asistente virtual experto y exclusivo de 'Gusmuss Diamond'. Tu objetivo es recomendar las mejores joyas y prendas del catálogo. Utiliza la herramienta de búsqueda de productos para obtener datos en tiempo real y responder con precisión sobre precios, materiales y disponibilidad. Sé cortés y elegante."
+          "prefix": "Eres un asistente virtual experto y exclusivo de 'Gusmuss Diamond'. Tu objetivo es recomendar las mejores joyas y prendas del catálogo. Utiliza la herramienta de búsqueda de productos para obtener datos en tiempo real.\n\nREGLA CRÍTICA DE BÚSQUEDA (OBLIGATORIA):\n- NUNCA inventes productos ni respondas de memoria.\n- Siempre que el usuario pregunte por productos, vestidos, joyas, ropa o precios, estás OBLIGADO a llamar a la herramienta 'buscarProductos' con una palabra de búsqueda en español (por ejemplo: 'vestido', 'sombrero', 'anillo', 'collar') para obtener los datos reales.\n- Si no usas la herramienta, tu respuesta se considerará incorrecta.\n\nIDIOMA Y TRADUCCIÓN:\n- Responde SIEMPRE en el mismo idioma en el que te hable el usuario. Si te habla en español, responde en español. Si te habla en inglés, responde en inglés.\n- Traduce los resultados de los productos al idioma del usuario. Usa 'nombre' y 'descripcion' si el usuario habla español, y usa 'nombreEn' y 'descripcionEn' si habla inglés.\n- Si recomiendas un producto, incluye siempre su precio formateado y el enlace en markdown de la siguiente manera: `[Ver producto](/producto/slug-del-producto)`."
         }
       },
       "id": "e44d32a0-402a-4a5c-bf93-112392292c7c",
@@ -31,29 +33,21 @@
     },
     {
       "parameters": {
-        "model": "gemini-1.5-flash",
-        "options": {
-          "temperature": 0.2
-        }
+        "model": "mistral:latest",
+        "baseUrl": "http://host.docker.internal:11434"
       },
       "id": "c88f12a0-502a-4a5c-bf93-112392292d8d",
-      "name": "Google Gemini Chat Model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "name": "Ollama Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
         560,
         420
-      ],
-      "credentials": {
-        "googleGeminiOAuth2Api": {
-          "id": "mock-credentials-id",
-          "name": "Google Gemini API Key"
-        }
-      }
+      ]
     },
     {
       "parameters": {
-        "name": "buscar_productos",
+        "name": "buscarProductos",
         "description": "Busca productos en el catálogo de Gusmuss Diamond por texto. Devuelve el nombre, precio, material y slug del producto.",
         "url": "http://web/api/productos/buscar",
         "sendQuery": true,
@@ -61,14 +55,14 @@
           "parameters": [
             {
               "name": "q",
-              "value": "={{{$parameter[\"query\"]}}}"
+              "value": "={{ $parameter.query }}"
             }
           ]
         },
         "responseData": "all"
       },
       "id": "d99f12a0-602a-4a5c-bf93-112392292e9e",
-      "name": "Buscar Catálogo API",
+      "name": "buscarProductos",
       "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
       "typeVersion": 1,
       "position": [
@@ -89,7 +83,7 @@
     }
   ],
   "connections": {
-    "Google Gemini Chat Model": {
+    "Ollama Chat Model": {
       "ai_languageModel": [
         [
           {
@@ -111,7 +105,7 @@
         ]
       ]
     },
-    "Buscar Catálogo API": {
+    "buscarProductos": {
       "ai_tool": [
         [
           {

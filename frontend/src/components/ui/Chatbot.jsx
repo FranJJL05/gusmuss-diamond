@@ -8,32 +8,31 @@ export default function Chatbot() {
       const link = document.createElement('link');
       link.id = styleId;
       link.rel = 'stylesheet';
-      link.href = 'https://cdn.jsdelivr.net/npm/@n8n/chat@0/dist/style.css';
+      link.href = 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css';
       document.head.appendChild(link);
     }
 
-    // 2. Cargar el script de n8n chat dinámicamente y ejecutarlo
-    const scriptId = 'n8n-chat-script';
-    let script = document.getElementById(scriptId);
+    // 2. Importar dinámicamente el módulo ES del widget de n8n
+    let active = true;
+    
+    const n8nHost = import.meta.env.VITE_N8N_HOST || 'http://localhost:5688';
+    const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || `${n8nHost}/webhook/5e1e9e3a-2410-4d12-a29d-cda4862221b7/chat`;
 
-    const initChat = () => {
-      // Obtenemos los hosts desde variables de entorno de Vite o usamos valores por defecto
-      // Nota: En local, n8n corre en el puerto 5688 expuesto por docker-compose
-      const n8nHost = import.meta.env.VITE_N8N_HOST || 'http://localhost:5688';
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || `${n8nHost}/webhook/18f5d720-302a-4a5c-bf93-112392292b6b/chat`;
-
-      if (window.createChat) {
-        window.createChat({
+    import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js')
+      .then(({ createChat }) => {
+        if (!active) return;
+        
+        createChat({
           host: n8nHost,
-          webhookId: '18f5d720-302a-4a5c-bf93-112392292b6b', // UUID del nodo chat trigger de n8n
+          webhookId: '5e1e9e3a-2410-4d12-a29d-cda4862221b7',
           webhookUrl: webhookUrl,
           options: {
             title: 'Gusmuss AI 💎',
             subtitle: 'Asesora de Joyería y Moda',
-            primaryColor: '#171717', // Color oscuro elegante de la marca
+            primaryColor: '#171717', // Color oscuro elegante
             backgroundColor: '#ffffff',
             titleBackgroundColor: '#171717',
-            titleTextColor: '#f59e0b', // Letras doradas/ámbar
+            titleTextColor: '#f59e0b', // Letras doradas
             buttonColor: '#171717',
             placeholder: 'Pregúnteme sobre joyas, vestidos, materiales...',
             initialMessages: [
@@ -42,26 +41,14 @@ export default function Chatbot() {
             ]
           }
         });
-      }
-    };
+      })
+      .catch((err) => {
+        console.error('Error al cargar el widget de chat de n8n:', err);
+      });
 
-    if (!script) {
-      script = document.createElement('script');
-      script.id = scriptId;
-      script.type = 'module';
-      script.src = 'https://cdn.jsdelivr.net/npm/@n8n/chat@0/dist/chat.bundle.es.js';
-      script.onload = () => {
-        // En navegadores modernos, los módulos importados añaden la función a window
-        setTimeout(initChat, 300);
-      };
-      document.body.appendChild(script);
-    } else {
-      // Si el script ya está cargado, simplemente inicializamos de nuevo
-      setTimeout(initChat, 100);
-    }
-
-    // Cleanup: eliminar los elementos añadidos o cerrar el chat al desmontar el componente si fuera necesario
+    // Limpieza al desmontar el componente
     return () => {
+      active = false;
       const chatWidget = document.querySelector('.n8n-chat-widget');
       if (chatWidget) {
         chatWidget.remove();
@@ -69,7 +56,5 @@ export default function Chatbot() {
     };
   }, []);
 
-  // El script de n8n inyecta su propio botón flotante al final del DOM,
-  // por lo que este componente no necesita renderizar ningún HTML propio.
   return null;
 }
