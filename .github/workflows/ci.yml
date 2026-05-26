@@ -37,6 +37,9 @@ jobs:
       - name: Check database schema validity
         run: php bin/console doctrine:schema:validate --skip-sync -e test || true
 
+      - name: Run Backend Tests
+        run: vendor/bin/phpunit
+
   test-frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -52,6 +55,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Run Frontend Tests
+        run: npm run test
 
       - name: Build React App
         run: npm run build

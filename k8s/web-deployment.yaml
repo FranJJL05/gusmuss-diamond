@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gusmuss-web
+  labels:
+    app: web
+spec:
+  replicas: 2 # Demuestra capacidad de escalado horizontal en Kubernetes
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: gusmuss-web:latest # Reemplazar con tu imagen real de Docker Hub o ECR
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: APP_ENV
+              value: "dev" # Cambiar a "prod" en producción real
+            - name: APP_SECRET
+              value: "8f87ec20ded0b3d4ed7656a910d38187"
+            - name: DATABASE_URL
+              value: "mysql://gusmuss_user:secretpassword@db:3306/gusmuss_db?serverVersion=8.0.32&charset=utf8mb4"
+            - name: MAILER_DSN
+              value: "smtp://mailer:1025"
+            - name: JWT_PASSPHRASE
+              value: "50061450ae55da103b4ad0d08b835f1fbf57204d1463f5fa5c9a29b853c3d2ca"
+          # Liveness y readiness probes para robustez
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 5

@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import BottomNav from './BottomNav';
 import Footer from './Footer';
+import Chatbot from '../ui/Chatbot';
 
 export default function Layout({ title }) {
   return (
@@ -15,9 +16,13 @@ export default function Layout({ title }) {
 
       <Footer />
 
+      {/* Chatbot flotante con IA */}
+      <Chatbot />
+
       <div className="md:hidden">
         <BottomNav />
       </div>
     </div>
   );
 }
+

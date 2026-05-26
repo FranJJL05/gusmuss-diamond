@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gusmuss-n8n
+  labels:
+    app: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      containers:
+        - name: n8n
+          image: docker.n8n.io/n8nio/n8n:latest
+          env:
+            - name: N8N_HOST
+              value: "n8n"
+            - name: N8N_PORT
+              value: "5678"
+            - name: N8N_PROTOCOL
+              value: "http"
+            - name: NODE_ENV
+              value: "production"
+            - name: WEBHOOK_URL
+              value: "http://n8n:5678/"
+            - name: GENERIC_TIMEZONE
+              value: "Europe/Madrid"
+          ports:
+            - containerPort: 5678
+              name: n8n-port
+          volumeMounts:
+            - name: n8n-persistent-storage
+              mountPath: /home/node/.n8n
+      volumes:
+        - name: n8n-persistent-storage
+          persistentVolumeClaim:
+            claimName: n8n-pvc

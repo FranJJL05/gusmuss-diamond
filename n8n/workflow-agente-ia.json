@@ -1,0 +1,143 @@
+{
+  "name": "Agente IA - Asesor de Joyería Gusmuss Diamond",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "18f5d720-302a-4a5c-bf93-112392292b6b",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1,
+      "position": [
+        380,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Eres un asistente virtual experto y exclusivo de 'Gusmuss Diamond'. Tu objetivo es recomendar las mejores joyas y prendas del catálogo. Utiliza la herramienta de búsqueda de productos para obtener datos en tiempo real y responder con precisión sobre precios, materiales y disponibilidad. Sé cortés y elegante."
+        }
+      },
+      "id": "e44d32a0-402a-4a5c-bf93-112392292c7c",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1,
+      "position": [
+        600,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gemini-1.5-flash",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "c88f12a0-502a-4a5c-bf93-112392292d8d",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        560,
+        420
+      ],
+      "credentials": {
+        "googleGeminiOAuth2Api": {
+          "id": "mock-credentials-id",
+          "name": "Google Gemini API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "buscar_productos",
+        "description": "Busca productos en el catálogo de Gusmuss Diamond por texto. Devuelve el nombre, precio, material y slug del producto.",
+        "url": "http://web/api/productos/buscar",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{{$parameter[\"query\"]}}}"
+            }
+          ]
+        },
+        "responseData": "all"
+      },
+      "id": "d99f12a0-602a-4a5c-bf93-112392292e9e",
+      "name": "Buscar Catálogo API",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1,
+      "position": [
+        780,
+        380
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f11a12a0-702a-4a5c-bf93-112392292f0f",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1,
+      "position": [
+        700,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Catálogo API": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "9148df07-d02e-4a5c-af93-112392292b6b",
+  "meta": {
+    "templateId": "gusmuss-jewelry-agent"
+  }
+}
