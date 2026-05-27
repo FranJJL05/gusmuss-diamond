@@ -15,7 +15,13 @@ export default function Chatbot() {
     // 2. Importar dinámicamente el módulo ES del widget de n8n
     let active = true;
     
-    const n8nHost = import.meta.env.VITE_N8N_HOST || 'http://localhost:5688';
+    // Detectar automáticamente el dominio para que funcione en local y en AWS
+    const currentHost = window.location.hostname;
+    const defaultN8nHost = currentHost === 'localhost' || currentHost === '127.0.0.1' 
+      ? 'http://localhost:5688' 
+      : `http://${currentHost}:5688`;
+      
+    const n8nHost = import.meta.env.VITE_N8N_HOST || defaultN8nHost;
     const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || `${n8nHost}/webhook/5e1e9e3a-2410-4d12-a29d-cda4862221b7/chat`;
 
     import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js')

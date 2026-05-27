@@ -128,10 +128,10 @@ class ProductController extends AbstractController
             'stock'           => $p->getStock(),
             'destacado'       => $p->isDestacado(),
             'imagen'          => $p->getImagenFilename()
-                ? $baseUrl . '/uploads/products/' . $p->getImagenFilename()
+                ? '/uploads/products/' . $p->getImagenFilename()
                 : null,
-            'galeria'         => array_map(function($img) use ($baseUrl) {
-                return $baseUrl . '/uploads/products/' . $img;
+            'galeria'         => array_map(function($img) {
+                return '/uploads/products/' . $img;
             }, $p->getImagenesExtra() ?? []),
             'tallas'          => $p->getTallasDisponibles() ?? [],
             'categoria'       => $p->getCategory() ? [
