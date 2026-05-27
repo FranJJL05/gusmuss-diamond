@@ -9,6 +9,7 @@ export default defineConfig({
     allowedHosts: true, // Permite conexiones desde el dominio de IONOS
   },
   server: {
+    allowedHosts: true,
     port: 3000,
     proxy: {
       '/api': {
