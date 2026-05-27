@@ -36,12 +36,8 @@ services:
     ports:
       - "5688:5678"
     environment:
-      - N8N_HOST=localhost
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
-      - NODE_ENV=production
-      - N8N_SECURE_COOKIE=false
-      - WEBHOOK_URL=http://localhost:5678/
       - GENERIC_TIMEZONE=Europe/Madrid
     volumes:
       - n8n_data:/home/node/.n8n
