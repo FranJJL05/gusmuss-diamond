@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react'
 // Así evitamos problemas de CORS en desarrollo.
 export default defineConfig({
   plugins: [react()],
+  preview: {
+    allowedHosts: true, // Permite conexiones desde el dominio de IONOS
+  },
   server: {
     port: 3000,
     proxy: {
