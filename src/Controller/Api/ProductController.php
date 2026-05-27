@@ -58,14 +58,20 @@ class ProductController extends AbstractController
 
     /**
      * GET /api/productos/buscar?q=diamante
+     * También acepta ?=diamante (clave vacía, enviada por n8n toolHttpRequest en modo ReAct)
      */
     #[Route('/buscar', name: 'buscar', methods: ['GET'])]
     public function buscar(Request $request): JsonResponse
     {
-        $query = $request->query->get('q', '');
+        // Intentar obtener el parámetro 'q' primero; si no, usar el primer valor de la query
+        $queryParams = $request->query->all();
+        $query = $queryParams['q'] ?? (count($queryParams) > 0 ? array_values($queryParams)[0] : '');
+
+        // Limpiar comillas que el agente IA (Mistral ReAct) puede añadir: 'vestido' → vestido
+        $query = trim(str_replace(["'", '"'], '', (string) $query));
 
         if (strlen($query) < 2) {
-            return $this->json(['error' => 'La búsqueda debe tener al menos 2 caracteres'], 400, $this->corsHeaders());
+            return $this->json([], 200, $this->corsHeaders());
         }
 
         $products = $this->productRepository->search($query);
