@@ -51,8 +51,8 @@
         "description": "Busca productos en el catálogo de Gusmuss Diamond por texto. Devuelve el nombre, precio, material y slug del producto.",
         "url": "http://web/api/productos/buscar",
         "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
+        "parametersQuery": {
+          "values": [
             {
               "name": "q",
               "value": "={{ $parameter.query }}"

@@ -63,9 +63,16 @@ class ProductController extends AbstractController
     #[Route('/buscar', name: 'buscar', methods: ['GET'])]
     public function buscar(Request $request): JsonResponse
     {
-        // Intentar obtener el parámetro 'q' primero; si no, usar el primer valor de la query
-        $queryParams = $request->query->all();
-        $query = $queryParams['q'] ?? (count($queryParams) > 0 ? array_values($queryParams)[0] : '');
+        // Obtener raw query string porque n8n en modo ReAct puede enviar '?=vestido' o '?=%27vestido%27'
+        $queryString = $request->server->get('QUERY_STRING', '');
+        
+        // Si viene con q=, lo parseamos
+        $query = $request->query->get('q', '');
+        
+        // Si no hay q= pero hay algo en la query string (como '=vestido')
+        if ($query === '' && $queryString !== '') {
+            $query = ltrim(urldecode($queryString), '=');
+        }
 
         // Limpiar comillas que el agente IA (Mistral ReAct) puede añadir: 'vestido' → vestido
         $query = trim(str_replace(["'", '"'], '', (string) $query));

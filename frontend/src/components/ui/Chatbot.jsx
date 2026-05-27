@@ -26,25 +26,66 @@ export default function Chatbot() {
           host: n8nHost,
           webhookId: '5e1e9e3a-2410-4d12-a29d-cda4862221b7',
           webhookUrl: webhookUrl,
-          options: {
-            title: 'Gusmuss AI 💎',
-            subtitle: 'Asesora de Joyería y Moda',
-            primaryColor: '#171717', // Color oscuro elegante
-            backgroundColor: '#ffffff',
-            titleBackgroundColor: '#171717',
-            titleTextColor: '#f59e0b', // Letras doradas
-            buttonColor: '#171717',
-            placeholder: 'Pregúnteme sobre joyas, vestidos, materiales...',
-            initialMessages: [
-              '¡Bienvenido a Gusmuss Diamond! 💎',
-              'Soy su asesora virtual autónoma configurada en n8n. ¿En qué tipo de piezas exclusivas o tallas está interesado hoy?'
-            ]
+          // Textos configurables en la raíz del objeto, no dentro de "options"
+          initialMessages: [
+            'Bienvenido a mi tienda, ¿en qué le puedo ayudar?'
+          ],
+          i18n: {
+            en: {
+              title: 'Gusmuss AI 💎',
+              subtitle: 'Asesora de Joyería y Moda',
+              footer: '',
+              getStarted: 'Nueva conversación',
+              inputPlaceholder: 'Escriba aquí su mensaje...',
+            }
           }
         });
       })
       .catch((err) => {
         console.error('Error al cargar el widget de chat de n8n:', err);
       });
+
+    // Añadir estilos personalizados para colores y botón
+    const customStyle = document.createElement('style');
+    customStyle.id = 'n8n-custom-chat-style';
+    customStyle.innerHTML = `
+      /* Variables CSS nativas de n8n chat para forzar el tema oscuro y dorado */
+      :root {
+        --chat--color-primary: #171717 !important;
+        --chat--color-secondary: #d4af37 !important;
+        --chat--color-background: #ffffff !important;
+        --chat--toggle--background: #171717 !important; /* Fuerza el color de fondo del botón flotante */
+      }
+      
+      /* Asegurar que la cabecera es negra y texto dorado */
+      .chat-layout .chat-header {
+        background-color: #171717 !important;
+        color: #d4af37 !important;
+      }
+
+      /* Efecto de brillo y animación en el botón principal */
+      .chat-window-toggle, button[class*="toggle"] {
+        background-color: #171717 !important;
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+        border: 2px solid #d4af37 !important;
+      }
+      .chat-window-toggle:hover, button[class*="toggle"]:hover {
+        transform: scale(1.1) !important;
+        box-shadow: 0 6px 25px rgba(212, 175, 55, 0.7) !important;
+      }
+      /* Hacer que el icono del SVG sea dorado */
+      .chat-window-toggle svg, button[class*="toggle"] svg {
+        color: #d4af37 !important;
+        stroke: #d4af37 !important;
+        fill: #d4af37 !important;
+      }
+      .chat-window-toggle svg path, button[class*="toggle"] svg path {
+        fill: #d4af37 !important;
+        stroke: #d4af37 !important;
+      }
+    `;
+    document.head.appendChild(customStyle);
 
     // Limpieza al desmontar el componente
     return () => {
