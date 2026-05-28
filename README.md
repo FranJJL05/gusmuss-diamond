@@ -1,52 +1,40 @@
-# 💎 Gusmuss Diamond
+# Gusmuss Diamond 💎
 
-Gusmuss Diamond es una plataforma e-commerce B2C de lujo desarrollada como Proyecto Integrado para el ciclo de **Desarrollo de Aplicaciones Web (DAW)**.
+Gusmuss Diamond es una plataforma e-commerce de alta joyería y moda, que integra un asistente de Inteligencia Artificial capaz de recomendar productos en tiempo real y comunicarse con los clientes.
 
-🌐 **En Vivo:** [www.frandaw.com](https://www.frandaw.com)
+## 🚀 Arquitectura y Despliegue (AWS & Docker)
 
-El sistema está diseñado para la digitalización de una joyería multimarca en Puerto Banús, ofreciendo una experiencia de compra exclusiva, multilingüe y altamente automatizada.
+Este proyecto ha sido desplegado siguiendo las mejores prácticas de DevOps y Cloud Computing, cumpliendo con los requisitos del módulo de despliegue:
 
-## 🚀 Arquitectura Tecnológica (Full-Stack)
+*   **Entorno Cloud (AWS):** El proyecto está alojado en una instancia EC2 de Amazon Web Services, garantizando alta disponibilidad. Se ha asignado una **IP Elástica (Elastic IP)** para mantener una dirección estática.
+*   **Contenedores y Orquestación:** Toda la infraestructura está contenerizada. Se utiliza **Docker** y **Docker Compose** como orquestador de contenedores. *(Nota técnica: Se ha optado por Docker Compose en lugar de Kubernetes para optimizar el consumo de recursos en la instancia EC2 t2.micro, logrando un despliegue eficiente y escalable sin saturar la memoria RAM).*
+*   **Nombres de Dominio:** El proyecto no se accede por IP, sino a través del dominio personalizado configurado mediante registros DNS en IONOS: [http://www.frandaw.com](http://www.frandaw.com).
+*   **Control de Versiones:** Se utiliza Git y GitHub como repositorio central de código.
+*   **CI/CD (Integración y Despliegue Continuo):** Se ha implementado un pipeline automático utilizando **GitHub Actions** (`.github/workflows/ci.yml`) que ejecuta pruebas automáticas y verifica la compilación tanto del Frontend como del Backend en cada push.
+*   **Documentación Automática:** La API REST del backend (Symfony) está documentada automáticamente utilizando Swagger/OpenAPI, accesible en la ruta `/api/doc`.
 
-El proyecto sigue una arquitectura desacoplada y orientada a servicios:
+## 🤖 Módulo de Agentes IA
 
-### 🖥️ Frontend (Single Page Application)
-- **Framework:** React.js + Vite.
-- **Estilos:** Tailwind CSS con diseño "Mobile First" y estética de lujo (minimalista B&W).
-- **Gestión de Estado:** Context API para el carrito, la autenticación y el idioma.
-- **Navegación:** React Router DOM (sin recargas de página).
+El proyecto incorpora un **Agente Inteligente conversacional** integrado en la tienda online:
 
-### ⚙️ Backend (API REST)
-- **Framework:** Symfony 6.4 (PHP 8.2).
-- **Base de Datos:** MySQL 8.0 gestionado mediante Doctrine ORM.
-- **Seguridad:** LexikJWTAuthenticationBundle para la autenticación basada en tokens JWT.
-- **Administración:** EasyAdmin 4 para la gestión completa del catálogo y los pedidos por parte del administrador.
+*   **Motor de IA Local:** Se utiliza el modelo **Mistral** a través de **Ollama**.
+*   **Orquestación de flujos:** Se utiliza **n8n** (desplegado en un contenedor Docker en AWS) para orquestar la comunicación entre el Frontend, el modelo de IA y la base de datos de productos.
+*   **Arquitectura Híbrida Seguro:** Para maximizar el rendimiento y no sobrecargar la capa gratuita de AWS, el procesamiento pesado del modelo Mistral se realiza mediante un túnel seguro (**Ngrok**) que conecta la nube con la GPU local, demostrando flexibilidad arquitectónica.
+*   **Herramientas dinámicas:** La IA tiene acceso a la herramienta `buscarProductos`, permitiéndole consultar la base de datos en tiempo real y recomendar vestidos o joyas exactas del catálogo con sus precios actualizados.
 
-### 🤖 Automatización y DevOps
-- **Contenedores:** Entorno local virtualizado completamente con **Docker** (`docker-compose`).
-- **Integración Continua (CI/CD):** Workflows de **GitHub Actions** para el despliegue automatizado.
-- **Cloud Hosting:** Servidores de producción en **Render**.
-- **Notificaciones IA:** Integración de Webhooks con **n8n** y **MailHog** para el envío automático de correos y notificaciones de pedidos.
+## 🎨 Diseño y Frontend
 
-## 📦 Instalación Local (Docker)
+*   **Tecnologías:** React, Vite y TailwindCSS.
+*   **Estética:** Interfaz "Glassmorphism", diseño oscuro de alta gama, y componentes interactivos diseñados para transmitir la exclusividad de una marca de diamantes.
 
-1. Clona este repositorio:
-   ```bash
-   git clone https://github.com/FranJJL05/gusmuss-diamond.git
-   cd gusmuss-diamond
-   ```
-2. Levanta los contenedores de Docker (Backend, Base de Datos, n8n, MailHog):
-   ```bash
-   docker-compose up -d
-   ```
-3. Instala las dependencias y arranca el servidor de desarrollo Frontend:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-4. Inicializa la base de datos navegando a la ruta de configuración inicial:
-   👉 `http://localhost:8000/api/dev/setup`
+## 🛠️ Instrucciones de Arranque (Entorno AWS)
 
----
-*Desarrollado por Francisco José Jiménez López - IES Iliberis*
+```bash
+# 1. Iniciar los servicios del Backend y Base de datos (Docker)
+cd /home/ubuntu/gusmuss-diamond
+sudo docker compose up -d
+
+# 2. Iniciar el Frontend web
+cd /home/ubuntu/gusmuss-diamond/frontend
+sudo npm run dev -- --host 0.0.0.0 --port 80
+```
