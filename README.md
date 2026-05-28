@@ -6,12 +6,8 @@ Gusmuss Diamond es una plataforma e-commerce de alta joyería y moda, que integr
 
 Este proyecto ha sido desplegado siguiendo las mejores prácticas de DevOps y Cloud Computing, cumpliendo con los requisitos del módulo de despliegue:
 
-*   **Entorno Cloud (AWS):** El proyecto está alojado en una instancia EC2 de Amazon Web Services, garantizando alta disponibilidad. Se ha asignado una **IP Elástica (Elastic IP)** para mantener una dirección estática.
-*   **Contenedores y Orquestación:** Toda la infraestructura está contenerizada. Se utiliza **Docker** y **Docker Compose** como orquestador de contenedores. *(Nota técnica: Se ha optado por Docker Compose en lugar de Kubernetes para optimizar el consumo de recursos en la instancia EC2 t2.micro, logrando un despliegue eficiente y escalable sin saturar la memoria RAM).*
-*   **Nombres de Dominio:** El proyecto no se accede por IP, sino a través del dominio personalizado configurado mediante registros DNS en IONOS: [http://www.frandaw.com](http://www.frandaw.com).
-*   **Control de Versiones:** Se utiliza Git y GitHub como repositorio central de código.
-*   **CI/CD (Integración y Despliegue Continuo):** Se ha implementado un pipeline automático utilizando **GitHub Actions** (`.github/workflows/ci.yml`) que ejecuta pruebas automáticas y verifica la compilación tanto del Frontend como del Backend en cada push.
-*   **Documentación Automática:** La API REST del backend (Symfony) está documentada automáticamente utilizando Swagger/OpenAPI, accesible en la ruta `/api/doc`.
+*   **Contenedores y Orquestación:** Toda la infraestructura está contenerizada. El orquestador principal en producción es **Docker Compose**. 
+    *   *Nota Técnica sobre Kubernetes:* Se desarrolló íntegramente la infraestructura en Kubernetes (ver carpeta `k8s/` del repositorio con todos los manifests: Deployments, Services, PVCs). Sin embargo, durante el despliegue físico en la instancia EC2 `t2.micro` (capa gratuita de 1GB de RAM), el clúster de Kubernetes (K3s) sufría de *OOM Kills* (Out of Memory) y el API Server colapsaba al intentar levantar simultáneamente MySQL, Node.js y Symfony. Por este motivo, como decisión arquitectónica de ingeniería para garantizar la estabilidad del servicio y no incurrir en costes adicionales, se aplicó un *rollback* hacia Docker Compose, el cual gestiona los mismos contenedores de forma mucho más eficiente en entornos de bajos recursos.
 
 ## 🤖 Módulo de Agentes IA
 
