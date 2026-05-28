@@ -24,12 +24,11 @@ El proyecto incorpora un **Agente Inteligente conversacional** integrado en la t
 
 ## 🛠️ Instrucciones de Arranque (Entorno AWS)
 
-```bash
-# 1. Iniciar los servicios del Backend y Base de datos (Docker)
-cd /home/ubuntu/gusmuss-diamond
-sudo docker compose up -d
+Al utilizar **Kubernetes (K3s)**, los contenedores del Backend, Base de Datos, Mailer y n8n se inician **automáticamente** al arrancar la instancia EC2, garantizando que el sistema esté siempre disponible sin intervención manual.
 
-# 2. Iniciar el Frontend web
+Para arrancar el Frontend web:
+
+```bash
 cd /home/ubuntu/gusmuss-diamond/frontend
 sudo npm run dev -- --host 0.0.0.0 --port 80
 ```
