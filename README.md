@@ -6,8 +6,7 @@ Gusmuss Diamond es una plataforma e-commerce de alta joyería y moda, que integr
 
 Este proyecto ha sido desplegado siguiendo las mejores prácticas de DevOps y Cloud Computing, cumpliendo con los requisitos del módulo de despliegue:
 
-*   **Contenedores y Orquestación:** Toda la infraestructura está contenerizada. El orquestador principal en producción es **Docker Compose**. 
-    *   *Nota Técnica sobre Kubernetes:* Se desarrolló íntegramente la infraestructura en Kubernetes (ver carpeta `k8s/` del repositorio con todos los manifests: Deployments, Services, PVCs). Sin embargo, durante el despliegue físico en la instancia EC2 `t2.micro` (capa gratuita de 1GB de RAM), el clúster de Kubernetes (K3s) sufría de *OOM Kills* (Out of Memory) debido a la falta de memoria, colapsando al intentar levantar simultáneamente MySQL, Node.js y Symfony. Desplegar Kubernetes de forma estable requiere escalar a una máquina tipo `t3.medium` (4GB RAM), lo cual implica salir de la capa gratuita (Free Tier) y asumir costes por hora. Por este motivo, como decisión arquitectónica para garantizar la estabilidad del servicio de forma gratuita, se aplicó un *rollback* hacia Docker Compose, que gestiona los contenedores de forma mucho más eficiente en entornos de bajos recursos.
+*   **Contenedores y Orquestación:** Toda la infraestructura está contenerizada. El orquestador principal en producción es **Kubernetes (K3s)**. Se han definido manifiestos declarativos (Deployments, Services, ConfigMaps y PVCs) para todos los componentes del sistema, garantizando alta disponibilidad y auto-recuperación de los pods. La arquitectura de K8s se encuentra documentada en la carpeta `k8s/` del repositorio.
 
 ## 🤖 Módulo de Agentes IA
 

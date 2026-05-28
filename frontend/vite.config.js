@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Proxy: las llamadas a /api desde React se redirigen a Symfony (puerto 8000)
-// Así evitamos problemas de CORS en desarrollo.
+// Proxy: las llamadas a /api desde React se redirigen a Symfony
+// En Kubernetes (K3s) el backend se expone en el NodePort 30080
 export default defineConfig({
   plugins: [react()],
   preview: {
@@ -13,11 +13,11 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost:30080',
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost:30080',
         changeOrigin: true,
       },
     },
