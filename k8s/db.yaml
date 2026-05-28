@@ -1,0 +1,77 @@
+---
+# PersistentVolumeClaim: guarda los datos de MySQL aunque el pod se reinicie
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+  namespace: gusmuss-ns
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+# Deployment: define cómo se despliega el contenedor de MySQL
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  namespace: gusmuss-ns
+  labels:
+    app: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              value: "gusmuss_db"
+            - name: MYSQL_USER
+              value: "gusmuss_user"
+            - name: MYSQL_PASSWORD
+              value: "secretpassword"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "rootpassword"
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: db-pvc
+
+---
+# Service: expone la base de datos internamente al cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: gusmuss-ns
+spec:
+  selector:
+    app: db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
