@@ -22,7 +22,7 @@ export default function Chatbot() {
       : `http://${currentHost}:5688`;
       
     const n8nHost = import.meta.env.VITE_N8N_HOST || defaultN8nHost;
-    const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || `${n8nHost}/webhook/95f2bf7a-4010-4379-8a23-c228c2039ea4/chat`;
+    const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || `${n8nHost}/webhook/17192b99-880d-49bb-b873-fd57474a47f3/chat`;
 
     import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js')
       .then(({ createChat }) => {
